@@ -1,6 +1,4 @@
-;; TODO - does this need to be inside the cljs directory as opposed to direct with the clj counterpart
-
-(ns cljs.user
+(ns user
   (:require
    [cljs.pprint :refer [pprint]]
    [devtools.core :as devtools]
