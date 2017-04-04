@@ -1,24 +1,77 @@
 (ns user
-  (:require [figwheel-sidecar.system :as fig]
-            [com.stuartsierra.component :as component]))
+  (:require [clojure.tools.namespace.repl :refer [refresh refresh-all set-refresh-dirs]]
+            [ring.middleware.defaults :as rmd]
+            [bidi.ring :as br]
+            [org.httpkit.server :refer [run-server]]
+            [hiccup.page :refer [html5 include-js include-css]]
+            [ring.util.response :refer [response content-type]]
+            [com.stuartsierra.component :as component]
+            [taoensso.timbre :as log]))
 
-(def figwheel-config (fig/fetch-config))
-(def figwheel (atom nil))
 
-(defn start-figwheel
-  "Start Figwheel on the given builds, or defaults to build-ids in `figwheel-config`."
-  ([]
-   (let [props (System/getProperties)
-         all-builds (->> figwheel-config :data :all-builds (mapv :id))]
-     (start-figwheel (keys (select-keys props all-builds)))))
-  ([build-ids]
-   (let [default-build-ids (-> figwheel-config :data :build-ids)
-         build-ids (if (empty? build-ids) default-build-ids build-ids)
-         preferred-config (assoc-in figwheel-config [:data :build-ids] build-ids)]
-     (reset! figwheel (component/system-map
-                        :figwheel-system (fig/figwheel-system preferred-config)
-                        :css-watcher (fig/css-watcher {:watch-paths ["resources/public/css"]})))
-     (swap! figwheel component/start))))
+(defn root-page-handler [request]
+  (let [root-page (html5
+                   [:head
+                    [:title "Lava Bear"]
+                    [:meta {:name "viewport" :content "width = device-width, initial-scale = 1.0, user-scalable = no"}]
+                    (include-css "/css/app.css")]
+                   [:body
+                    [:div#app]
+                    (include-js "/js/compiled/app.js")])]
+    (-> root-page response (content-type "text/html"))))
 
-(defn start-cljs-repl []
-  (fig/cljs-repl (:figwheel-system @figwheel)))
+
+(defrecord Server []
+  component/Lifecycle
+  (start [component]
+    (let [port 3000
+          middleware-opts {:params {:urlencoded true
+                                    :nested true
+                                    :keywordize true}
+                           :security {:xss-protection {:enable? true, :mode :block}
+                                      :frame-options :sameorigin
+                                      :content-type-options :nosniff}
+                           :session {:flash true
+                                     :cookie-attrs {:http-only true
+                                                    :max-age 3600}}
+                           :static {:resources "public"}
+                           :responses {:not-modified-responses true
+                                       :absolute-redirects true
+                                       :content-types true
+                                       :default-charset "utf-8"}}
+
+          backend-routes ["/" [[true :root-page]]]
+
+          handler (-> (br/make-handler backend-routes {:root-page root-page-handler})
+                      (rmd/wrap-defaults middleware-opts))
+
+          stop-server (run-server handler {:port port})]
+
+      (log/info "starting server on port" port)
+      (assoc component :stop-server stop-server)))
+
+  (stop [component]
+    (when-let [stop-server (:stop-server component)]
+      (log/info "stopping server")
+      (stop-server))
+    (assoc component :stop-server nil)))
+
+
+(def system (component/system-map
+             :server (map->Server {})))
+
+
+(defn start! []
+  (alter-var-root #'system component/start))
+
+
+(defn stop! []
+  (alter-var-root #'system (fn [s] (when s (component/stop s)))))
+
+
+(defn reload! [& {:keys [refresh-all?]}]
+  (stop!)
+  (set-refresh-dirs "server")
+  (if refresh-all?
+    (refresh-all :after 'user/start!)
+    (refresh :after 'user/start!)))
