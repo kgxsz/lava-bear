@@ -1,4 +1,4 @@
-(ns app.ui
+(ns client.ui
   (:require [om.next :as om :refer-macros [defui]]
             [untangled.client.core :as uc]
             [om.dom :as dom]))
