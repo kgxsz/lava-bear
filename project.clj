@@ -10,22 +10,25 @@
                  [ring/ring-defaults "0.1.5"]
                  [com.taoensso/timbre "4.1.4"]]
 
-  :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
+  :clean-targets ^{:protect false} ["resources/public/js/compiled"
+                                    "target"
+                                    "figwheel_server.log"
+                                    ".lein-repl-history"]
 
-  :profiles {:dev {:source-paths ["dev/server"]
+  :profiles {:dev {:source-paths ["dev" "src"]
 
                    :dependencies [[org.clojure/tools.namespace "0.2.11"]
                                   [binaryage/devtools "0.9.2"]]
 
                    :plugins [[lein-figwheel "0.5.9"]]
 
-                   :repl-options {:init-ns user
+                   :repl-options {:init-ns server.user
                                   :port 4000}
 
                    :cljsbuild {:builds [{:id "dev"
-                                         :source-paths ["dev/client" "src/client"]
+                                         :source-paths ["dev" "src"]
                                          :figwheel true
-                                         :compiler {:main "user"
+                                         :compiler {:main "client.user"
                                                     :asset-path "js/compiled/dev"
                                                     :output-to "resources/public/js/compiled/app.js"
                                                     :output-dir "resources/public/js/compiled/dev"

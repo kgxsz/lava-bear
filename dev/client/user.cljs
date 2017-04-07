@@ -1,11 +1,10 @@
-(ns user
+(ns client.user
   (:require
-   [cljs.pprint :refer [pprint]]
    [devtools.core :as devtools]
    [untangled.client.logging :as log]
    [untangled.client.core :as uc]
-   [app.ui :as ui]
-   [app.core :as core]))
+   [client.ui :as ui]
+   [client.core :as core]))
 
 ;; TODO - these guys could be in a start function
 (enable-console-print!)

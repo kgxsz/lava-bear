@@ -1,8 +1,8 @@
-(ns user
+(ns server.user
   (:require [clojure.tools.namespace.repl :refer [refresh refresh-all set-refresh-dirs]]
             [ring.middleware.defaults :as rmd]
             [bidi.ring :as br]
-            [org.httpkit.server :refer [run-server]]
+            [org.httpkit.server :as http]
             [hiccup.page :refer [html5 include-js include-css]]
             [ring.util.response :refer [response content-type]]
             [com.stuartsierra.component :as component]
@@ -20,8 +20,8 @@
                     (include-js "/js/compiled/app.js")])]
     (-> root-page response (content-type "text/html"))))
 
-
-(defrecord Server []
+;; TODO - move this shit to src/server and make the system directly in here
+(defrecord HttpServer []
   component/Lifecycle
   (start [component]
     (let [port 3000
@@ -45,20 +45,20 @@
           handler (-> (br/make-handler backend-routes {:root-page root-page-handler})
                       (rmd/wrap-defaults middleware-opts))
 
-          stop-server (run-server handler {:port port})]
+          stop-http-server (http/run-server handler {:port port})]
 
-      (log/info "starting server on port" port)
-      (assoc component :stop-server stop-server)))
+      (log/info "starting http server on port" port)
+      (assoc component :stop-http-server stop-http-server)))
 
   (stop [component]
-    (when-let [stop-server (:stop-server component)]
-      (log/info "stopping server")
-      (stop-server))
-    (assoc component :stop-server nil)))
+    (when-let [stop-http-server (:stop-http-server component)]
+      (log/info "stopping http server")
+      (stop-http-server))
+    (assoc component :stop-http-server nil)))
 
 
 (def system (component/system-map
-             :server (map->Server {})))
+             :http-server (map->HttpServer {})))
 
 
 (defn start! []
@@ -73,5 +73,5 @@
   (stop!)
   (set-refresh-dirs "server")
   (if refresh-all?
-    (refresh-all :after 'user/start!)
-    (refresh :after 'user/start!)))
+    (refresh-all :after 'server.user/start!)
+    (refresh :after 'server.user/start!)))
