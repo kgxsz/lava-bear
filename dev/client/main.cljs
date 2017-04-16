@@ -5,9 +5,7 @@
             [untangled.client.logging :as log]))
 
 (enable-console-print!)
-
 (log/set-level :debug)
-
 (devtools/install!)
 
 (defonce system (component/start (make-system)))
