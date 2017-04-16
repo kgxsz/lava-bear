@@ -29,7 +29,7 @@
                    [:head
                     [:title "Lava Bear"]
                     [:meta {:name "viewport" :content "width = device-width, initial-scale = 1.0, user-scalable = no"}]
-                    (include-css "/css/app.css")]
+                    (include-css "/css/compiled/app.css")]
                    [:body
                     [:div#app]
                     (include-js "/js/compiled/app.js")])]
