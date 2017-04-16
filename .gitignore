@@ -13,8 +13,8 @@ pom.xml.asc
 /classes/
 /target/
 /checkouts/
-/resources/public/js
-/resources/public/css
+/resources/public/js/compiled
+/resources/public/css/compiled
 .lein-deps-sum
 .lein-repl-history
 .lein-plugins/
