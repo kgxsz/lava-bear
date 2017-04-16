@@ -71,7 +71,6 @@
                                              :compiler {:main "client.main"
                                                         :asset-path "js/compiled/prod"
                                                         :output-to "resources/public/js/compiled/app.js"
-                                                        :output-dir "resources/public/js/compiled/prod"
                                                         :recompile-dependents true
                                                         :optimizations :advanced}}]}
 
