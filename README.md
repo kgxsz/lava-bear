@@ -9,7 +9,7 @@
   - Then start the system: `(start)`
 - To start the front end: `lein figwheel`.
   - Then connect to the repl on port `5000`
-  - Then start the cljs repl: `(figwheel-sidecar.repl-api/cljs-repl)`
+  - Then start the cljs repl: `(cljs-repl)`
 - To compile the css on file changes: `lein garden auto`.
 - To see the front end, hit `localhost:3000`.
 - To build a the standalone jar: `lein uberjar`.
