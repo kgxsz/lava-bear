@@ -1,7 +1,8 @@
 (ns client.ui
   (:require [om.next :as om :refer-macros [defui]]
+            [om-tools.dom :as dom :include-macros true]
             [untangled.client.core :as uc]
-            [om-tools.dom :as dom :include-macros true]))
+            [untangled.client.mutations :as m]))
 
 (defui ^:once Item
   static uc/InitialAppState
@@ -33,6 +34,7 @@
   (initial-state
    [this params]
    {:title "Initial List"
+    :ui/new-item-label ""
     :items [(uc/initial-state Item {:label "A"})
             (uc/initial-state Item {:label "B"})]})
 
@@ -40,6 +42,7 @@
   (query
    [this]
    [:title
+    :ui/new-item-label
     {:items (om/get-query Item)}])
 
   static om/Ident
@@ -50,9 +53,18 @@
   Object
   (render
    [this]
-   (let [{:keys [title items]} (om/props this)]
+   (let [{:keys [title ui/new-item-label items] :or {ui/new-item-label ""}} (om/props this)]
      (dom/div
-      (dom/h4 title)
+      (dom/h4
+       title)
+      (dom/input
+       {:value new-item-label
+        :on-change (fn [e]
+                     (m/set-string! this :ui/new-item-label :event e))})
+      (dom/button
+       {:on-click (fn []
+                    (om/transact! this `[(app/add-item {:label ~new-item-label})]))}
+       "+")
       (dom/ul (map ui-item items))))))
 
 (def ui-my-list (om/factory MyList))
