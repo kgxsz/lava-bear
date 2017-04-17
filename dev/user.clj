@@ -1,6 +1,7 @@
-(ns server.main
+(ns user
   (:require [server.system :refer [make-system]]
             [clojure.tools.namespace.repl :as repl]
+            [figwheel-sidecar.repl-api :refer [cljs-repl]]
             [com.stuartsierra.component :as component]))
 
 (defonce system (make-system))
@@ -15,5 +16,5 @@
   (stop)
   (repl/set-refresh-dirs "src" "dev")
   (if refresh-all?
-    (repl/refresh-all :after 'server.main/start)
-    (repl/refresh :after 'server.main/start)))
+    (repl/refresh-all :after 'user/start)
+    (repl/refresh :after 'user/start)))

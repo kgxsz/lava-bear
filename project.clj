@@ -24,18 +24,18 @@
   :profiles {:dev {:source-paths ["dev" "src"]
 
                    :dependencies [[org.clojure/tools.namespace "0.2.11"]
+                                  [figwheel-sidecar "0.5.4-6"]
                                   [binaryage/devtools "0.9.2"]]
 
                    :plugins [[lein-figwheel "0.5.9"]
                              [lein-garden "0.2.6"]]
 
-                   :repl-options {:init-ns server.main
-                                  :port 4000}
+                   :repl-options {:port 4000}
 
                    :cljsbuild {:builds [{:id "dev"
                                          :source-paths ["dev" "src"]
-                                         :figwheel {:on-jsload "client.main/reload"}
-                                         :compiler {:main "client.main"
+                                         :figwheel {:on-jsload "cljs.user/reload"}
+                                         :compiler {:main "cljs.user"
                                                     :asset-path "js/compiled/dev"
                                                     :output-to "resources/public/js/compiled/app.js"
                                                     :output-dir "resources/public/js/compiled/dev"

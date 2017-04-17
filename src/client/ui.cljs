@@ -9,6 +9,7 @@
                                 :some-data 42})
   static om/IQuery
   (query [this] [:ui/react-key :some-data])
+
   Object
   (render [this]
           (let [{:keys [ui/react-key some-data]} (om/props this)]
