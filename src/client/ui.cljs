@@ -4,7 +4,7 @@
             [untangled.client.core :as uc]
             [untangled.client.mutations :as m]))
 
-(defui ^:once Item
+#_(defui ^:once Item
   static uc/InitialAppState
   (initial-state
    [this {:keys [label]}]
@@ -26,10 +26,10 @@
    (let [{:keys [label]} (om/props this)]
      (dom/li label))))
 
-(def ui-item (om/factory Item {:keyfn :label}))
+#_(def ui-item (om/factory Item {:keyfn :label}))
 
 
-(defui ^:once MyList
+#_(defui ^:once MyList
   static uc/InitialAppState
   (initial-state
    [this params]
@@ -67,26 +67,106 @@
        "+")
       (dom/ul (map ui-item items))))))
 
-(def ui-my-list (om/factory MyList))
+#_(def ui-my-list (om/factory MyList))
+
+
+(defui ^:once Main
+  static uc/InitialAppState
+  (initial-state
+   [this params]
+   {:id 1
+    :type :main-tab
+    :extra "extra"})
+
+  static om/IQuery
+  (query
+   [this]
+   [:id :type :extra])
+
+  Object
+  (render
+   [this]
+   (let [{:keys [extra]} (om/props this)]
+     (dom/p "main:" extra))))
+
+(def ui-main (om/factory Main {:keyfn :id}))
+
+
+(defui ^:once Settings
+  static uc/InitialAppState
+  (initial-state
+   [this params]
+   {:id 1
+    :type :settings-tab
+    :args {:a 1}})
+
+  static om/IQuery
+  (query
+   [this]
+   [:id :type :args])
+
+  Object
+  (render
+   [this]
+   (let [{:keys [args]} (om/props this)]
+     (dom/p "settings:" (pr-str args)))))
+
+(def ui-settings (om/factory Settings {:keyfn :id}))
+
+
+(defui Switcher
+  static uc/InitialAppState
+  (initial-state
+   [this params]
+   (uc/initial-state Main {}))
+
+  static om/IQuery
+  (query
+   [this]
+   {:main-tab (om/get-query Main)
+    :settings-tab (om/get-query Settings)})
+
+  static om/Ident
+  (ident
+   [this {:keys [id type]}]
+   [type id])
+
+  Object
+  (render
+   [this]
+   (let [{:keys [type] :as props} (om/props this)]
+     (case type
+       :main-tab (ui-main props)
+       :settings-tab (ui-settings props)
+       (dom/p "no tab")))))
+
+(def ui-switcher (om/factory Switcher))
 
 
 (defui ^:once App
   static uc/InitialAppState
   (initial-state
    [this params]
-   {:list (uc/initial-state MyList {})})
+   {:ui/react-key :app
+    :tabs (uc/initial-state Switcher {})})
 
   static om/IQuery
   (query
    [this]
    [:ui/react-key
-    {:list (om/get-query MyList)}])
+    {:tabs (om/get-query Switcher)}])
 
   Object
   (render
    [this]
-   (let [{:keys [ui/react-key list]} (om/props this)]
+   (let [{:keys [ui/react-key tabs]} (om/props this)]
      (dom/div
       {:key react-key}
-      (dom/h4 "Some Lists")
-      (ui-my-list list)))))
+      (dom/h4 "Header")
+      (dom/button
+       {:on-click #(om/transact! this '[(app/choose-tab {:tab :main-tab})])}
+       "main")
+      (dom/button
+       {:on-click #(om/transact! this '[(app/choose-tab {:tab :settings-tab})])}
+       "settings")
+      (ui-switcher tabs)))))

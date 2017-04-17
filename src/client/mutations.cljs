@@ -4,7 +4,7 @@
             [untangled.client.core :as uc]
             [untangled.client.mutations :as m]))
 
-(defmethod m/mutate 'app/add-item [{:keys [state ref]} k {:keys [label]}]
+#_(defmethod m/mutate 'app/add-item [{:keys [state ref]} k {:keys [label]}]
   {:action (fn []
              (let [list-path (conj ref :items)
                    new-item (uc/initial-state ui/Item {:label label})
@@ -13,3 +13,8 @@
                (swap! state assoc-in item-ident new-item)
                ;; tack on the ident of the item in the list
                (uc/integrate-ident! state item-ident :append list-path)))})
+
+(defmethod m/mutate 'app/choose-tab [{:keys [state]} _ {:keys [tab]}]
+  ;; secretary calls this transaction for routing
+  {:action (fn []
+             (swap! state assoc :tabs [tab 1]))})
