@@ -2,6 +2,7 @@
   :dependencies [[org.clojure/clojure "1.9.0-alpha14"]
                  [org.clojure/clojurescript "1.9.521"]
                  [org.omcljs/om "1.0.0-alpha48"]
+                 [prismatic/om-tools "0.4.0"]
                  [com.stuartsierra/component "0.3.1"]
                  [navis/untangled-client "0.7.0"]
                  [bidi "1.25.0"]
