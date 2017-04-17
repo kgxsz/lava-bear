@@ -52,13 +52,13 @@
                               :nrepl-port 5000
                               :css-dirs ["resources/public/css"]}}
 
-             :uberjar {:source-paths ["prod" "src"]
+             :uberjar {:source-paths ["src"]
 
                        :uberjar-name "lava-bear-standalone.jar"
 
                        :aot :all
 
-                       :main server.main
+                       :main server.system
 
                        :plugins  [[lein-cljsbuild "1.1.5"]
                                   [lein-garden "0.2.6"]]
@@ -67,8 +67,8 @@
                                leiningen.garden]
 
                        :cljsbuild {:builds [{:id "prod"
-                                             :source-paths ["prod" "src"]
-                                             :compiler {:main "client.main"
+                                             :source-paths ["src"]
+                                             :compiler {:main "client.system"
                                                         :asset-path "js/compiled/prod"
                                                         :output-to "resources/public/js/compiled/app.js"
                                                         :recompile-dependents true
