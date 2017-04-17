@@ -1,4 +1,5 @@
 (ns server.system
+  (:gen-class)
   (:require [bidi.ring :as br]
             [com.stuartsierra.component :as component]
             [hiccup.page :refer [html5 include-js include-css]]
@@ -66,3 +67,8 @@
        :http-server (map->HttpServer {}))
       (component/system-using
        {:http-server [:config]})))
+
+(defonce system (make-system))
+
+(defn -main [& args]
+  (alter-var-root #'system component/start))

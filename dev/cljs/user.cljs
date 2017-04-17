@@ -1,5 +1,5 @@
 (ns ^:figwheel-no-load cljs.user
-  (:require [client.system :refer [make-system]]
+  (:require [client.system :refer [system]]
             [client.ui :as ui]
             [com.stuartsierra.component :as component]
             [devtools.core :as devtools]
@@ -7,11 +7,10 @@
             [untangled.client.impl.util :as util]
             [untangled.client.logging :as log]))
 
+;; TODO - should these be part of the browser?
 (enable-console-print!)
 (log/set-level :debug)
 (devtools/install!)
-
-(defonce system (component/start (make-system)))
 
 (defn reload []
   (let [!untangled-client (get-in system [:renderer :!untangled-client])]

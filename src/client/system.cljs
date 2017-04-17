@@ -30,3 +30,5 @@
        :renderer (map->Renderer {}))
       (component/system-using
        {:renderer [:browser]})))
+
+(defonce system (component/start (make-system)))
