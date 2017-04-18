@@ -38,7 +38,7 @@
                                                        (let [client-routes (get-in config [:client-routes])
                                                              !history (get-in browser [:!history])
                                                              update-location (fn [location]
-                                                                               (om/transact! reconciler `[(nav/update-location ~location) :pages]))]
+                                                                               (om/transact! reconciler `[(nav/update-location ~location)]))]
                                                          (reset! !history (pushy/pushy update-location (partial bidi/match-route client-routes)))
                                                          (pushy/start! @!history)))
                                    :shared {:!history (get-in browser [:!history])}))]
