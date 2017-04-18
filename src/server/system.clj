@@ -22,8 +22,9 @@
 (defrecord Config []
   component/Lifecycle
   (start [component]
+    (log/info "starting config")
     (assoc component
-           :backend-routes ["/" [[true :root-page]]]
+           :server-routes ["/" [[true :root-page]]]
            :http-server {:port (or (System/getenv "PORT") "3000")
                          :middleware-opts {:params {:urlencoded true
                                                     :nested true
@@ -47,8 +48,8 @@
   (start [component]
     (let [port (Integer. (get-in config [:http-server :port]))
           middleware-opts (get-in config [:http-server :middleware-opts])
-          backend-routes (get-in config [:backend-routes])
-          handler (-> (br/make-handler backend-routes {:root-page root-page-handler})
+          server-routes (get-in config [:server-routes])
+          handler (-> (br/make-handler server-routes {:root-page root-page-handler})
                       (rmd/wrap-defaults middleware-opts))
           stop-http-server (http/run-server handler {:port port})]
 

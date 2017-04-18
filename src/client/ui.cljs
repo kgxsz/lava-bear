@@ -1,6 +1,7 @@
 (ns client.ui
   (:require [om.next :as om :refer-macros [defui]]
             [om-tools.dom :as dom :include-macros true]
+            [pushy.core :as pushy]
             [untangled.client.core :as uc]
             [untangled.client.mutations :as m]))
 
@@ -70,7 +71,7 @@
 #_(def ui-my-list (om/factory MyList))
 
 
-(defui ^:once Main
+#_(defui ^:once Main
   static uc/InitialAppState
   (initial-state
    [this params]
@@ -89,10 +90,10 @@
    (let [{:keys [extra]} (om/props this)]
      (dom/p "main:" extra))))
 
-(def ui-main (om/factory Main {:keyfn :id}))
+#_(def ui-main (om/factory Main {:keyfn :id}))
 
 
-(defui ^:once Settings
+#_(defui ^:once Settings
   static uc/InitialAppState
   (initial-state
    [this params]
@@ -111,10 +112,10 @@
    (let [{:keys [args]} (om/props this)]
      (dom/p "settings:" (pr-str args)))))
 
-(def ui-settings (om/factory Settings {:keyfn :id}))
+#_(def ui-settings (om/factory Settings {:keyfn :id}))
 
 
-(defui Switcher
+#_(defui Switcher
   static uc/InitialAppState
   (initial-state
    [this params]
@@ -140,7 +141,80 @@
        :settings-tab (ui-settings props)
        (dom/p "no tab")))))
 
-(def ui-switcher (om/factory Switcher))
+#_(def ui-switcher (om/factory Switcher))
+
+
+(defui ^:once HomePage
+  static uc/InitialAppState
+  (initial-state
+   [this params]
+   {:id 1
+    :type :home-page
+    :extra "extra"})
+
+  static om/IQuery
+  (query
+   [this]
+   [:id :type :extra])
+
+  Object
+  (render
+   [this]
+   (let [{:keys [extra]} (om/props this)]
+     (dom/p "home page: " extra))))
+
+(def ui-home-page (om/factory HomePage))
+
+
+(defui ^:once UnknownPage
+  static uc/InitialAppState
+  (initial-state
+   [this params]
+   {:id 1
+    :type :unknown-page
+    :boo "boo"})
+
+  static om/IQuery
+  (query
+   [this]
+   [:id :type :boo])
+
+  Object
+  (render
+   [this]
+   (let [{:keys [boo]} (om/props this)]
+     (dom/p "unknown page:" boo))))
+
+(def ui-unknown-page (om/factory UnknownPage))
+
+
+(defui PageRouter
+  static uc/InitialAppState
+  (initial-state
+   [this params]
+   (uc/initial-state HomePage {}))
+
+  static om/IQuery
+  (query
+   [this]
+   {:home-page (om/get-query HomePage)
+    :unknown-page (om/get-query UnknownPage)})
+
+  static om/Ident
+  (ident
+   [this {:keys [id type]}]
+   [type id])
+
+  Object
+  (render
+   [this]
+   (let [{:keys [type] :as props} (om/props this)]
+     (case type
+       :home-page (ui-home-page props)
+       :unknown-page (ui-unknown-page props)
+       (dom/p "no page!!!")))))
+
+(def ui-page-router (om/factory PageRouter))
 
 
 (defui ^:once App
@@ -148,25 +222,35 @@
   (initial-state
    [this params]
    {:ui/react-key :app
-    :tabs (uc/initial-state Switcher {})})
+    :pages (uc/initial-state PageRouter {})
+    #_:tabs #_(uc/initial-state Switcher {})})
 
   static om/IQuery
   (query
    [this]
    [:ui/react-key
-    {:tabs (om/get-query Switcher)}])
+    {:pages (om/get-query PageRouter)}
+    #_{:tabs (om/get-query Switcher)}])
 
   Object
   (render
    [this]
-   (let [{:keys [ui/react-key tabs]} (om/props this)]
+   (let [{:keys [ui/react-key pages tabs]} (om/props this)
+         {:keys [!history]} (om/shared this)]
      (dom/div
       {:key react-key}
       (dom/h4 "Header")
       (dom/button
+       {:on-click #(pushy/set-token! @!history "/")}
+       "home")
+      (dom/button
+       {:on-click #(pushy/set-token! @!history "/d")}
+       "unknown")
+      #_(dom/button
        {:on-click #(om/transact! this '[(app/choose-tab {:tab :main-tab})])}
        "main")
-      (dom/button
+      #_(dom/button
        {:on-click #(om/transact! this '[(app/choose-tab {:tab :settings-tab})])}
        "settings")
-      (ui-switcher tabs)))))
+      #_(ui-switcher tabs)
+      (ui-page-router pages)))))

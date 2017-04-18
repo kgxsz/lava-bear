@@ -18,3 +18,7 @@
   ;; secretary calls this transaction for routing
   {:action (fn []
              (swap! state assoc :tabs [tab 1]))})
+
+(defmethod m/mutate 'nav/update-location [{:keys [state]} _ {:keys [handler]}]
+  {:action (fn []
+             (swap! state assoc :pages [handler 1]))})
