@@ -94,6 +94,28 @@
 (def ui-home-page (om/factory HomePage))
 
 
+(defui ^:once ThingPage
+  static uc/InitialAppState
+  (initial-state
+   [this params]
+   {:id '_
+    :handler :thing
+    :haa "haa"})
+
+  static om/IQuery
+  (query
+   [this]
+   [:id :handler :haa])
+
+  Object
+  (render
+   [this]
+   (let [{:keys [haa]} (om/props this)]
+     (dom/p "thing page: " haa))))
+
+(def ui-thing-page (om/factory ThingPage))
+
+
 (defui ^:once UnknownPage
   static uc/InitialAppState
   (initial-state
@@ -126,6 +148,7 @@
   (query
    [this]
    {:home (om/get-query HomePage)
+    :thing (om/get-query ThingPage)
     :unknown (om/get-query UnknownPage)})
 
   static om/Ident
@@ -139,7 +162,7 @@
    (let [{:keys [handler] :as props} (om/props this)]
      (case handler
        :home (ui-home-page props)
-       :unknown (ui-unknown-page props)
+       :thing (ui-thing-page props)
        (ui-unknown-page props)))))
 
 (def ui-page-router (om/factory PageRouter))
