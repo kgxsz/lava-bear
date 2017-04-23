@@ -14,11 +14,13 @@
                ;; tack on the ident of the item in the list
                (uc/integrate-ident! state item-ident :append list-path)))})
 
-(defmethod m/mutate 'app/choose-tab [{:keys [state]} _ {:keys [tab]}]
+#_(defmethod m/mutate 'app/choose-tab [{:keys [state]} _ {:keys [tab]}]
   ;; secretary calls this transaction for routing
   {:action (fn []
              (swap! state assoc :tabs [tab 1]))})
 
-(defmethod m/mutate 'nav/update-location [{:keys [state]} _ {:keys [handler]}]
+(defmethod m/mutate 'app/navigate [{:keys [state]} _ {:keys [handler]}]
   {:action (fn []
-             (swap! state assoc :pages [handler 1]))})
+             ;; TODO - does this really belong here, or should the path be decomposed before the mutation?
+             (js/console.warn "mutation to navigate" (pr-str handler))
+             (swap! state assoc :handler [handler '_]))})

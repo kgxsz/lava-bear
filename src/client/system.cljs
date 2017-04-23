@@ -1,21 +1,22 @@
 (ns client.system
   (:require [client.ui :as ui]
+            [client.navigation :as n]
             [client.mutations :as m]
-            [bidi.bidi :as bidi]
             [com.stuartsierra.component :as component]
-            [pushy.core :as pushy]
             [untangled.client.core :as uc]
-            [untangled.client.logging :as log]
-            [om.next :as om]))
+            [untangled.client.logging :as log]))
 
 (defrecord Config []
   component/Lifecycle
   (start [component]
     (log/info "starting config")
     (assoc component
-           :client-routes ["/" [["" :home-page]
-                                ["facebook-sign-in" :facebook-sign-in-page]
-                                [true :unknown-page]]]))
+           :client-routes ["/" [["" :home]
+                                [[:id "/thing"] :thing]
+                                ["facebook-sign-in" :facebook-sign-in]
+                                [true :unknown]]]))
+
+  ;; TODO - figure out how to make route-params work
 
   (stop [component]
     component))
@@ -25,7 +26,7 @@
   (start [component]
     (log/info "starting browser")
     (assoc component
-           :!history (atom {})))
+           :!navigation (atom {})))
 
   (stop [component]
     component))
@@ -33,15 +34,12 @@
 (defrecord Renderer [config browser]
   component/Lifecycle
   (start [component]
-    (let [!untangled-client (atom (uc/new-untangled-client
+    (let [shared {:browser browser
+                  :config config}
+          !untangled-client (atom (uc/new-untangled-client
                                    :started-callback (fn [{:keys [reconciler]}]
-                                                       (let [client-routes (get-in config [:client-routes])
-                                                             !history (get-in browser [:!history])
-                                                             update-location (fn [location]
-                                                                               (om/transact! reconciler `[(nav/update-location ~location)]))]
-                                                         (reset! !history (pushy/pushy update-location (partial bidi/match-route client-routes)))
-                                                         (pushy/start! @!history)))
-                                   :shared {:!history (get-in browser [:!history])}))]
+                                                       (n/start-navigation reconciler (:!navigation browser) (:client-routes config)))
+                                   :shared shared))]
       (log/info "starting renderer")
       (swap! !untangled-client uc/mount ui/App "app")
       (assoc component :!untangled-client !untangled-client)))
