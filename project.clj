@@ -7,6 +7,7 @@
                  [navis/untangled-client "0.7.0"]
                  [kibu/pushy "0.3.7"]
                  [bidi "1.25.0"]
+                 [medley "0.7.1"]
                  [http-kit "2.1.18"]
                  [hiccup "1.0.5"]
                  [garden "1.3.2"]

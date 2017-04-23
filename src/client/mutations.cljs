@@ -19,8 +19,9 @@
   {:action (fn []
              (swap! state assoc :tabs [tab 1]))})
 
-(defmethod m/mutate 'app/navigate [{:keys [state]} _ {:keys [handler]}]
+(defmethod m/mutate 'app/navigate [{:keys [state]} _ {:keys [handler route-params query-params]}]
   {:action (fn []
-             ;; TODO - does this really belong here, or should the path be decomposed before the mutation?
-             (js/console.warn "mutation to navigate" (pr-str handler))
-             (swap! state assoc :handler [handler '_]))})
+             (swap! state assoc
+                    :handler [handler '_]
+                    :route-params route-params
+                    :query-params query-params))})
