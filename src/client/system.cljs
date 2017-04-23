@@ -16,8 +16,6 @@
                                 ["facebook-sign-in" :facebook-sign-in]
                                 [true :unknown]]]))
 
-  ;; TODO - figure out how to make route-params work
-
   (stop [component]
     component))
 
