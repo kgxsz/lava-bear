@@ -77,19 +77,20 @@
   (initial-state
    [this params]
    {:id '_
-    :handler :home
-    :extra "extra"})
+    :handler :home})
 
   static om/IQuery
   (query
    [this]
-   [:id :handler :extra])
+   [:id
+    :handler
+    :query-params])
 
   Object
   (render
    [this]
-   (let [{:keys [extra]} (om/props this)]
-     (dom/p "home page: " extra))))
+   (let [{:keys [query-params]} (om/props this)]
+     (dom/p "home page: " (pr-str query-params)))))
 
 (def ui-home-page (om/factory HomePage))
 
@@ -99,19 +100,20 @@
   (initial-state
    [this params]
    {:id '_
-    :handler :thing
-    :haa "haa"})
+    :handler :thing})
 
   static om/IQuery
   (query
    [this]
-   [:id :handler :haa])
+   [:id
+    :handler
+    :route-params])
 
   Object
   (render
    [this]
-   (let [{:keys [haa]} (om/props this)]
-     (dom/p "thing page: " haa))))
+   (let [{:keys [route-params]} (om/props this)]
+     (dom/p "thing page: " (pr-str route-params)))))
 
 (def ui-thing-page (om/factory ThingPage))
 
@@ -121,19 +123,18 @@
   (initial-state
    [this params]
    {:id '_
-    :handler :unknown
-    :boo "boo"})
+    :handler :unknown})
 
   static om/IQuery
   (query
    [this]
-   [:id :handler :boo])
+   [:id
+    :handler])
 
   Object
   (render
    [this]
-   (let [{:keys [boo]} (om/props this)]
-     (dom/p "unknown page: " boo))))
+   (dom/p "unknown page :(")))
 
 (def ui-unknown-page (om/factory UnknownPage))
 
@@ -189,12 +190,12 @@
       {:key react-key}
       (dom/h4 "Header")
       (dom/button
-       {:on-click #(n/navigate (om/shared this) {:handler :home})}
+       {:on-click #(n/navigate (om/shared this) {:handler :home :query-params {:a 1 :b "hello"}})}
        "home")
       (dom/button
        {:on-click #(n/navigate (om/shared this) {:handler :thing :route-params {:thing-id 123}})}
        "thing")
       (dom/button
-       {:on-click #(n/navigate (om/shared this) {:url "/f?a=1&b=2"})}
+       {:on-click #(n/navigate (om/shared this) {:url "/wat"})}
        "unknown")
       (ui-page-router handler)))))
