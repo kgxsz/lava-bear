@@ -39,7 +39,7 @@
                                          :source-paths ["dev" "src"]
                                          :figwheel {:on-jsload "cljs.user/reload"}
                                          :compiler {:main "cljs.user"
-                                                    :asset-path "js/compiled/dev"
+                                                    :asset-path "/js/compiled/dev"
                                                     :output-to "resources/public/js/compiled/app.js"
                                                     :output-dir "resources/public/js/compiled/dev"
                                                     :recompile-dependents true
@@ -72,7 +72,7 @@
                        :cljsbuild {:builds [{:id "prod"
                                              :source-paths ["src"]
                                              :compiler {:main "client.system"
-                                                        :asset-path "js/compiled/prod"
+                                                        :asset-path "/js/compiled/prod"
                                                         :output-to "resources/public/js/compiled/app.js"
                                                         :recompile-dependents true
                                                         :optimizations :advanced}}]}
