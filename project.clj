@@ -10,6 +10,7 @@
                  [http-kit "2.1.18"]
                  [hiccup "1.0.5"]
                  [garden "1.3.2"]
+                 [com.cemerick/url "0.1.1"]
                  [ring/ring-defaults "0.1.5"]
                  [com.taoensso/timbre "4.1.4"]]
 

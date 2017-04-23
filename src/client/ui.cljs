@@ -1,6 +1,5 @@
 (ns client.ui
   (:require [client.navigation :as n]
-            [bidi.bidi :as bidi]
             [om.next :as om :refer-macros [defui]]
             [om-tools.dom :as dom :include-macros true]
             [pushy.core :as pushy]
@@ -166,11 +165,13 @@
      (dom/div
       {:key react-key}
       (dom/h4 "Header")
-      ;; TODO - these should be change-location functions that take this and know how to pull out shared
       (dom/button
-       {:on-click #(n/navigate this "/")}
+       {:on-click #(n/navigate (om/shared this) {:handler :home})}
        "home")
       (dom/button
-       {:on-click #(n/navigate this "/d")}
+       {:on-click #(n/navigate (om/shared this) {:handler :thing :route-params {:thing-id 123}})}
+       "thing")
+      (dom/button
+       {:on-click #(n/navigate (om/shared this) {:url "/f?a=1&b=2"})}
        "unknown")
       (ui-page-router handler)))))
