@@ -22,6 +22,7 @@
 (defmethod m/mutate 'app/navigate [{:keys [state]} _ {:keys [handler route-params query-params]}]
   {:action (fn []
              (swap! state assoc
-                    :handler [handler '_]
-                    :route-params route-params
-                    :query-params query-params))})
+                    :navigation {:handler handler
+                                 :route-params route-params
+                                 :query-params query-params}
+                    :handler [handler '_]))})

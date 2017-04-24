@@ -84,13 +84,13 @@
    [this]
    [:id
     :handler
-    [:query-params '_]])
+    [:navigation '_]])
 
   Object
   (render
    [this]
-   (let [{:keys [query-params]} (om/props this)]
-     (dom/p "home page: " (pr-str query-params)))))
+   (let [{:keys [navigation]} (om/props this)]
+     (dom/p "home page: " (pr-str navigation)))))
 
 (def ui-home-page (om/factory HomePage))
 
@@ -107,13 +107,13 @@
    [this]
    [:id
     :handler
-    [:route-params '_]])
+    [:navigation '_]])
 
   Object
   (render
    [this]
-   (let [{:keys [route-params]} (om/props this)]
-     (dom/p "thing page: " (pr-str route-params)))))
+   (let [{:keys [navigation]} (om/props this)]
+     (dom/p "thing page: " (pr-str navigation)))))
 
 (def ui-thing-page (om/factory ThingPage))
 
