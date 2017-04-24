@@ -77,13 +77,13 @@
   (initial-state
    [this params]
    {:id '_
-    :handler :home})
+    :page :home-page})
 
   static om/IQuery
   (query
    [this]
    [:id
-    :handler
+    :page
     [:navigation '_]])
 
   Object
@@ -100,13 +100,13 @@
   (initial-state
    [this params]
    {:id '_
-    :handler :thing})
+    :page :thing-page})
 
   static om/IQuery
   (query
    [this]
    [:id
-    :handler
+    :page
     [:navigation '_]])
 
   Object
@@ -123,13 +123,13 @@
   (initial-state
    [this params]
    {:id '_
-    :handler :unknown})
+    :page :unknown-page})
 
   static om/IQuery
   (query
    [this]
    [:id
-    :handler])
+    :page])
 
   Object
   (render
@@ -148,22 +148,22 @@
   static om/IQuery
   (query
    [this]
-   {:home (om/get-query HomePage)
-    :thing (om/get-query ThingPage)
-    :unknown (om/get-query UnknownPage)})
+   {:home-page (om/get-query HomePage)
+    :thing-page (om/get-query ThingPage)
+    :unknown-page (om/get-query UnknownPage)})
 
   static om/Ident
   (ident
-   [this {:keys [id handler]}]
-   [handler id])
+   [this {:keys [id page]}]
+   [page id])
 
   Object
   (render
    [this]
-   (let [{:keys [handler] :as props} (om/props this)]
-     (case handler
-       :home (ui-home-page props)
-       :thing (ui-thing-page props)
+   (let [{:keys [page] :as props} (om/props this)]
+     (case page
+       :home-page (ui-home-page props)
+       :thing-page (ui-thing-page props)
        (ui-unknown-page props)))))
 
 (def ui-page-router (om/factory PageRouter))
@@ -174,19 +174,19 @@
   (initial-state
    [this params]
    {:ui/react-key :app
-    :handler (uc/initial-state PageRouter {})})
+    :page (uc/initial-state PageRouter {})})
 
   static om/IQuery
   (query
    [this]
    [:ui/react-key
     :route-params
-    {:handler (om/get-query PageRouter)}])
+    {:page (om/get-query PageRouter)}])
 
   Object
   (render
    [this]
-   (let [{:keys [ui/react-key handler]} (om/props this)]
+   (let [{:keys [ui/react-key page]} (om/props this)]
      (dom/div
       {:key react-key}
       (dom/h4 "Header")
@@ -197,6 +197,9 @@
        {:on-click #(n/navigate (om/shared this) {:handler :thing :route-params {:thing-id 123}})}
        "thing")
       (dom/button
+       {:on-click #(n/navigate (om/shared this) {:handler :thing :route-params {:thing-id 69}})}
+       "be cool")
+      (dom/button
        {:on-click #(n/navigate (om/shared this) {:url "/wat"})}
        "unknown")
-      (ui-page-router handler)))))
+      (ui-page-router page)))))

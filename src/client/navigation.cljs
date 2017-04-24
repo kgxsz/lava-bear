@@ -18,11 +18,18 @@
 (defn start-navigation [reconciler !navigation client-routes]
   (reset! !navigation (pushy/pushy
                        (fn [{:keys [handler route-params] :as location}]
-                         (let [token (pushy/get-token @!navigation)
-                               [_ query-string] (s/split token "?")
-                               location {:handler handler
-                                         :route-params route-params
-                                         :query-params (->> query-string url/query->map (m/map-keys keyword))}]
-                           (om/transact! reconciler `[(app/navigate ~location) :handler :route-params :query-params])))
+                         (let [page (-> handler
+                                        (name)
+                                        (str "-page")
+                                        (keyword))
+                               query-params (->> (s/split (pushy/get-token @!navigation) "?")
+                                                 (second)
+                                                 (url/query->map)
+                                                 (m/map-keys keyword))]
+                           (om/transact! reconciler `[(app/navigate {:page ~page
+                                                                     :handler ~handler
+                                                                     :route-params ~route-params
+                                                                     :query-params ~query-params})
+                                                      :page])))
                        (partial bidi/match-route client-routes)))
   (pushy/start! @!navigation))

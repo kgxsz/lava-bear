@@ -19,10 +19,10 @@
   {:action (fn []
              (swap! state assoc :tabs [tab 1]))})
 
-(defmethod m/mutate 'app/navigate [{:keys [state]} _ {:keys [handler route-params query-params]}]
+(defmethod m/mutate 'app/navigate [{:keys [state]} _ {:keys [page handler route-params query-params]}]
   {:action (fn []
              (swap! state assoc
                     :navigation {:handler handler
                                  :route-params route-params
                                  :query-params query-params}
-                    :handler [handler '_]))})
+                    :page [page '_]))})
