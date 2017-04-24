@@ -84,7 +84,7 @@
    [this]
    [:id
     :handler
-    :query-params])
+    [:query-params '_]])
 
   Object
   (render
@@ -107,7 +107,7 @@
    [this]
    [:id
     :handler
-    :route-params])
+    [:route-params '_]])
 
   Object
   (render
@@ -180,6 +180,7 @@
   (query
    [this]
    [:ui/react-key
+    :route-params
     {:handler (om/get-query PageRouter)}])
 
   Object
