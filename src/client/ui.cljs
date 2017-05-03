@@ -6,21 +6,23 @@
             [untangled.client.core :as uc]
             [untangled.client.mutations :as m]))
 
-#_(defui ^:once Item
+(defui ^:once Item
   static uc/InitialAppState
   (initial-state
-   [this {:keys [label]}]
-   {:label label})
+   [this {:keys [id label]}]
+   {:id id
+    :label label})
 
   static om/IQuery
   (query
    [this]
-   [:label])
+   [:id
+    :label])
 
   static om/Ident
   (ident
-   [this {:keys [label]}]
-   [:items/by-label label])
+   [this {:keys [id label]}]
+   [:items/by-id id])
 
   Object
   (render
@@ -28,17 +30,16 @@
    (let [{:keys [label]} (om/props this)]
      (dom/li label))))
 
-#_(def ui-item (om/factory Item {:keyfn :label}))
+(def ui-item (om/factory Item {:keyfn :id}))
 
 
-#_(defui ^:once MyList
+(defui ^:once MyList
   static uc/InitialAppState
   (initial-state
    [this params]
-   {:title "Initial List"
+   {:title "Some List"
     :ui/new-item-label ""
-    :items [(uc/initial-state Item {:label "A"})
-            (uc/initial-state Item {:label "B"})]})
+    :items []})
 
   static om/IQuery
   (query
@@ -69,7 +70,7 @@
        "+")
       (dom/ul (map ui-item items))))))
 
-#_(def ui-my-list (om/factory MyList))
+(def ui-my-list (om/factory MyList))
 
 
 (defui ^:once HomePage
@@ -100,20 +101,24 @@
   (initial-state
    [this params]
    {:id '_
-    :page :thing-page})
+    :page :thing-page
+    :list (uc/initial-state MyList {})})
 
   static om/IQuery
   (query
    [this]
    [:id
     :page
-    [:navigation '_]])
+    {:list (om/get-query MyList)}
+    {[:navigation '_] [:route-params]}])
 
   Object
   (render
    [this]
-   (let [{:keys [navigation]} (om/props this)]
-     (dom/p "thing page: " (pr-str navigation)))))
+   (let [{:keys [navigation list]} (om/props this)]
+     (dom/div
+      (dom/p "thing page: " (pr-str navigation))
+      (ui-my-list list)))))
 
 (def ui-thing-page (om/factory ThingPage))
 
@@ -154,7 +159,7 @@
 
   static om/Ident
   (ident
-   [this {:keys [id page]}]
+   [this {:keys [page id]}]
    [page id])
 
   Object
