@@ -2,15 +2,18 @@
   (:require [client.ui :as ui]
             [client.navigation :as n]
             [client.mutations :as m]
-            [com.stuartsierra.component :as component]
-            [untangled.client.core :as uc]
+            [com.stuartsierra.component :as c]
+            [om.next :as om]
+            [untangled.client.core :as u]
+            [untangled.client.data-fetch :as d]
             [untangled.client.logging :as log]))
 
 (defrecord Config []
-  component/Lifecycle
+  c/Lifecycle
   (start [component]
     (log/info "starting config")
     (assoc component
+           ;; TODO - should this come from somewhere common?
            :client-routes ["/" [["" :home]
                                 [[:thing-id "/thing"] :thing]
                                 ["facebook-sign-in" :facebook-sign-in]
@@ -20,7 +23,7 @@
     component))
 
 (defrecord Browser [config]
-  component/Lifecycle
+  c/Lifecycle
   (start [component]
     (log/info "starting browser")
     (assoc component
@@ -29,29 +32,32 @@
   (stop [component]
     component))
 
+;; TODO - should this actually be the untangled-client with a :value key?
 (defrecord Renderer [config browser]
-  component/Lifecycle
+  c/Lifecycle
   (start [component]
     (let [shared {:browser browser
                   :config config}
-          !untangled-client (atom (uc/new-untangled-client
+          !untangled-client (atom (u/new-untangled-client
                                    :started-callback (fn [{:keys [reconciler]}]
-                                                       (n/start-navigation reconciler (:!navigation browser) (:client-routes config)))
+                                                       (n/start-navigation reconciler (:!navigation browser) (:client-routes config))
+                                                       (d/load-data reconciler [{:loaded-items (om/get-query ui/Item)}]
+                                                                    :post-mutation 'fetch/items-loaded))
                                    :shared shared))]
       (log/info "starting renderer")
-      (swap! !untangled-client uc/mount ui/App "app")
+      (swap! !untangled-client u/mount ui/App "app")
       (assoc component :!untangled-client !untangled-client)))
 
   (stop [component]
     component))
 
 (defn make-system []
-  (-> (component/system-map
+  (-> (c/system-map
        :config (map->Config {})
        :browser (map->Browser {})
        :renderer (map->Renderer {}))
-      (component/system-using
+      (c/system-using
        {:browser [:config]
         :renderer [:config :browser]})))
 
-(defonce system (component/start (make-system)))
+(defonce system (c/start (make-system)))
