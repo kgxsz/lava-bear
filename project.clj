@@ -5,6 +5,7 @@
                  [prismatic/om-tools "0.4.0"]
                  [com.stuartsierra/component "0.3.1"]
                  [navis/untangled-client "0.7.0"]
+                 [navis/untangled-server "0.7.0"]
                  [kibu/pushy "0.3.7"]
                  [bidi "1.25.0"]
                  [medley "0.7.1"]
