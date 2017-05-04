@@ -18,7 +18,9 @@
             [taoensso.timbre :as log]))
 
 ;; TODO - do something intelligent with this
-(def items (atom [{:id 1 :label "item from server"}]))
+(def last-id (atom 2))
+(def items (atom [{:id 1 :label "item from server"}
+                  {:id 2 :label "another item"}]))
 
 (defmulti api-mutate om/dispatch)
 (defmulti api-read om/dispatch)
@@ -26,8 +28,24 @@
 (defmethod api-mutate :default [e k p]
   (log/error "unrecognised mutatuion " k))
 
+(defmethod api-mutate 'app/add-item [e k {:keys [id label]}]
+  {:action (fn []
+             (let [next-id (swap! last-id inc)]
+               (swap! items conj {:id next-id :label label})
+               {:tempids {id next-id}}))})
+
 (defmethod api-read :default [{:keys [ast query] :as env} dispatch-key params]
   (log/error "unrecognised query" (parser/ast->expr ast)))
+
+(defmethod api-read :loaded-items [{:keys [query] :as env} dispatch-key params]
+  (Thread/sleep 1000)
+  {:value @items})
+
+
+
+
+
+;;; TODO - clean all this shit
 
 (defn root-page-handler [request]
   (let [root-page (html5

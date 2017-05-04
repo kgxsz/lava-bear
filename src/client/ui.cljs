@@ -66,7 +66,10 @@
                      (m/set-string! this :ui/new-item-label :event e))})
       (dom/button
        {:on-click (fn []
-                    (om/transact! this `[(app/add-item {:label ~new-item-label})]))}
+                    (m/set-string! this :ui/new-item-label :value "")
+                    (om/transact! this `[(app/add-item {:id ~(om/tempid) :label ~new-item-label})
+                                         (untangled/load {:query [{:loaded-items ~(om/get-query Item)}]
+                                                          :post-mutation fetch/items-loaded})]))}
        "+")
       (dom/ul (map ui-item items))))))
 
@@ -185,16 +188,17 @@
   (query
    [this]
    [:ui/react-key
+    :ui/loading-data
     :route-params
     {:page (om/get-query PageRouter)}])
 
   Object
   (render
    [this]
-   (let [{:keys [ui/react-key page]} (om/props this)]
+   (let [{:keys [ui/react-key ui/loading-data page]} (om/props this)]
      (dom/div
       {:key react-key}
-      (dom/h4 "Header")
+      (dom/h4 "Header" (when loading-data " is loading"))
       (dom/button
        {:on-click #(n/navigate (om/shared this) {:handler :home :query-params {:a 1 :b "hello"}})}
        "home")
