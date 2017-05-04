@@ -120,7 +120,7 @@
 (defn make-your-api-module []
     (component/using (->YourApiModule) []))
 
-#_(defrecord HttpServer [config]
+(defrecord HttpServer [config]
   component/Lifecycle
   (start [component]
     (let [port (Integer. (get-in config [:http-server :port]))
@@ -149,10 +149,10 @@
 ;; TODO - figure out how to get this guy where it needs to be
 (defonce system
   (usc/untangled-system
-   {:api-handler-key :api-handler ;; TODO - probs don't need this
-    :components {:config (map->Config {})
+   {:components {:config (map->Config {})
                  :server (usc/make-web-server) ;;TODO - I can use my own server goddamnit
-                 :handler (component/using (map->YourHandler {}) [:config :api-handler])}
+                 :handler (component/using (map->YourHandler {}) {:config :config
+                                                                  :api-handler ::usc/api-handler})}
     :modules [(->YourApiModule)]}))
 
 #_(defonce system (make-system))
