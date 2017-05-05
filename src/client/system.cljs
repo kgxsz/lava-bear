@@ -53,6 +53,7 @@
 
 (defn make-system []
   (-> (c/system-map
+       ;; TODO simplify here to look like server
        :config (map->Config {})
        :browser (map->Browser {})
        :renderer (map->Renderer {}))

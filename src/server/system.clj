@@ -1,161 +1,99 @@
-;; TODO - shorten aliases all over please
 (ns server.system
   (:gen-class)
-  (:require [bidi.ring :as br]
-            [com.stuartsierra.component :as component]
-            [hiccup.page :refer [html5 include-js include-css]]
-
-            ;; TODO - put in the right place
-            [untangled.server.core :as usc]
-            [untangled.server.impl.middleware :as mid]
-            [om.next.server :as oms]
-
-            [om.next :as om]
-            [om.next.impl.parser :as parser]
+  (:require [server.api :as api]
+            [bidi.ring :as ring]
+            [com.stuartsierra.component :as c]
+            [hiccup.page :as page]
             [org.httpkit.server :as http]
-            [ring.middleware.defaults :as rmd]
-            [ring.util.response :refer [response content-type]]
-            [taoensso.timbre :as log]))
-
-;; TODO - do something intelligent with this
-(def last-id (atom 2))
-(def items (atom [{:id 1 :label "item from server"}
-                  {:id 2 :label "another item"}]))
-
-(defmulti api-mutate om/dispatch)
-(defmulti api-read om/dispatch)
-
-(defmethod api-mutate :default [e k p]
-  (log/error "unrecognised mutatuion " k))
-
-(defmethod api-mutate 'app/add-item [e k {:keys [id label]}]
-  {:action (fn []
-             (let [next-id (swap! last-id inc)]
-               (swap! items conj {:id next-id :label label})
-               {:tempids {id next-id}}))})
-
-(defmethod api-read :default [{:keys [ast query] :as env} dispatch-key params]
-  (log/error "unrecognised query" (parser/ast->expr ast)))
-
-(defmethod api-read :loaded-items [{:keys [query] :as env} dispatch-key params]
-  (Thread/sleep 1000)
-  {:value @items})
-
-
-
-
-
-;;; TODO - clean all this shit
-
-(defn root-page-handler [request]
-  (let [root-page (html5
-                   [:head
-                    [:title "Lava Bear"]
-                    [:meta {:name "viewport" :content "width = device-width, initial-scale = 1.0, user-scalable = no"}]
-                    (include-css "/css/compiled/app.css")]
-                   [:body
-                    [:div#app]
-                    (include-js "/js/compiled/app.js")])]
-    (-> root-page response (content-type "text/html"))))
+            [ring.middleware.defaults :as md]
+            [ring.util.response :as ur]
+            [taoensso.timbre :as log]
+            [untangled.server.core :as usc]
+            [untangled.server.impl.middleware :as usm]))
 
 (defrecord Config []
-  component/Lifecycle
-  (start [component]
-    (log/info "starting config")
-    (assoc component
-           :value {:server-routes ["/" [[true :root-page-handler]]]
-                   :port (Integer. (or (System/getenv "PORT") "3000"))
-                   :middleware-opts {:params {:urlencoded true
-                                              :nested true
-                                              :keywordize true}
-                                     :security {:xss-protection {:enable? true, :mode :block}
-                                                :frame-options :sameorigin
-                                                :content-type-options :nosniff}
-                                     :session {:flash true
-                                               :cookie-attrs {:http-only true
-                                                              :max-age 3600}}
-                                     :static {:resources "public"}
-                                     :responses {:not-modified-responses true
-                                                 :absolute-redirects true
-                                                 :content-types true
-                                                 :default-charset "utf-8"}}}))
+  c/Lifecycle
+  (start [this]
+    (log/info "creating config")
+    (assoc this
+           :server-routes ["/" [[true :root-page]]]
+           :http-kit-opts {:port (Integer. (or (System/getenv "PORT") "3000"))}
+           :middleware-opts {:params {:urlencoded true
+                                      :nested true
+                                      :keywordize true}
+                             :security {:xss-protection {:enable? true, :mode :block}
+                                        :frame-options :sameorigin
+                                        :content-type-options :nosniff}
+                             :session {:flash true
+                                       :cookie-attrs {:http-only true
+                                                      :max-age 3600}}
+                             :static {:resources "public"}
+                             :responses {:not-modified-responses true
+                                         :absolute-redirects true
+                                         :content-types true
+                                         :default-charset "utf-8"}}))
 
-  (stop [component] component))
+  (stop [this] this))
 
-(defn MIDDLEWARE [handler component]
-  ((get component :middleware) handler))
+(defrecord Database []
+  c/Lifecycle
+  (start [this]
+    (log/info "creating database")
+    (assoc this
+           :last-id (atom 2)
+           :items (atom [{:id 1 :label "item from server"}
+                        {:id 2 :label "another item"}])))
 
-;; TODO - apparently you can grab things like :config straight out of the component
-(defrecord YourHandler [config api-handler]
-  component/Lifecycle
-  (start [component]
-    (let [middleware-opts (get-in config [:value :middleware-opts])
-          server-routes (get-in config [:value :server-routes])]
+  (stop [this] this))
 
-      (log/info "created handler")
-      (assoc component :middleware (-> (br/make-handler server-routes {:root-page-handler root-page-handler})
+(defrecord Server []
+  c/Lifecycle
+  (start [{:keys [config untangled.server.core/api-handler] :as this}]
+    (let [{:keys [http-kit-opts middleware-opts server-routes]} config
 
-                                       ;; TODO - improve this shit
-                                       (MIDDLEWARE api-handler)
+          root-page (fn [request]
+                      (let [root-page (page/html5
+                                       [:head
+                                        [:title "Lava Bear"]
+                                        [:meta {:name "viewport"
+                                                :content "width = device-width, initial-scale = 1.0, user-scalable = no"}]
+                                        (page/include-css "/css/compiled/app.css")]
+                                       [:body
+                                        [:div#app]
+                                        (page/include-js "/js/compiled/app.js")])]
+                        (-> root-page ur/response (ur/content-type "text/html"))))
 
-                                       (rmd/wrap-defaults middleware-opts)
+          handler (-> (ring/make-handler server-routes {:root-page root-page})
+                      ((partial (:middleware api-handler)))
+                      (md/wrap-defaults middleware-opts)
+                      (usm/wrap-transit-params)
+                      (usm/wrap-transit-response))
 
-                                       ;; TODO - wrap the encoding stuff here
-                                       (mid/wrap-transit-params)
-                                       (mid/wrap-transit-response)
+          stop-server (http/run-server handler http-kit-opts)]
 
-                                       ))))
+      (log/info "starting server on port" (:port http-kit-opts))
+      (assoc this :stop-server stop-server)))
 
-  (stop [component]
-    (assoc component :middleware nil)))
+  (stop [this]
+    (when-let [stop-server (:stop-server this)]
+      (log/info "stopping server")
+      (stop-server))
+    (assoc this :stop-server nil)))
 
-(defrecord YourApiModule []
+(defrecord Api []
   usc/Module
-  (system-key [this] ::YourApiModule)
+  (system-key [this] :api)
   (components [this] {})
   usc/APIHandler
-  (api-read [this] api-read)
-  (api-mutate [this] api-mutate))
+  (api-read [this] api/api-read)
+  (api-mutate [this] api/api-mutate))
 
-(defn make-your-api-module []
-    (component/using (->YourApiModule) []))
-
-(defrecord HttpServer [config]
-  component/Lifecycle
-  (start [component]
-    (let [port (Integer. (get-in config [:http-server :port]))
-          middleware-opts (get-in config [:http-server :middleware-opts])
-          server-routes (get-in config [:server-routes])
-          handler (-> (br/make-handler server-routes {:root-page root-page-handler})
-                      (rmd/wrap-defaults middleware-opts))
-          stop-http-server (http/run-server handler {:port port})]
-
-      (log/info "starting http server on port" port)
-      (assoc component :stop-http-server stop-http-server)))
-
-  (stop [component]
-    (when-let [stop-http-server (:stop-http-server component)]
-      (log/info "stopping http server")
-      (stop-http-server))
-    (assoc component :stop-http-server nil)))
-
-#_(defn make-system []
-  (-> (component/system-map
-       :config (map->Config {})
-       :http-server (map->HttpServer {}))
-      (component/system-using
-       {:http-server [:config]})))
-
-;; TODO - figure out how to get this guy where it needs to be
 (defonce system
   (usc/untangled-system
-   {:components {:config (map->Config {})
-                 :server (usc/make-web-server) ;;TODO - I can use my own server goddamnit
-                 :handler (component/using (map->YourHandler {}) {:config :config
-                                                                  :api-handler ::usc/api-handler})}
-    :modules [(->YourApiModule)]}))
-
-#_(defonce system (make-system))
+   {:components {:config (->Config)
+                 :database (->Database)
+                 :server (c/using (->Server) [:config ::usc/api-handler])}
+    :modules [(c/using (->Api) [:config :database])]}))
 
 (defn -main [& args]
-  (alter-var-root #'system component/start))
+  (alter-var-root #'system c/start))
