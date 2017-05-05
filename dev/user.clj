@@ -1,8 +1,8 @@
 (ns user
   (:require [server.system :refer [system]]
             [clojure.tools.namespace.repl :as repl]
-            [figwheel-sidecar.repl-api :refer [cljs-repl]]
-            [com.stuartsierra.component :as component]))
+            [com.stuartsierra.component :as component]
+            [figwheel-sidecar.repl-api :refer [cljs-repl]]))
 
 (defn start []
   (alter-var-root #'system component/start))

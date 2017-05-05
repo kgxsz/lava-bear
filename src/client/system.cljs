@@ -4,8 +4,8 @@
             [client.mutations :as m]
             [com.stuartsierra.component :as c]
             [om.next :as om]
-            [untangled.client.core :as u]
-            [untangled.client.data-fetch :as d]
+            [untangled.client.core :as uc]
+            [untangled.client.data-fetch :as ud]
             [untangled.client.logging :as log]))
 
 (defrecord Config []
@@ -38,14 +38,14 @@
   (start [component]
     (let [shared {:browser browser
                   :config config}
-          !untangled-client (atom (u/new-untangled-client
+          !untangled-client (atom (uc/new-untangled-client
                                    :started-callback (fn [{:keys [reconciler]}]
                                                        (n/start-navigation reconciler (:!navigation browser) (:client-routes config))
-                                                       (d/load-data reconciler [{:loaded-items (om/get-query ui/Item)}]
+                                                       (ud/load-data reconciler [{:loaded-items (om/get-query ui/Item)}]
                                                                     :post-mutation 'fetch/items-loaded))
                                    :shared shared))]
       (log/info "starting renderer")
-      (swap! !untangled-client u/mount ui/App "app")
+      (swap! !untangled-client uc/mount ui/App "app")
       (assoc component :!untangled-client !untangled-client)))
 
   (stop [component]

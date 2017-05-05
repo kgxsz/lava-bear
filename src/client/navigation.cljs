@@ -1,9 +1,9 @@
 (ns client.navigation
-  (:require [bidi.bidi :as bidi]
+  (:require [bidi.bidi :as b]
             [cemerick.url :as url]
-            [medley.core :as m]
+            [medley.core :as mc]
             [om.next :as om]
-            [pushy.core :as pushy]
+            [pushy.core :as p]
             [clojure.string :as s]
             [untangled.client.logging :as log]))
 
@@ -12,24 +12,24 @@
         {:keys [!navigation]} browser
         query-string (when-not (s/blank? (url/map->query query-params)) (str "?" (url/map->query query-params)))
         route-params (-> route-params vec flatten)
-        path (when-not url (apply bidi/path-for client-routes handler route-params))]
-    ((if replace? pushy/replace-token! pushy/set-token!) @!navigation (or url (str path query-string)))))
+        path (when-not url (apply b/path-for client-routes handler route-params))]
+    ((if replace? p/replace-token! p/set-token!) @!navigation (or url (str path query-string)))))
 
 (defn start-navigation [reconciler !navigation client-routes]
-  (reset! !navigation (pushy/pushy
+  (reset! !navigation (p/pushy
                        (fn [{:keys [handler route-params] :as location}]
                          (let [page (-> handler
                                         (name)
                                         (str "-page")
                                         (keyword))
-                               query-params (->> (s/split (pushy/get-token @!navigation) "?")
+                               query-params (->> (s/split (p/get-token @!navigation) "?")
                                                  (second)
                                                  (url/query->map)
-                                                 (m/map-keys keyword))]
+                                                 (mc/map-keys keyword))]
                            (om/transact! reconciler `[(app/navigate {:page ~page
                                                                      :handler ~handler
                                                                      :route-params ~route-params
                                                                      :query-params ~query-params})
                                                       :page])))
-                       (partial bidi/match-route client-routes)))
-  (pushy/start! @!navigation))
+                       (partial b/match-route client-routes)))
+  (p/start! @!navigation))

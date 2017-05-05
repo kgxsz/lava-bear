@@ -2,16 +2,16 @@
   (:require [client.system :refer [system]]
             [client.ui :as ui]
             [com.stuartsierra.component :as component]
-            [devtools.core :as devtools]
+            [devtools.core :as dc]
             [untangled.client.core :as uc]
-            [untangled.client.impl.util :as util]
+            [untangled.client.impl.util :as uu]
             [untangled.client.logging :as log]))
 
 ;; TODO - should these be part of the browser?
 ;; How do I surface server-based config? Does it even make sense on the FE?
 (enable-console-print!)
 (log/set-level :debug)
-(devtools/install!)
+(dc/install!)
 
 (defn reload []
   (let [!untangled-client (get-in system [:renderer :!untangled-client])]
@@ -19,4 +19,4 @@
 
 (defn state []
   (let [!untangled-client (get-in system [:renderer :!untangled-client])]
-    (util/log-app-state !untangled-client)))
+    (uu/log-app-state !untangled-client)))

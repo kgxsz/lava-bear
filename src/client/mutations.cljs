@@ -2,9 +2,9 @@
   (:require [client.ui :as ui]
             [om.next :as om]
             [untangled.client.core :as uc]
-            [untangled.client.mutations :as m]))
+            [untangled.client.mutations :as um]))
 
-(defmethod m/mutate 'app/add-item [{:keys [state ref]} k {:keys [id label]}]
+(defmethod um/mutate 'app/add-item [{:keys [state ref]} k {:keys [id label]}]
   {:remote true
    :action (fn []
              (let [list-path (conj ref :items)
@@ -15,7 +15,7 @@
                ;; tack on the ident of the item in the list
                (uc/integrate-ident! state item-ident :append list-path)))})
 
-(defmethod m/mutate 'fetch/items-loaded [{:keys [state]} _ _]
+(defmethod um/mutate 'fetch/items-loaded [{:keys [state]} _ _]
   {:action (fn []
              (let [idents (get @state :loaded-items)]
                (swap! state (fn [s]
@@ -23,7 +23,7 @@
                                   (assoc-in [:lists/by-title "Some List" :items] idents)
                                   (dissoc :loaded-items))))))})
 
-(defmethod m/mutate 'app/navigate [{:keys [state]} _ {:keys [page handler route-params query-params]}]
+(defmethod um/mutate 'app/navigate [{:keys [state]} _ {:keys [page handler route-params query-params]}]
   {:action (fn []
              (swap! state assoc
                     :navigation {:handler handler

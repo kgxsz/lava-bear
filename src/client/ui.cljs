@@ -2,9 +2,8 @@
   (:require [client.navigation :as n]
             [om.next :as om :refer-macros [defui]]
             [om-tools.dom :as dom :include-macros true]
-            [pushy.core :as pushy]
             [untangled.client.core :as uc]
-            [untangled.client.mutations :as m]))
+            [untangled.client.mutations :as um]))
 
 (defui ^:once Item
   static uc/InitialAppState
@@ -63,10 +62,10 @@
       (dom/input
        {:value new-item-label
         :on-change (fn [e]
-                     (m/set-string! this :ui/new-item-label :event e))})
+                     (um/set-string! this :ui/new-item-label :event e))})
       (dom/button
        {:on-click (fn []
-                    (m/set-string! this :ui/new-item-label :value "")
+                    (um/set-string! this :ui/new-item-label :value "")
                     (om/transact! this `[(app/add-item {:id ~(om/tempid) :label ~new-item-label})
                                          (untangled/load {:query [{:loaded-items ~(om/get-query Item)}]
                                                           :post-mutation fetch/items-loaded})]))}

@@ -8,7 +8,7 @@
             [ring.middleware.defaults :as md]
             [ring.util.response :as ur]
             [taoensso.timbre :as log]
-            [untangled.server.core :as usc]
+            [untangled.server.core :as uc]
             [untangled.server.impl.middleware :as usm]))
 
 (defrecord Config []
@@ -80,20 +80,20 @@
       (stop-server))
     (assoc this :stop-server nil)))
 
-(defrecord Api []
-  usc/Module
+(defrecord ApiModule []
+  uc/Module
   (system-key [this] :api)
   (components [this] {})
-  usc/APIHandler
+  uc/APIHandler
   (api-read [this] api/api-read)
   (api-mutate [this] api/api-mutate))
 
 (defonce system
-  (usc/untangled-system
+  (uc/untangled-system
    {:components {:config (->Config)
                  :database (->Database)
-                 :server (c/using (->Server) [:config ::usc/api-handler])}
-    :modules [(c/using (->Api) [:config :database])]}))
+                 :server (c/using (->Server) [:config ::uc/api-handler])}
+    :modules [(c/using (->ApiModule) [:config :database])]}))
 
 (defn -main [& args]
   (alter-var-root #'system c/start))
