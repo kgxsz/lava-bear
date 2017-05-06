@@ -7,8 +7,6 @@
             [untangled.client.impl.util :as uu]
             [untangled.client.logging :as log]))
 
-;; TODO - should these be part of the browser?
-;; How do I surface server-based config? Does it even make sense on the FE?
 (enable-console-print!)
 (log/set-level :debug)
 (dc/install!)
