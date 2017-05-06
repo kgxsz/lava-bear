@@ -2,6 +2,7 @@
   (:gen-class)
   (:require [server.api :as api]
             [bidi.ring :as ring]
+            [clojure.edn :as edn]
             [com.stuartsierra.component :as c]
             [hiccup.page :as page]
             [org.httpkit.server :as http]
@@ -16,24 +17,16 @@
   (start [this]
     (log/info "creating config")
     (assoc this
-           :server-routes ["/" [[true :root-page]]]
-           :http-kit-opts {:port (Integer. (or (System/getenv "PORT") "3000"))}
-           :middleware-opts {:params {:urlencoded true
-                                      :nested true
-                                      :keywordize true}
-                             :security {:xss-protection {:enable? true, :mode :block}
-                                        :frame-options :sameorigin
-                                        :content-type-options :nosniff}
-                             :session {:flash true
-                                       :cookie-attrs {:http-only true
-                                                      :max-age 3600}}
-                             :static {:resources "public"}
-                             :responses {:not-modified-responses true
-                                         :absolute-redirects true
-                                         :content-types true
-                                         :default-charset "utf-8"}}))
+           :private (edn/read-string (slurp "resources/private_config.edn"))
+           :public (edn/read-string (slurp "resources/public_config.edn"))))
 
-  (stop [this] this))
+  ;; Need to grab ENV vars for each and every value here, like {:http-kit {:opts {:port 3000}}} would be HTTP_KIT_OPTS_PORT=3000
+  ;; ONly grab the ones that ask for it though
+
+  (stop [this]
+    (assoc this
+           :public nil
+           :private nil)))
 
 (defrecord Database []
   c/Lifecycle
@@ -49,7 +42,7 @@
 (defrecord Server []
   c/Lifecycle
   (start [{:keys [config untangled.server.core/api-handler] :as this}]
-    (let [{:keys [http-kit-opts middleware-opts server-routes]} config
+    (let [{{:keys [http-kit-opts middleware-opts server-routes]} :public} config
 
           root-page (fn [request]
                       (let [root-page (page/html5

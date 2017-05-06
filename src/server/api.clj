@@ -21,4 +21,3 @@
 (defmethod api-read :loaded-items [{:keys [config database query] :as e} k p]
   (Thread/sleep 1000)
   {:value (mapv #(select-keys % query) @(:items database))})
-
