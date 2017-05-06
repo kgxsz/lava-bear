@@ -18,7 +18,7 @@
 (defmethod api-read :default [{:keys [ast] :as e} k p]
   (log/error "unrecognised query" (omp/ast->expr ast)))
 
-(defmethod api-read :loaded-items [{:keys [config database] :as e} k p]
+(defmethod api-read :loaded-items [{:keys [config database query] :as e} k p]
   (Thread/sleep 1000)
-  {:value @(:items database)})
+  {:value (mapv #(select-keys % query) @(:items database))})
 
