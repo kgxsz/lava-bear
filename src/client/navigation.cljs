@@ -9,20 +9,20 @@
 
 (defn navigate [{:keys [config browser]} {:keys [handler query-params route-params url replace?]}]
   (let [{:keys [client-routes]} config
-        {:keys [!navigation]} browser
+        {:keys [navigation]} browser
         query-string (when-not (s/blank? (url/map->query query-params)) (str "?" (url/map->query query-params)))
         route-params (-> route-params vec flatten)
         path (when-not url (apply b/path-for client-routes handler route-params))]
-    ((if replace? p/replace-token! p/set-token!) @!navigation (or url (str path query-string)))))
+    ((if replace? p/replace-token! p/set-token!) @navigation (or url (str path query-string)))))
 
-(defn start-navigation [reconciler !navigation client-routes]
-  (reset! !navigation (p/pushy
+(defn start-navigation [reconciler navigation client-routes]
+  (reset! navigation (p/pushy
                        (fn [{:keys [handler route-params] :as location}]
                          (let [page (-> handler
                                         (name)
                                         (str "-page")
                                         (keyword))
-                               query-params (->> (s/split (p/get-token @!navigation) "?")
+                               query-params (->> (s/split (p/get-token @navigation) "?")
                                                  (second)
                                                  (url/query->map)
                                                  (mc/map-keys keyword))]
@@ -32,4 +32,4 @@
                                                                      :query-params ~query-params})
                                                       :page])))
                        (partial b/match-route client-routes)))
-  (p/start! @!navigation))
+  (p/start! @navigation))

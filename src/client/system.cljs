@@ -13,7 +13,6 @@
   (start [component]
     (log/info "starting config")
     (assoc component
-           ;; TODO - should this come from somewhere common?
            :client-routes ["/" [["" :home]
                                 [[:thing-id "/thing"] :thing]
                                 ["facebook-sign-in" :facebook-sign-in]
@@ -27,26 +26,25 @@
   (start [component]
     (log/info "starting browser")
     (assoc component
-           :!navigation (atom {})))
+           :navigation (atom {})))
 
   (stop [component]
     component))
 
-;; TODO - should this actually be the untangled-client with a :value key?
 (defrecord Renderer [config browser]
   c/Lifecycle
   (start [component]
     (let [shared {:browser browser
                   :config config}
-          !untangled-client (atom (uc/new-untangled-client
+          untangled-client (atom (uc/new-untangled-client
                                    :started-callback (fn [{:keys [reconciler]}]
-                                                       (n/start-navigation reconciler (:!navigation browser) (:client-routes config))
+                                                       (n/start-navigation reconciler (:navigation browser) (:client-routes config))
                                                        (ud/load-data reconciler [{:loaded-items (om/get-query ui/Item)}]
                                                                     :post-mutation 'fetch/items-loaded))
                                    :shared shared))]
       (log/info "starting renderer")
-      (swap! !untangled-client uc/mount ui/App "app")
-      (assoc component :!untangled-client !untangled-client)))
+      (swap! untangled-client uc/mount ui/App "app")
+      (assoc component :untangled-client untangled-client)))
 
   (stop [component]
     component))
