@@ -149,7 +149,12 @@
   Object
   (render
    [this]
-   (dom/p "unknown page :(")))
+   (dom/div
+    (dom/p
+     "You're lost")
+    (dom/button
+     {:on-click #(n/navigate this {:handler :home})}
+     "go home"))))
 
 (def ui-unknown-page (om/factory UnknownPage))
 
@@ -207,15 +212,15 @@
       {:key react-key}
       #_(dom/h4 "Header" (when loading-data " is loading"))
       #_(dom/button
-       {:on-click #(n/navigate (om/shared this) {:handler :home :query-params {:a 1 :b "hello"}})}
+         {:on-click #(n/navigate this {:handler :home :query-params {:a 1 :b "hello"}})}
        "home")
       #_(dom/button
-       {:on-click #(n/navigate (om/shared this) {:handler :thing :route-params {:thing-id 123}})}
+         {:on-click #(n/navigate this {:handler :thing :route-params {:thing-id 123}})}
        "thing")
       #_(dom/button
-       {:on-click #(n/navigate (om/shared this) {:handler :thing :route-params {:thing-id 69}})}
+         {:on-click #(n/navigate this {:handler :thing :route-params {:thing-id 69}})}
        "be cool")
       #_(dom/button
-       {:on-click #(n/navigate (om/shared this) {:url "/wat"})}
+         {:on-click #(n/navigate this {:url "/wat"})}
        "unknown")
       (ui-page-router page)))))

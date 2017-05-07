@@ -7,8 +7,9 @@
             [clojure.string :as s]
             [untangled.client.logging :as log]))
 
-(defn navigate [{:keys [config browser]} {:keys [handler query-params route-params url replace?]}]
-  (let [{:keys [client-routes]} config
+(defn navigate [component {:keys [handler query-params route-params url replace?]}]
+  (let [{:keys [config browser]} (om/shared component)
+        {:keys [client-routes]} config
         {:keys [navigation]} browser
         query-string (when-not (s/blank? (url/map->query query-params)) (str "?" (url/map->query query-params)))
         route-params (-> route-params vec flatten)
