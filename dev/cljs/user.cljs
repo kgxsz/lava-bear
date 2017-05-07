@@ -12,9 +12,9 @@
 (dc/install!)
 
 (defn reload []
-  (let [!untangled-client (get-in system [:renderer :!untangled-client])]
-    (swap! !untangled-client uc/mount ui/App "app")))
+  (let [untangled-client (get-in system [:renderer :untangled-client])]
+    (swap! untangled-client uc/mount ui/App "app")))
 
 (defn state []
-  (let [!untangled-client (get-in system [:renderer :!untangled-client])]
-    (uu/log-app-state !untangled-client)))
+  (let [untangled-client (get-in system [:renderer :untangled-client])]
+    (uu/log-app-state untangled-client)))
