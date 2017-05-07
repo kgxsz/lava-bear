@@ -15,18 +15,39 @@
 (defrecord Config []
   c/Lifecycle
   (start [this]
-    (log/info "creating config")
-    (assoc this
-           :private (edn/read-string (slurp "resources/private_config.edn"))
-           :public (edn/read-string (slurp "resources/public_config.edn"))))
+    (let [private-config (try
+                           (-> (str (System/getProperty "user.home") "/.lein/lava-bear/private_config.edn")
+                               (slurp)
+                               (edn/read-string))
+                           (catch java.io.FileNotFoundException e {}))]
+
+      (log/info "creating config")
+
+      (assoc this
+             :server-routes ["/" [[true :root-page]]]
+             :http-kit-opts {:port (or (edn/read-string (System/getenv "PORT"))
+                                       (get-in private-config [:port])
+                                       3000)}
+             :middleware-opts {:params {:urlencoded true
+                                        :nested true
+                                        :keywordize true}
+                               :security {:xss-protection {:enable? true
+                                                           :mode :block}
+                                          :frame-options :sameorigin
+                                          :content-type-options :nosniff}
+                               :session {:flash true
+                                         :cookie-attrs {:http-only true
+                                                        :max-age 3600}}
+                               :static {:resources "public"}
+                               :responses {:not-modified-responses true
+                                           :absolute-redirects true
+                                           :content-types true
+                                           :default-charset "utf-8"}})))
 
   ;; Need to grab ENV vars for each and every value here, like {:http-kit {:opts {:port 3000}}} would be HTTP_KIT_OPTS_PORT=3000
   ;; ONly grab the ones that ask for it though
 
-  (stop [this]
-    (assoc this
-           :public nil
-           :private nil)))
+  (stop [this] this))
 
 (defrecord Database []
   c/Lifecycle
@@ -42,7 +63,7 @@
 (defrecord Server []
   c/Lifecycle
   (start [{:keys [config untangled.server.core/api-handler] :as this}]
-    (let [{{:keys [http-kit-opts middleware-opts server-routes]} :public} config
+    (let [{:keys [http-kit-opts middleware-opts server-routes]} config
 
           root-page (fn [request]
                       (let [root-page (page/html5
