@@ -93,7 +93,15 @@
   (render
    [this]
    (let [{:keys [navigation]} (om/props this)]
-     (dom/p "home page: " (pr-str navigation)))))
+     (dom/div
+      {:style {:margin-top "8rem"
+               :font-family "arial"
+               :color "#555"
+               :font-size "1.8rem"
+               :text-align "center"}}
+      "Under Construction")
+     #_(dom/p "home page: " (pr-str navigation)))))
+
 
 (def ui-home-page (om/factory HomePage))
 
@@ -197,17 +205,17 @@
    (let [{:keys [ui/react-key ui/loading-data page]} (om/props this)]
      (dom/div
       {:key react-key}
-      (dom/h4 "Header" (when loading-data " is loading"))
-      (dom/button
+      #_(dom/h4 "Header" (when loading-data " is loading"))
+      #_(dom/button
        {:on-click #(n/navigate (om/shared this) {:handler :home :query-params {:a 1 :b "hello"}})}
        "home")
-      (dom/button
+      #_(dom/button
        {:on-click #(n/navigate (om/shared this) {:handler :thing :route-params {:thing-id 123}})}
        "thing")
-      (dom/button
+      #_(dom/button
        {:on-click #(n/navigate (om/shared this) {:handler :thing :route-params {:thing-id 69}})}
        "be cool")
-      (dom/button
+      #_(dom/button
        {:on-click #(n/navigate (om/shared this) {:url "/wat"})}
        "unknown")
       (ui-page-router page)))))

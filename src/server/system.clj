@@ -65,7 +65,7 @@
           root-page (fn [request]
                       (let [root-page (page/html5
                                        [:head
-                                        [:title "Lava Bear"]
+                                        [:title "keigo.io"]
                                         [:meta {:name "viewport"
                                                 :content "width = device-width, initial-scale = 1.0, user-scalable = no"}]
                                         (page/include-css "/css/compiled/app.css")]
