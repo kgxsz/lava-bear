@@ -25,9 +25,9 @@
 
       (assoc this
              :server-routes ["/" [[true :root-page]]]
-             :http-kit-opts {:port (or (edn/read-string (System/getenv "PORT"))
-                                       (get-in private-config [:port])
-                                       3000)}
+
+             :http-kit-opts {:port (or (edn/read-string (System/getenv "PORT")) 3000)}
+
              :middleware-opts {:params {:urlencoded true
                                         :nested true
                                         :keywordize true}
@@ -43,9 +43,6 @@
                                            :absolute-redirects true
                                            :content-types true
                                            :default-charset "utf-8"}})))
-
-  ;; Need to grab ENV vars for each and every value here, like {:http-kit {:opts {:port 3000}}} would be HTTP_KIT_OPTS_PORT=3000
-  ;; ONly grab the ones that ask for it though
 
   (stop [this] this))
 
