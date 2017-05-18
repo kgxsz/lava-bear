@@ -1,5 +1,6 @@
 (ns server.api
-  (:require [clj-time.core :as time]
+  (:require [clj-time.core :as t]
+            [clj-time.coerce :as tc]
             [om.next :as om]
             [om.next.impl.parser :as omp]
             [taoensso.timbre :as log]))
@@ -21,17 +22,17 @@
              (let [id (java.util.UUID/randomUUID)]
                (swap! (:auth-attempts/by-id database)
                       assoc id {:id id
-                                :initialised-at "now" #_(time/now)})
+                                :initialised-at (tc/to-date (t/now))})
                {:tempids {tempid id}}))})
 
-(defmethod api-mutate 'app/finalise-auth-attempt [{:keys [config database]} k {:keys [id code] :as p}]
+(defmethod api-mutate 'app/finalise-auth-attempt [{:keys [config database]} k {:keys [id code]}]
   {:action (fn []
              ;; TODO - hit fb with code and everything, then create the session
              (let [auth-attempt (get @(:auth-attempts/by-id database) id)]
                (if auth-attempt
                  (swap! (:auth-attempts/by-id database)
-                        assoc-in [id :finalised-at] "now + something" #_(time/now))
-                 (log/warn "auth attempt doesn't exist yo"))))})
+                        assoc-in [id :finalised-at] (tc/to-date (t/now)))
+                 (log/warn "auth attempt not found:" id))))})
 
 (defmethod api-read :default [{:keys [ast] :as e} k p]
   (log/error "unrecognised query" (omp/ast->expr ast)))
@@ -39,7 +40,6 @@
 (defmethod api-read :auth-attempt [{:keys [config database]} k {:keys [id]}]
   (when-let [auth-attempt (get @(:auth-attempts/by-id database) id)]
     {:value {:id id
-             :finalised-at (:finalised-at auth-attempt)
              :app-id (get-in config [:auth :app-id])
              :redirect-url (get-in config [:auth :redirect-url])
              :scope (get-in config [:auth :scope])}}))
