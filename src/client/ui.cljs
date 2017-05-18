@@ -94,9 +94,8 @@
         error (om/transact! this `[(app/update-auth-status {:auth-status :failure})])
         (and state code) (om/transact! this `[(app/update-auth-status {:auth-status :loading})
                                               (app/finalise-auth-attempt {:id ~id :code ~code})
-                                              (untangled/load {:query [(:auth-attempt {:id ~id})]})
-                                              ;; TODO - do a post mutation here to update the auth-status
-                                              ]))
+                                              #_(untangled/load {:query [(:auth-attempt {:id ~id})]
+                                                               :post-mutation app/something})]))
       (n/navigate this {:handler :home})))
 
   (render [this]
@@ -116,25 +115,24 @@
 
   Object
   (componentDidUpdate [this _ _]
-    (let [{:keys [ui/auth-status auth-attempt]} (om/props this)
-          {:keys [id finalised-at app-id redirect-url scope status]} auth-attempt]
-      (when (and id (nil? finalised-at))
-        (n/navigate this {:url "https://www.facebook.com/v2.8/dialog/oauth"
-                          :query-params {:app_id app-id
-                                         :state id
-                                         :scope scope
-                                         :redirect_uri redirect-url}}))))
+    (when-let [{:keys [app-id id redirect-url scope]} (:auth-attempt (om/props this))]
+      (n/navigate this {:url "https://www.facebook.com/v2.8/dialog/oauth"
+                        :query-params {:app_id app-id
+                                       :state id
+                                       :scope scope
+                                       :redirect_uri redirect-url}})))
 
   (render [this]
     (let [{:keys [ui/auth-status]} (om/props this)]
       (dom/div
         (dom/button
           {:on-click #(let [tempid (om/tempid)]
-                        (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
-                                             (app/update-auth-status {:auth-status :loading})
+                        (om/transact! this `[(app/update-auth-status {:auth-status :loading})
+                                             (app/initialise-auth-attempt {:id ~tempid})
                                              (untangled/load {:query [(:auth-attempt {:id ~tempid})]})]))}
           (case auth-status
             :loading "signing in"
+            :success "sign in succeeded!"
             :failure "sign in failed!"
             "sign in"))))))
 
