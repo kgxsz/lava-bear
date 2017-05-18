@@ -8,13 +8,13 @@
             [untangled.client.logging :as log]))
 
 (defn navigate [component {:keys [handler query-params route-params url replace?]}]
-  (let [{:keys [config browser]} (om/shared component)
-        {:keys [client-routes]} config
-        {:keys [navigation]} browser
+  (let [{{:keys [client-routes]} :config {:keys [navigation]} :browser} (om/shared component)
         query-string (when-not (s/blank? (url/map->query query-params)) (str "?" (url/map->query query-params)))
         route-params (-> route-params vec flatten)
         path (when-not url (apply b/path-for client-routes handler route-params))]
-    ((if replace? p/replace-token! p/set-token!) @navigation (or url (str path query-string)))))
+    (if url
+      (set! js/window.location (str url query-string))
+      ((if replace? p/replace-token! p/set-token!) @navigation (str path query-string)))))
 
 (defn start-navigation [reconciler navigation client-routes]
   (reset! navigation (p/pushy

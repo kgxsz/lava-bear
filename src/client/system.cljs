@@ -14,8 +14,8 @@
     (log/info "starting config")
     (assoc component
            :client-routes ["/" [["" :home]
+                                ["auth" :auth]
                                 [[:thing-id "/thing"] :thing]
-                                ["facebook-sign-in" :facebook-sign-in]
                                 [true :unknown]]]))
 
   (stop [component]

@@ -42,7 +42,11 @@
                                :responses {:not-modified-responses true
                                            :absolute-redirects true
                                            :content-types true
-                                           :default-charset "utf-8"}})))
+                                           :default-charset "utf-8"}}
+             :auth {:app-id (or (System/getenv "AUTH_APP_ID") "424679067898674")
+                    :app-secret (or (System/getenv "AUTH_APP_SECRET") (:auth-app-secret private-config))
+                    :redirect-url (or (System/getenv "AUTH_REDIRECT_URL") "http://localhost:3000/auth")
+                    :scope "email"})))
 
   (stop [this] this))
 
@@ -51,6 +55,7 @@
   (start [this]
     (log/info "creating database")
     (assoc this
+           :auth-attempts/by-id (atom {})
            :last-id (atom 2)
            :items (atom [{:id 1 :label "item from server"}
                         {:id 2 :label "another item"}])))
