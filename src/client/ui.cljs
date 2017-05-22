@@ -94,8 +94,7 @@
         error (om/transact! this `[(app/update-auth-status {:auth-status :failure})])
         (and state code) (om/transact! this `[(app/update-auth-status {:auth-status :loading})
                                               (app/finalise-auth-attempt {:id ~id :code ~code})
-                                              #_(untangled/load {:query [(:auth-attempt {:id ~id})]
-                                                               :post-mutation app/something})]))
+                                              (untangled/load {:query [(:auth-attempt {:id ~id})]})]))
       (n/navigate this {:handler :home})))
 
   (render [this]
@@ -115,12 +114,16 @@
 
   Object
   (componentDidUpdate [this _ _]
-    (when-let [{:keys [app-id id redirect-url scope]} (:auth-attempt (om/props this))]
-      (n/navigate this {:url "https://www.facebook.com/v2.8/dialog/oauth"
-                        :query-params {:app_id app-id
-                                       :state id
-                                       :scope scope
-                                       :redirect_uri redirect-url}})))
+    (when-let [{:keys [client-id id redirect-url scope success-at failure-at user-id]} (:auth-attempt (om/props this))]
+      (cond
+        success-at (om/transact! this `[(app/update-auth-status {:auth-status :success})
+                                        (untangled/load {:query [(:user {:user-id ~user-id})]})])
+        failure-at (om/transact! this `[(app/update-auth-status {:auth-status :failure})])
+        :else (n/navigate this {:url "https://www.facebook.com/v2.9/dialog/oauth"
+                                :query-params {:client_id client-id
+                                               :state id
+                                               :scope scope
+                                               :redirect_uri redirect-url}}))))
 
   (render [this]
     (let [{:keys [ui/auth-status]} (om/props this)]
@@ -134,7 +137,14 @@
             :loading "signing in"
             :success "sign in succeeded!"
             :failure "sign in failed!"
-            "sign in"))))))
+            "sign in"))
+
+        (dom/button
+         {:on-click #(om/transact! this `[(untangled/load {:query [:hello]})])}
+         "hello")
+        (dom/button
+         {:on-click #(om/transact! this `[(untangled/load {:query [:bye]})])}
+         "bye")))))
 
 (def ui-home-page (om/factory HomePage))
 

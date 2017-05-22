@@ -24,27 +24,26 @@
       (log/info "creating config")
 
       (assoc this
-             :server-routes ["/" [[true :root-page]]]
+             :server-routes ["/" [[true :root-page]]] ;; TODO des this really need to be in config
 
              :http-kit-opts {:port (or (edn/read-string (System/getenv "PORT")) 3000)}
 
+             ;; TODO - pick and choose what you need from https://github.com/ring-clojure/ring-defaults
+             ;; TODO separate these into independent parts
              :middleware-opts {:params {:urlencoded true
                                         :nested true
                                         :keywordize true}
-                               :security {:xss-protection {:enable? true
-                                                           :mode :block}
+                               :security {:xss-protection {:enable? true :mode :block}
                                           :frame-options :sameorigin
                                           :content-type-options :nosniff}
-                               :session {:flash true
-                                         :cookie-attrs {:http-only true
-                                                        :max-age 3600}}
+                               :cookies true
                                :static {:resources "public"}
                                :responses {:not-modified-responses true
                                            :absolute-redirects true
                                            :content-types true
                                            :default-charset "utf-8"}}
-             :auth {:app-id (or (System/getenv "AUTH_APP_ID") "424679067898674")
-                    :app-secret (or (System/getenv "AUTH_APP_SECRET") (:auth-app-secret private-config))
+             :auth {:client-id (or (System/getenv "AUTH_CLIENT_ID") "424679067898674")
+                    :client-secret (or (System/getenv "AUTH_CLIENT_SECRET") (:auth-client-secret private-config))
                     :redirect-url (or (System/getenv "AUTH_REDIRECT_URL") "http://localhost:3000/auth")
                     :scope "email"})))
 
@@ -56,15 +55,45 @@
     (log/info "creating database")
     (assoc this
            :auth-attempts/by-id (atom {})
+           :users/by-id (atom {})
            :last-id (atom 2)
            :items (atom [{:id 1 :label "item from server"}
-                        {:id 2 :label "another item"}])))
+                         {:id 2 :label "another item"}])))
 
   (stop [this] this))
 
+(defrecord State []
+  c/Lifecycle
+  (start [this]
+    (log/info "creating state")
+    (assoc this
+           :sessions (atom {})
+           :database (atom {:last-id 2
+                            :items [{:id 1 :label "item from server"}
+                                    {:id 2 :label "another item"}]})))
+  (stop [this] this))
+
+(defn wrap-session [handler {:keys [state]}]
+  (fn [request]
+    (let [session-key (get-in request [:cookies "session-key" :value] (java.util.UUID/randomUUID))
+          process-request (fn [request]
+                            (assoc request :session-key session-key))
+          process-response (fn [response]
+                             (if (get @(:sessions state) session-key)
+                               (assoc-in response [:cookies "session-key"] {:value session-key :http-only true :max-age 60})
+                               response))]
+      (-> request
+          (process-request)
+          (handler)
+          (process-response)))))
+
+(defn wrap-api [handler {:keys [untangled.server.core/api-handler]}]
+  ((:middleware api-handler) handler))
+
+
 (defrecord Server []
   c/Lifecycle
-  (start [{:keys [config untangled.server.core/api-handler] :as this}]
+  (start [{:keys [config] :as this}]
     (let [{:keys [http-kit-opts middleware-opts server-routes]} config
 
           root-page (fn [request]
@@ -80,7 +109,8 @@
                         (-> root-page ur/response (ur/content-type "text/html"))))
 
           handler (-> (ring/make-handler server-routes {:root-page root-page})
-                      ((partial (:middleware api-handler)))
+                      (wrap-api this)
+                      (wrap-session this)
                       (md/wrap-defaults middleware-opts)
                       (usm/wrap-transit-params)
                       (usm/wrap-transit-response))
@@ -107,9 +137,10 @@
 (defonce system
   (uc/untangled-system
    {:components {:config (->Config)
+                 :state (->State)
                  :database (->Database)
-                 :server (c/using (->Server) [:config ::uc/api-handler])}
-    :modules [(c/using (->ApiModule) [:config :database])]}))
+                 :server (c/using (->Server) [:config :state ::uc/api-handler])}
+    :modules [(c/using (->ApiModule) [:config :state :database])]}))
 
 (defn -main [& args]
   (alter-var-root #'system c/start))
