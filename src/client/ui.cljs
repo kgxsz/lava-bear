@@ -117,7 +117,7 @@
     (when-let [{:keys [client-id id redirect-url scope success-at failure-at user-id]} (:auth-attempt (om/props this))]
       (cond
         success-at (om/transact! this `[(app/update-auth-status {:auth-status :success})
-                                        (untangled/load {:query [(:user {:user-id ~user-id})]})])
+                                        (untangled/load {:query [:current-user]})])
         failure-at (om/transact! this `[(app/update-auth-status {:auth-status :failure})])
         :else (n/navigate this {:url "https://www.facebook.com/v2.9/dialog/oauth"
                                 :query-params {:client_id client-id
@@ -137,14 +137,7 @@
             :loading "signing in"
             :success "sign in succeeded!"
             :failure "sign in failed!"
-            "sign in"))
-
-        (dom/button
-         {:on-click #(om/transact! this `[(untangled/load {:query [:hello]})])}
-         "hello")
-        (dom/button
-         {:on-click #(om/transact! this `[(untangled/load {:query [:bye]})])}
-         "bye")))))
+            "sign in"))))))
 
 (def ui-home-page (om/factory HomePage))
 

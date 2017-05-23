@@ -39,8 +39,8 @@
           untangled-client (atom (uc/new-untangled-client
                                    :started-callback (fn [{:keys [reconciler]}]
                                                        (n/start-navigation reconciler (:navigation browser) (:client-routes config))
-                                                       (ud/load-data reconciler [{:loaded-items (om/get-query ui/Item)}]
-                                                                    :post-mutation 'fetch/items-loaded))
+                                                       (ud/load-data reconciler [{:loaded-items (om/get-query ui/Item)} :items]
+                                                                     :post-mutation 'fetch/items-loaded))
                                    :shared shared))]
       (log/info "starting renderer")
       (swap! untangled-client uc/mount ui/App "app")

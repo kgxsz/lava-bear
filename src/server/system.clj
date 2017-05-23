@@ -49,26 +49,15 @@
 
   (stop [this] this))
 
-(defrecord Database []
-  c/Lifecycle
-  (start [this]
-    (log/info "creating database")
-    (assoc this
-           :auth-attempts/by-id (atom {})
-           :users/by-id (atom {})
-           :last-id (atom 2)
-           :items (atom [{:id 1 :label "item from server"}
-                         {:id 2 :label "another item"}])))
-
-  (stop [this] this))
-
 (defrecord State []
   c/Lifecycle
   (start [this]
     (log/info "creating state")
     (assoc this
            :sessions (atom {})
-           :database (atom {:last-id 2
+           :database (atom {:auth-attempts/by-id {}
+                            :users/by-id {}
+                            :last-id 2
                             :items [{:id 1 :label "item from server"}
                                     {:id 2 :label "another item"}]})))
   (stop [this] this))
@@ -80,7 +69,7 @@
                             (assoc request :session-key session-key))
           process-response (fn [response]
                              (if (get @(:sessions state) session-key)
-                               (assoc-in response [:cookies "session-key"] {:value session-key :http-only true :max-age 60})
+                               (update response :cookies assoc "session-key" {:value session-key :http-only true :max-age 60})
                                response))]
       (-> request
           (process-request)
@@ -89,7 +78,6 @@
 
 (defn wrap-api [handler {:keys [untangled.server.core/api-handler]}]
   ((:middleware api-handler) handler))
-
 
 (defrecord Server []
   c/Lifecycle
@@ -138,9 +126,8 @@
   (uc/untangled-system
    {:components {:config (->Config)
                  :state (->State)
-                 :database (->Database)
                  :server (c/using (->Server) [:config :state ::uc/api-handler])}
-    :modules [(c/using (->ApiModule) [:config :state :database])]}))
+    :modules [(c/using (->ApiModule) [:config :state])]}))
 
 (defn -main [& args]
   (alter-var-root #'system c/start))
