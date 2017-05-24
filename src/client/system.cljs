@@ -15,7 +15,6 @@
     (assoc component
            :client-routes ["/" [["" :home]
                                 ["auth" :auth]
-                                [[:thing-id "/thing"] :thing]
                                 [true :unknown]]]))
 
   (stop [component]
@@ -39,8 +38,7 @@
           untangled-client (atom (uc/new-untangled-client
                                    :started-callback (fn [{:keys [reconciler]}]
                                                        (n/start-navigation reconciler (:navigation browser) (:client-routes config))
-                                                       (ud/load-data reconciler [{:items (om/get-query ui/Item)}]
-                                                                     :post-mutation 'fetch/items-loaded))
+                                                       (ud/load-data reconciler [:current-user]))
                                    :shared shared))]
       (log/info "starting renderer")
       (swap! untangled-client uc/mount ui/App "app")

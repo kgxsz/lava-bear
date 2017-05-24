@@ -4,24 +4,6 @@
             [untangled.client.core :as uc]
             [untangled.client.mutations :as um]))
 
-(defmethod um/mutate 'app/add-item [{:keys [state ref]} k {:keys [id label]}]
-  {:remote true
-   :action (fn []
-             (let [list-path (conj ref :items)
-                   new-item (uc/initial-state ui/Item {:id id :label label})
-                   item-ident (om/ident ui/Item new-item)]
-               ;; place the item in the db table items
-               (swap! state assoc-in item-ident new-item)
-               ;; tack on the ident of the item in the list
-               (uc/integrate-ident! state item-ident :append list-path)))})
-
-(defmethod um/mutate 'fetch/items-loaded [{:keys [state]} _ _]
-  {:action (fn []
-             (let [idents (get @state :items)]
-               (swap! state #(-> %
-                                (assoc-in [:lists/by-title "Some List" :items] idents)
-                                (dissoc :items)))))})
-
 (defmethod um/mutate 'app/update-auth-status [{:keys [state]} _ {:keys [auth-status]}]
   {:action (fn []
              (swap! state assoc :ui/auth-status auth-status))})

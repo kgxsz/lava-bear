@@ -14,17 +14,6 @@
 (defmethod api-mutate :default [e k p]
   (log/error "unrecognised mutation" k))
 
-(defmethod api-mutate 'app/add-item [{:keys [config state]} k {:keys [id label]}]
-  {:action (fn []
-             (let [{:keys [database]} state
-                   next-id (-> @database
-                               (get :items)
-                               (last)
-                               (get :id)
-                               (inc))]
-               (swap! database update :items conj {:id next-id :label label})
-               {:tempids {id next-id}}))})
-
 (defmethod api-mutate 'app/initialise-auth-attempt [{:keys [config state]} k {tempid :id}]
   {:action (fn []
              (let [{:keys [database]} state
@@ -98,7 +87,3 @@
   (let [{:keys [database sessions]} state
         {:keys [user-id]} (get @sessions (:session-key request))]
     {:value (get-in @database [:users/by-id user-id])}))
-
-(defmethod api-read :items [{:keys [config state query] :as e} k p]
-  (let [{:keys [database]} state]
-    {:value (mapv #(select-keys % query) (get-in @database [:items]))}))
