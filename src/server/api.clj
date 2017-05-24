@@ -17,15 +17,15 @@
 (defmethod api-mutate 'app/initialise-auth-attempt [{:keys [config state]} k {tempid :id}]
   {:action (fn []
              (let [{:keys [database]} state
-                   id (java.util.UUID/randomUUID)]
-               (swap! database assoc-in [:auth-attempts/by-id id] {:id id :initialised-at (tc/to-date (t/now))})
-               {:tempids {tempid id}}))})
+                   auth-attempt-id (java.util.UUID/randomUUID)]
+               (swap! database assoc-in [:auth-attempts/by-id auth-attempt-id] {:id auth-attempt-id :initialised-at (tc/to-date (t/now))})
+               {:tempids {tempid auth-attempt-id}}))})
 
-(defmethod api-mutate 'app/finalise-auth-attempt [{:keys [request config state]} k {:keys [id code]}]
+(defmethod api-mutate 'app/finalise-auth-attempt [{:keys [request config state]} k {:keys [code] auth-attempt-id :id}]
   {:action (fn []
              (let [{{:keys [client-id client-secret redirect-url]} :auth} config
                    {:keys [sessions database]} state]
-               (if (get-in @database [:auth-attempts/by-id id])
+               (if (get-in @database [:auth-attempts/by-id auth-attempt-id])
                  (let [{:keys [status body error]} @(http/request {:url "https://graph.facebook.com/v2.9/oauth/access_token"
                                                                    :method :get
                                                                    :headers {"Accept" "application/json"}
@@ -35,7 +35,7 @@
                                                                                   "code" code}
                                                                    :timeout 5000})]
 
-                   (log/info "confirming auth attempt" id)
+                   (log/info "confirming auth attempt" auth-attempt-id)
 
                    (if (= 200 status)
                      (let [{:keys [access-token]} (json/read-str body :key-fn csk/->kebab-case-keyword)
@@ -49,10 +49,10 @@
                        (if (= 200 status)
 
                          (let [{:keys [email picture first-name last-name] user-id :id} (json/read-str body :key-fn csk/->kebab-case-keyword)]
-                           (log/infof "auth attempt %s succeeded, with user %s" id user-id)
+                           (log/infof "auth attempt %s succeeded, with user %s" auth-attempt-id user-id)
                            (swap! database #(-> %
-                                                (update-in [:auth-attempts/by-id id] merge {:success-at (tc/to-date (t/now))
-                                                                                            :user-id user-id})
+                                                (update-in [:auth-attempts/by-id auth-attempt-id] merge {:success-at (tc/to-date (t/now))
+                                                                                                         :user-id user-id})
                                                 (update-in [:users/by-id user-id] merge {:user-id user-id
                                                                                          :email email
                                                                                          :first-name first-name
@@ -60,21 +60,21 @@
                                                                                          :avatar {:src (get-in picture [:data :url])}})))
                            (swap! sessions assoc (:session-key request) {:user-id user-id}))
 
-                         (do (log/infof "api request failed for auth attempt %s, with status %s, and error %s " id status body)
-                             (swap! database assoc-in [:auth-attempts/by-id id :failure-at] (tc/to-date (t/now))))))
+                         (do (log/infof "api request failed for auth attempt %s, with status %s, and error %s " auth-attempt-id status body)
+                             (swap! database assoc-in [:auth-attempts/by-id auth-attempt-id :failure-at] (tc/to-date (t/now))))))
 
-                     (do (log/infof "access token request failed for auth attempt %s, with status %s, and error %s " id status body)
-                         (swap! database assoc-in [:auth-attempts/by-id id :failure-at] (tc/to-date (t/now))))))
+                     (do (log/infof "access token request failed for auth attempt %s, with status %s, and error %s " auth-attempt-id status body)
+                         (swap! database assoc-in [:auth-attempts/by-id auth-attempt-id :failure-at] (tc/to-date (t/now))))))
 
-                 (log/info "unable to match auth attempt" id))))})
+                 (log/info "unable to match auth attempt" auth-attempt-id))))})
 
 (defmethod api-read :default [{:keys [ast] :as e} k p]
   (log/error "unrecognised query" (omp/ast->expr ast)))
 
-(defmethod api-read :auth-attempt [{:keys [config state]} k {:keys [id]}]
+(defmethod api-read :auth-attempt [{:keys [config state]} k {auth-attempt-id :id}]
   (let [{:keys [database]} state
-        {:keys [initialised-at success-at failure-at user-id]} (get-in @database [:auth-attempts/by-id id])]
-    {:value {:id id
+        {:keys [initialised-at success-at failure-at user-id]} (get-in @database [:auth-attempts/by-id auth-attempt-id])]
+    {:value {:id auth-attempt-id
              :success-at success-at
              :failure-at failure-at
              :user-id user-id

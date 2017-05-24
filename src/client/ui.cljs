@@ -17,12 +17,12 @@
   Object
   (componentDidMount [this]
     (let [{:keys [error state code]} (get-in (om/props this) [:navigation :query-params])
-          id (uuid state)]
+          auth-attempt-id (uuid state)]
       (cond
         error (om/transact! this `[(app/update-auth-status {:auth-status :failure})])
         (and state code) (om/transact! this `[(app/update-auth-status {:auth-status :loading})
-                                              (app/finalise-auth-attempt {:id ~id :code ~code})
-                                              (untangled/load {:query [(:auth-attempt {:id ~id})]})]))
+                                              (app/finalise-auth-attempt {:id ~auth-attempt-id :code ~code})
+                                              (untangled/load {:query [(:auth-attempt {:id ~auth-attempt-id})]})]))
       (n/navigate this {:handler :home})))
 
   (render [this]
@@ -42,14 +42,14 @@
 
   Object
   (componentDidUpdate [this _ _]
-    (when-let [{:keys [client-id id redirect-url scope success-at failure-at user-id]} (:auth-attempt (om/props this))]
+    (when-let [{:keys [client-id redirect-url scope success-at failure-at user-id] auth-attempt-id :id} (:auth-attempt (om/props this))]
       (cond
         success-at (om/transact! this `[(app/update-auth-status {:auth-status :success})
                                         (untangled/load {:query [:current-user]})])
         failure-at (om/transact! this `[(app/update-auth-status {:auth-status :failure})])
         :else (n/navigate this {:url "https://www.facebook.com/v2.9/dialog/oauth"
                                 :query-params {:client_id client-id
-                                               :state id
+                                               :state auth-attempt-id
                                                :scope scope
                                                :redirect_uri redirect-url}}))))
 
