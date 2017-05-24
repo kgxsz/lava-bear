@@ -33,8 +33,6 @@
                                           :frame-options :sameorigin
                                           :content-type-options :nosniff}
                                :cookies true
-                               :session {:http-only true
-                                         :max-age 60}
                                :static {:resources "public"}
                                :responses {:not-modified-responses true
                                            :absolute-redirects true
@@ -62,14 +60,13 @@
 
 (defn wrap-session [handler {:keys [state config]}]
   (fn [request]
-    (let [session-key (get-in request [:cookies "session-key" :value] (java.util.UUID/randomUUID))
+    (let [session-key (or (some-> request (get-in [:cookies "session-key" :value]) java.util.UUID/fromString)
+                          (java.util.UUID/randomUUID))
           process-request (fn [request]
                             (assoc request :session-key session-key))
           process-response (fn [response]
                              (if (get @(:sessions state) session-key)
-                               (update response :cookies assoc "session-key"
-                                       (merge (get-in config [:middleware-opts :session])
-                                              {:value session-key}))
+                               (update response :cookies assoc "session-key" {:value session-key :http-only true :max-age 300})
                                response))]
       (-> request
           (process-request)
