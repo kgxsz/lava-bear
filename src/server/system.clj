@@ -24,12 +24,8 @@
       (log/info "creating config")
 
       (assoc this
-             :server-routes ["/" [[true :root-page]]] ;; TODO des this really need to be in config
-
+             :server-routes ["/" [[true :root-page]]]
              :http-kit-opts {:port (or (edn/read-string (System/getenv "PORT")) 3000)}
-
-             ;; TODO - pick and choose what you need from https://github.com/ring-clojure/ring-defaults
-             ;; TODO separate these into independent parts
              :middleware-opts {:params {:urlencoded true
                                         :nested true
                                         :keywordize true}
@@ -37,6 +33,8 @@
                                           :frame-options :sameorigin
                                           :content-type-options :nosniff}
                                :cookies true
+                               :session {:http-only true
+                                         :max-age 60}
                                :static {:resources "public"}
                                :responses {:not-modified-responses true
                                            :absolute-redirects true
@@ -62,14 +60,16 @@
                                     {:id 2 :label "another item"}]})))
   (stop [this] this))
 
-(defn wrap-session [handler {:keys [state]}]
+(defn wrap-session [handler {:keys [state config]}]
   (fn [request]
     (let [session-key (get-in request [:cookies "session-key" :value] (java.util.UUID/randomUUID))
           process-request (fn [request]
                             (assoc request :session-key session-key))
           process-response (fn [response]
                              (if (get @(:sessions state) session-key)
-                               (update response :cookies assoc "session-key" {:value session-key :http-only true :max-age 60})
+                               (update response :cookies assoc "session-key"
+                                       (merge (get-in config [:middleware-opts :session])
+                                              {:value session-key}))
                                response))]
       (-> request
           (process-request)
@@ -83,7 +83,6 @@
   c/Lifecycle
   (start [{:keys [config] :as this}]
     (let [{:keys [http-kit-opts middleware-opts server-routes]} config
-
           root-page (fn [request]
                       (let [root-page (page/html5
                                        [:head
@@ -95,14 +94,12 @@
                                         [:div#app]
                                         (page/include-js "/js/compiled/app.js")])]
                         (-> root-page ur/response (ur/content-type "text/html"))))
-
           handler (-> (ring/make-handler server-routes {:root-page root-page})
                       (wrap-api this)
                       (wrap-session this)
                       (md/wrap-defaults middleware-opts)
                       (usm/wrap-transit-params)
                       (usm/wrap-transit-response))
-
           stop-server (http/run-server handler http-kit-opts)]
 
       (log/info "starting server on port" (:port http-kit-opts))

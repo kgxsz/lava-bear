@@ -17,10 +17,10 @@
 
 (defmethod um/mutate 'fetch/items-loaded [{:keys [state]} _ _]
   {:action (fn []
-             (let [idents (get @state :loaded-items)]
+             (let [idents (get @state :items)]
                (swap! state #(-> %
                                 (assoc-in [:lists/by-title "Some List" :items] idents)
-                                (dissoc :loaded-items)))))})
+                                (dissoc :items)))))})
 
 (defmethod um/mutate 'app/update-auth-status [{:keys [state]} _ {:keys [auth-status]}]
   {:action (fn []

@@ -85,7 +85,7 @@
 
 (defmethod api-read :auth-attempt [{:keys [config state]} k {:keys [id]}]
   (let [{:keys [database]} state
-        {:keys [initialised-at success-at failure-at user-id]} (get-in @database [:auth-attempt/by-id id])]
+        {:keys [initialised-at success-at failure-at user-id]} (get-in @database [:auth-attempts/by-id id])]
     {:value {:id id
              :success-at success-at
              :failure-at failure-at
@@ -99,6 +99,6 @@
         {:keys [user-id]} (get @sessions (:session-key request))]
     {:value (get-in @database [:users/by-id user-id])}))
 
-(defmethod api-read :loaded-items [{:keys [config state query] :as e} k p]
+(defmethod api-read :items [{:keys [config state query] :as e} k p]
   (let [{:keys [database]} state]
     {:value (mapv #(select-keys % query) (get-in @database [:items]))}))
