@@ -54,7 +54,6 @@
                                                 (update-in [:auth-attempts/by-id id] merge {:success-at (tc/to-date (t/now))
                                                                                             :user-id user-id})
                                                 (update-in [:users/by-id user-id] merge {:user-id user-id
-                                                                                         :latest-auth-attempt id
                                                                                          :email email
                                                                                          :first-name first-name
                                                                                          :last-name last-name
