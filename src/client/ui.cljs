@@ -20,7 +20,7 @@
 
   static om/IQuery
   (query [this]
-    [:id :page [:current-user '_] {[:navigation '_] [:query-params]}])
+    [:id :page [:current-user '_] [:navigation '_]])
 
   Object
   (componentDidMount [this]
@@ -29,14 +29,12 @@
           auth-attempt-id (uuid state)]
       (when (and state code)
         (om/transact! this `[(app/finalise-auth-attempt {:id ~auth-attempt-id :code ~code})
-                             (untangled/load {:query [:current-user (:auth-attempt {:id ~auth-attempt-id})]})]))))
-
-  (componentDidUpdate [this _ _]
-    (n/navigate this {:handler :home}))
+                             (untangled/load {:query [:current-user (:auth-attempt {:id ~auth-attempt-id})]})])
+        (n/navigate this {:handler :home}))))
 
   (render [this]
     (let [{:keys [navigation]} (om/props this)
-          {:keys [error state code]} (:query-params navigation)]
+          {:keys [error]} (:query-params navigation)]
       (dom/div
        (if error
          "mmmm something didn't quite work"
@@ -71,13 +69,13 @@
       (dom/div
        (if (empty? current-user)
          (dom/div
+          ;; TODO - this should be a separate component that queries for what it needs
           (dom/button
-           {:disabled (or (empty? auth-attempt) initialised-at failure-at success-at)
+           {:disabled (or initialised-at failure-at success-at)
             :on-click #(let [tempid (om/tempid)]
                          (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
                                               (untangled/load {:query [(:auth-attempt {:id ~tempid})]})]))}
            (cond
-             (empty? auth-attempt) "sign in failed!"
              failure-at "sign in failed!"
              success-at "signed in succeeded!"
              initialised-at "signing in"
