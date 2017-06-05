@@ -29,7 +29,7 @@
           auth-attempt-id (uuid state)]
       (when (and state code)
         (om/transact! this `[(app/finalise-auth-attempt {:id ~auth-attempt-id :code ~code})
-                             (untangled/load {:query [:current-user]})]))))
+                             (untangled/load {:query [:current-user (:auth-attempt {:id ~auth-attempt-id})]})]))))
 
   (componentDidUpdate [this _ _]
     (n/navigate this {:handler :home}))
@@ -57,8 +57,8 @@
   Object
   (componentDidUpdate [this _ _]
     (let [{:keys [auth-attempt]} (om/props this)
-          {:keys [id client-id redirect-url scope]} auth-attempt]
-      (when (and id client-id redirect-url scope)
+          {:keys [initialised-at failure-at success-at id client-id redirect-url scope]} auth-attempt]
+      (when (and initialised-at (nil? failure-at) (nil? success-at))
         (n/navigate this {:url "https://www.facebook.com/v2.9/dialog/oauth"
                           :query-params {:client_id client-id
                                          :state id

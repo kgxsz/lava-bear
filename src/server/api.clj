@@ -18,7 +18,11 @@
   {:action (fn []
              (let [{:keys [database]} state
                    auth-attempt-id (java.util.UUID/randomUUID)]
-               (swap! database assoc-in [:auth-attempts/by-id auth-attempt-id] {:id auth-attempt-id :initialised-at (tc/to-date (t/now))})
+               (swap! database assoc-in [:auth-attempts/by-id auth-attempt-id] {:id auth-attempt-id
+                                                                                :initialised-at (tc/to-date (t/now))
+                                                                                :client-id (get-in config [:auth :client-id])
+                                                                                :redirect-url (get-in config [:auth :redirect-url])
+                                                                                :scope (get-in config [:auth :scope])})
                {:tempids {tempid auth-attempt-id}}))})
 
 (defmethod api-mutate 'app/finalise-auth-attempt [{:keys [request config state]} k {:keys [code] auth-attempt-id :id}]
@@ -30,7 +34,7 @@
                                                                    :method :get
                                                                    :headers {"Accept" "application/json"}
                                                                    :query-params {"client_id" client-id
-                                                                                  "client_secret" client-secret
+                                                                                  "client_secred" client-secret
                                                                                   "redirect_uri" redirect-url
                                                                                   "code" code}
                                                                    :timeout 5000})]
@@ -71,15 +75,9 @@
 (defmethod api-read :default [{:keys [ast] :as e} k p]
   (log/error "unrecognised query" (omp/ast->expr ast)))
 
-(defmethod api-read :auth-attempt [{:keys [config state]} k {auth-attempt-id :id}]
-  (let [{:keys [database]} state
-        {:keys [initialised-at success-at failure-at user-id] :as auth-attempt} (get-in @database [:auth-attempts/by-id auth-attempt-id])]
-    {:value (if auth-attempt
-              (assoc auth-attempt
-                     :client-id (get-in config [:auth :client-id])
-                     :redirect-url (get-in config [:auth :redirect-url])
-                     :scope (get-in config [:auth :scope]))
-              {})}))
+(defmethod api-read :auth-attempt [{:keys [state]} k {auth-attempt-id :id}]
+  (let [{:keys [database]} state]
+    {:value (get-in @database [:auth-attempts/by-id auth-attempt-id] {})}))
 
 (defmethod api-read :current-user [{:keys [request state]} k p]
   (let [{:keys [database sessions]} state
