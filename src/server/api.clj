@@ -34,7 +34,7 @@
                                                                    :method :get
                                                                    :headers {"Accept" "application/json"}
                                                                    :query-params {"client_id" client-id
-                                                                                  "client_secred" client-secret
+                                                                                  "client_secret" client-secret
                                                                                   "redirect_uri" redirect-url
                                                                                   "code" code}
                                                                    :timeout 5000})]
@@ -82,5 +82,4 @@
 (defmethod api-read :current-user [{:keys [request state]} k p]
   (let [{:keys [database sessions]} state
         {:keys [user-id]} (get @sessions (:session-key request))]
-    (Thread/sleep 3000)
     {:value (get-in @database [:users/by-id user-id] {})}))

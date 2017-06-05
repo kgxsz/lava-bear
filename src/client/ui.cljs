@@ -40,8 +40,7 @@
       (dom/div
        (if error
          "mmmm something didn't quite work"
-         ;; TODO - this should look exactly like the loading page
-         "auth page - loading")))))
+         (ui-loading))))))
 
 (def ui-auth-page (om/factory AuthPage))
 
@@ -68,18 +67,19 @@
   (render [this]
     (let [{:keys [current-user auth-attempt]} (om/props this)
           {:keys [first-name]} current-user
-          {:keys [failure-at]} auth-attempt]
+          {:keys [initialised-at failure-at success-at]} auth-attempt]
       (dom/div
        (if (empty? current-user)
          (dom/div
           (dom/button
-           ;; TODO disable if in progress
-           {:on-click #(let [tempid (om/tempid)]
+           {:disabled (or initialised-at failure-at success-at)
+            :on-click #(let [tempid (om/tempid)]
                          (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
                                               (untangled/load {:query [(:auth-attempt {:id ~tempid})]})]))}
            (cond
              failure-at "sign in failed!"
-             auth-attempt "signing-in"
+             success-at "signed in succeeded!"
+             initialised-at "signing in"
              :else "sign in")))
 
          (dom/div
