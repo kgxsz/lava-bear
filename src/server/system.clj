@@ -43,7 +43,8 @@
                     :redirect-url (or (System/getenv "AUTH_REDIRECT_URL") "http://localhost:3000/auth")
                     :scope "email"})))
 
-  (stop [this] this))
+  (stop [this]
+    this))
 
 (defrecord State []
   c/Lifecycle
@@ -56,7 +57,8 @@
                             :last-id 2
                             :items [{:id 1 :label "item from server"}
                                     {:id 2 :label "another item"}]})))
-  (stop [this] this))
+  (stop [this]
+    this))
 
 (defn wrap-session [handler {:keys [state config]}]
   (fn [request]
@@ -66,7 +68,7 @@
                             (assoc request :session-key session-key))
           process-response (fn [response]
                              (if (get @(:sessions state) session-key)
-                               (update response :cookies assoc "session-key" {:value session-key :http-only true :max-age 300})
+                               (update response :cookies assoc "session-key" {:value session-key :http-only true :max-age 60})
                                response))]
       (-> request
           (process-request)

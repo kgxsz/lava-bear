@@ -3,7 +3,15 @@
             [om.next :as om :refer-macros [defui]]
             [om-tools.dom :as dom :include-macros true]
             [untangled.client.core :as uc]
+            [untangled.client.data-fetch :as ud]
             [untangled.client.mutations :as um]))
+
+(defui ^:once Loading
+  Object
+  (render [this]
+   (dom/div "loading")))
+
+(def ui-loading (om/factory Loading))
 
 (defui ^:once AuthPage
   static uc/InitialAppState
@@ -12,22 +20,28 @@
 
   static om/IQuery
   (query [this]
-   [:id :page [:ui/auth-status '_] {[:navigation '_] [:query-params]}])
+    [:id :page [:current-user '_] {[:navigation '_] [:query-params]}])
 
   Object
   (componentDidMount [this]
-    (let [{:keys [error state code]} (get-in (om/props this) [:navigation :query-params])
+    (let [{:keys [navigation]} (om/props this)
+          {:keys [state code]} (:query-params navigation)
           auth-attempt-id (uuid state)]
-      (cond
-        error (om/transact! this `[(app/update-auth-status {:auth-status :failure})])
-        (and state code) (om/transact! this `[(app/update-auth-status {:auth-status :loading})
-                                              (app/finalise-auth-attempt {:id ~auth-attempt-id :code ~code})
-                                              (untangled/load {:query [(:auth-attempt {:id ~auth-attempt-id})]})]))
-      (n/navigate this {:handler :home})))
+      (when (and state code)
+        (om/transact! this `[(app/finalise-auth-attempt {:id ~auth-attempt-id :code ~code})
+                             (untangled/load {:query [:current-user]})]))))
+
+  (componentDidUpdate [this _ _]
+    (n/navigate this {:handler :home}))
 
   (render [this]
-    (dom/div
-      "auth page - loading")))
+    (let [{:keys [navigation]} (om/props this)
+          {:keys [error state code]} (:query-params navigation)]
+      (dom/div
+       (if error
+         "mmmm something didn't quite work"
+         ;; TODO - this should look exactly like the loading page
+         "auth page - loading")))))
 
 (def ui-auth-page (om/factory AuthPage))
 
@@ -38,34 +52,38 @@
 
   static om/IQuery
   (query [this]
-    [:id :page [:ui/auth-status '_] [:auth-attempt '_]])
+    [:id :page [:current-user '_] [:auth-attempt '_]])
 
   Object
   (componentDidUpdate [this _ _]
-    (when-let [{:keys [client-id redirect-url scope success-at failure-at user-id] auth-attempt-id :id} (:auth-attempt (om/props this))]
-      (cond
-        success-at (om/transact! this `[(app/update-auth-status {:auth-status :success})
-                                        (untangled/load {:query [:current-user]})])
-        failure-at (om/transact! this `[(app/update-auth-status {:auth-status :failure})])
-        :else (n/navigate this {:url "https://www.facebook.com/v2.9/dialog/oauth"
-                                :query-params {:client_id client-id
-                                               :state auth-attempt-id
-                                               :scope scope
-                                               :redirect_uri redirect-url}}))))
+    (let [{:keys [auth-attempt]} (om/props this)
+          {:keys [id client-id redirect-url scope]} auth-attempt]
+      (when (and id client-id redirect-url scope)
+        (n/navigate this {:url "https://www.facebook.com/v2.9/dialog/oauth"
+                          :query-params {:client_id client-id
+                                         :state id
+                                         :scope scope
+                                         :redirect_uri redirect-url}}))))
 
   (render [this]
-    (let [{:keys [ui/auth-status]} (om/props this)]
+    (let [{:keys [current-user auth-attempt]} (om/props this)
+          {:keys [first-name]} current-user
+          {:keys [failure-at]} auth-attempt]
       (dom/div
-        (dom/button
-          {:on-click #(let [tempid (om/tempid)]
-                        (om/transact! this `[(app/update-auth-status {:auth-status :loading})
-                                             (app/initialise-auth-attempt {:id ~tempid})
-                                             (untangled/load {:query [(:auth-attempt {:id ~tempid})]})]))}
-          (case auth-status
-            :loading "signing in"
-            :success "sign in succeeded!"
-            :failure "sign in failed!"
-            "sign in"))))))
+       (if (empty? current-user)
+         (dom/div
+          (dom/button
+           ;; TODO disable if in progress
+           {:on-click #(let [tempid (om/tempid)]
+                         (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
+                                              (untangled/load {:query [(:auth-attempt {:id ~tempid})]})]))}
+           (cond
+             failure-at "sign in failed!"
+             auth-attempt "signing-in"
+             :else "sign in")))
+
+         (dom/div
+          "Hi " first-name))))))
 
 (def ui-home-page (om/factory HomePage))
 
@@ -92,7 +110,7 @@
 (defui ^:once PageRouter
   static uc/InitialAppState
   (initial-state [this params]
-    (uc/initial-state HomePage {}))
+    (uc/initial-state UnknownPage {}))
 
   static om/IQuery
   (query [this]
@@ -118,18 +136,25 @@
   static uc/InitialAppState
   (initial-state [this params]
     {:ui/react-key :app
-     :ui/auth-status :idle
-     :page (uc/initial-state PageRouter {})})
+     :navigation nil
+     :current-user nil
+     :page-router (uc/initial-state PageRouter {})})
 
   static om/IQuery
   (query [this]
     [:ui/react-key
-     :route-params
-     {:page (om/get-query PageRouter)}])
+     :navigation
+     :current-user
+     {:page-router (om/get-query PageRouter)}])
 
   Object
   (render [this]
-    (let [{:keys [ui/react-key page]} (om/props this)]
+    (let [{:keys [ui/react-key navigation current-user page-router]} (om/props this)
+          initialising? (or (nil? navigation)
+                            (nil? current-user)
+                            (:ui/fetch-state current-user))]
       (dom/div
-        {:key react-key}
-        (ui-page-router page)))))
+       {:key react-key}
+       (if initialising?
+         (ui-loading)
+         (ui-page-router page-router))))))

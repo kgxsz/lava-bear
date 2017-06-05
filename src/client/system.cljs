@@ -4,57 +4,52 @@
             [client.mutations :as m]
             [com.stuartsierra.component :as c]
             [om.next :as om]
+            [taoensso.timbre :as log]
             [untangled.client.core :as uc]
-            [untangled.client.data-fetch :as ud]
-            [untangled.client.logging :as log]))
+            [untangled.client.data-fetch :as ud]))
 
 (defrecord Config []
   c/Lifecycle
-  (start [component]
+  (start [this]
     (log/info "starting config")
-    (assoc component
+    (assoc this
            :client-routes ["/" [["" :home]
                                 ["auth" :auth]
                                 [true :unknown]]]))
 
-  (stop [component]
-    component))
+  (stop [this]
+    this))
 
-(defrecord Browser [config]
+(defrecord Browser []
   c/Lifecycle
-  (start [component]
+  (start [{:keys [config] :as this}]
     (log/info "starting browser")
-    (assoc component
+    (assoc this
            :navigation (atom {})))
 
-  (stop [component]
-    component))
+  (stop [this]
+    this))
 
-(defrecord Renderer [config browser]
+(defrecord Renderer []
   c/Lifecycle
-  (start [component]
-    (let [shared {:browser browser
-                  :config config}
+  (start [{:keys [config browser] :as this}]
+    (let [shared {:browser browser :config config}
           untangled-client (atom (uc/new-untangled-client
                                    :started-callback (fn [{:keys [reconciler]}]
                                                        (n/start-navigation reconciler (:navigation browser) (:client-routes config))
-                                                       (ud/load-data reconciler [:current-user]))
+                                                       (ud/load reconciler :current-user nil))
                                    :shared shared))]
       (log/info "starting renderer")
       (swap! untangled-client uc/mount ui/App "app")
-      (assoc component :untangled-client untangled-client)))
+      (assoc this :untangled-client untangled-client)))
 
-  (stop [component]
-    component))
+  (stop [this]
+    this))
 
 (defn make-system []
-  (-> (c/system-map
-       ;; TODO simplify here to look like server
-       :config (map->Config {})
-       :browser (map->Browser {})
-       :renderer (map->Renderer {}))
-      (c/system-using
-       {:browser [:config]
-        :renderer [:config :browser]})))
+  (c/system-map
+   :config (->Config)
+   :browser (c/using (->Browser) [:config])
+   :renderer (c/using (->Renderer) [:config :browser])))
 
 (defonce system (c/start (make-system)))

@@ -1,17 +1,17 @@
 (ns client.mutations
   (:require [client.ui :as ui]
             [om.next :as om]
+            [taoensso.timbre :as log]
             [untangled.client.core :as uc]
             [untangled.client.mutations :as um]))
 
-(defmethod um/mutate 'app/update-auth-status [{:keys [state]} _ {:keys [auth-status]}]
-  {:action (fn []
-             (swap! state assoc :ui/auth-status auth-status))})
+(defmethod um/mutate 'app/initialise-auth-attempt [{:keys [state]} _ _]
+  {:remote true
+   :action (fn []
+             (swap! state assoc
+                    :auth-attempt {}))})
 
-(defmethod um/mutate 'app/initialise-auth-attempt [{:keys [state]} _ {:keys [id]}]
-  {:remote true})
-
-(defmethod um/mutate 'app/finalise-auth-attempt [{:keys [state]} _ {:keys [code attempt-id]}]
+(defmethod um/mutate 'app/finalise-auth-attempt [{:keys [state]} _ _]
   {:remote true})
 
 (defmethod um/mutate 'app/navigate [{:keys [state]} _ {:keys [page handler route-params query-params]}]
@@ -20,4 +20,4 @@
                     :navigation {:handler handler
                                  :route-params route-params
                                  :query-params query-params}
-                    :page [page '_]))})
+                    :page-router [page '_]))})

@@ -1,11 +1,11 @@
 (ns client.navigation
   (:require [bidi.bidi :as b]
             [cemerick.url :as url]
+            [clojure.string :as s]
             [medley.core :as mc]
             [om.next :as om]
             [pushy.core :as p]
-            [clojure.string :as s]
-            [untangled.client.logging :as log]))
+            [taoensso.timbre :as log]))
 
 (defn navigate [component {:keys [handler query-params route-params url replace?]}]
   (let [{{:keys [client-routes]} :config {:keys [navigation]} :browser} (om/shared component)
@@ -13,6 +13,7 @@
         route-params (-> route-params vec flatten)
         path (when-not url (apply b/path-for client-routes handler route-params))]
     (if url
+      ;; TODO - there's gotta be a way to do this with fucking pushy
       (set! js/window.location (str url query-string))
       ((if replace? p/replace-token! p/set-token!) @navigation (str path query-string)))))
 

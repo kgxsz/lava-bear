@@ -73,16 +73,16 @@
 
 (defmethod api-read :auth-attempt [{:keys [config state]} k {auth-attempt-id :id}]
   (let [{:keys [database]} state
-        {:keys [initialised-at success-at failure-at user-id]} (get-in @database [:auth-attempts/by-id auth-attempt-id])]
-    {:value {:id auth-attempt-id
-             :success-at success-at
-             :failure-at failure-at
-             :user-id user-id
-             :client-id (get-in config [:auth :client-id])
-             :redirect-url (get-in config [:auth :redirect-url])
-             :scope (get-in config [:auth :scope])}}))
+        {:keys [initialised-at success-at failure-at user-id] :as auth-attempt} (get-in @database [:auth-attempts/by-id auth-attempt-id])]
+    {:value (if auth-attempt
+              (assoc auth-attempt
+                     :client-id (get-in config [:auth :client-id])
+                     :redirect-url (get-in config [:auth :redirect-url])
+                     :scope (get-in config [:auth :scope]))
+              {})}))
 
 (defmethod api-read :current-user [{:keys [request state]} k p]
   (let [{:keys [database sessions]} state
         {:keys [user-id]} (get @sessions (:session-key request))]
-    {:value (get-in @database [:users/by-id user-id])}))
+    (Thread/sleep 3000)
+    {:value (get-in @database [:users/by-id user-id] {})}))
