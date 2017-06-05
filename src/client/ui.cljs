@@ -72,11 +72,12 @@
        (if (empty? current-user)
          (dom/div
           (dom/button
-           {:disabled (or initialised-at failure-at success-at)
+           {:disabled (or (empty? auth-attempt) initialised-at failure-at success-at)
             :on-click #(let [tempid (om/tempid)]
                          (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
                                               (untangled/load {:query [(:auth-attempt {:id ~tempid})]})]))}
            (cond
+             (empty? auth-attempt) "sign in failed!"
              failure-at "sign in failed!"
              success-at "signed in succeeded!"
              initialised-at "signing in"
