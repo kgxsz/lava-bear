@@ -90,7 +90,8 @@
                                                 :content "width = device-width, initial-scale = 1.0, user-scalable = no"}]
                                         (page/include-css "/css/compiled/app.css")]
                                        [:body
-                                        [:div#app]
+                                        [:div#app
+                                         "loading"]
                                         (page/include-js "/js/compiled/app.js")])]
                         (-> root-page ur/response (ur/content-type "text/html"))))
           handler (-> (ring/make-handler server-routes {:root-page root-page})

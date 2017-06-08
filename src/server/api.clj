@@ -28,47 +28,51 @@
 (defmethod api-mutate 'app/finalise-auth-attempt [{:keys [request config state]} k {:keys [code] auth-attempt-id :id}]
   {:action (fn []
              (let [{{:keys [client-id client-secret redirect-url]} :auth} config
-                   {:keys [sessions database]} state]
-               (if (get-in @database [:auth-attempts/by-id auth-attempt-id])
-                 (let [{:keys [status body error]} @(http/request {:url "https://graph.facebook.com/v2.9/oauth/access_token"
-                                                                   :method :get
-                                                                   :headers {"Accept" "application/json"}
-                                                                   :query-params {"client_id" client-id
-                                                                                  "client_secret" client-secret
-                                                                                  "redirect_uri" redirect-url
-                                                                                  "code" code}
-                                                                   :timeout 5000})]
+                   {:keys [sessions database]} state
+                   {:keys [success-at failure-at] :as auth-attempt} (get-in @database [:auth-attempts/by-id auth-attempt-id])]
+               (if auth-attempt
+                 (if (and (nil? success-at) (nil? failure-at))
+                   (let [{:keys [status body error]} @(http/request {:url "https://graph.facebook.com/v2.9/oauth/access_token"
+                                                                     :method :get
+                                                                     :headers {"Accept" "application/json"}
+                                                                     :query-params {"client_id" client-id
+                                                                                    "client_secret" client-secret
+                                                                                    "redirect_uri" redirect-url
+                                                                                    "code" code}
+                                                                     :timeout 5000})]
 
-                   (log/info "confirming auth attempt" auth-attempt-id)
+                     (log/info "confirming auth attempt" auth-attempt-id)
 
-                   (if (= 200 status)
-                     (let [{:keys [access-token]} (json/read-str body :key-fn csk/->kebab-case-keyword)
-                           {:keys [status body error]} @(http/request {:url "https://graph.facebook.com/v2.9/me"
-                                                                       :method :get
-                                                                       :oauth-token access-token
-                                                                       :headers {"Accept" "application/json"}
-                                                                       :query-params {"fields" "email,first_name,last_name,picture.width(256).height(256)"}
-                                                                       :timeout 5000})]
+                     (if (= 200 status)
+                       (let [{:keys [access-token]} (json/read-str body :key-fn csk/->kebab-case-keyword)
+                             {:keys [status body error]} @(http/request {:url "https://graph.facebook.com/v2.9/me"
+                                                                         :method :get
+                                                                         :oauth-token access-token
+                                                                         :headers {"Accept" "application/json"}
+                                                                         :query-params {"fields" "email,first_name,last_name,picture.width(256).height(256)"}
+                                                                         :timeout 5000})]
 
-                       (if (= 200 status)
+                         (if (= 200 status)
 
-                         (let [{:keys [email picture first-name last-name] user-id :id} (json/read-str body :key-fn csk/->kebab-case-keyword)]
-                           (log/infof "auth attempt %s succeeded, with user %s" auth-attempt-id user-id)
-                           (swap! database #(-> %
-                                                (update-in [:auth-attempts/by-id auth-attempt-id] merge {:success-at (tc/to-date (t/now))
-                                                                                                         :user-id user-id})
-                                                (update-in [:users/by-id user-id] merge {:user-id user-id
-                                                                                         :email email
-                                                                                         :first-name first-name
-                                                                                         :last-name last-name
-                                                                                         :avatar {:src (get-in picture [:data :url])}})))
-                           (swap! sessions assoc (:session-key request) {:user-id user-id}))
+                           (let [{:keys [email picture first-name last-name] user-id :id} (json/read-str body :key-fn csk/->kebab-case-keyword)]
+                             (log/infof "auth attempt %s succeeded, with user %s" auth-attempt-id user-id)
+                             (swap! database #(-> %
+                                                  (update-in [:auth-attempts/by-id auth-attempt-id] merge {:success-at (tc/to-date (t/now))
+                                                                                                           :user-id user-id})
+                                                  (update-in [:users/by-id user-id] merge {:user-id user-id
+                                                                                           :email email
+                                                                                           :first-name first-name
+                                                                                           :last-name last-name
+                                                                                           :avatar {:src (get-in picture [:data :url])}})))
+                             (swap! sessions assoc (:session-key request) {:user-id user-id}))
 
-                         (do (log/infof "api request failed for auth attempt %s, with status %s, and error %s " auth-attempt-id status body)
-                             (swap! database assoc-in [:auth-attempts/by-id auth-attempt-id :failure-at] (tc/to-date (t/now))))))
+                           (do (log/infof "api request failed for auth attempt %s, with status %s, and error %s " auth-attempt-id status body)
+                               (swap! database assoc-in [:auth-attempts/by-id auth-attempt-id :failure-at] (tc/to-date (t/now))))))
 
-                     (do (log/infof "access token request failed for auth attempt %s, with status %s, and error %s " auth-attempt-id status body)
-                         (swap! database assoc-in [:auth-attempts/by-id auth-attempt-id :failure-at] (tc/to-date (t/now))))))
+                       (do (log/infof "access token request failed for auth attempt %s, with status %s, and error %s " auth-attempt-id status body)
+                           (swap! database assoc-in [:auth-attempts/by-id auth-attempt-id :failure-at] (tc/to-date (t/now))))))
+
+                   (log/info "auth-attempt previously finalised" auth-attempt-id))
 
                  (log/info "unable to match auth attempt" auth-attempt-id))))})
 

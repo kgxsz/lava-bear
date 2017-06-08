@@ -6,6 +6,9 @@
             [untangled.client.data-fetch :as ud]
             [untangled.client.mutations :as um]))
 
+(defn initialised? [x]
+  (and (map? x) (not (:ui/fetch-state x))))
+
 (defui ^:once Loading
   Object
   (render [this]
@@ -20,24 +23,33 @@
 
   static om/IQuery
   (query [this]
-    [:id :page [:current-user '_] [:navigation '_]])
+    [:id :page [:current-user '_] [:auth-attempt '_] [:navigation '_]])
 
   Object
   (componentDidMount [this]
-    (let [{:keys [navigation]} (om/props this)
-          {:keys [state code]} (:query-params navigation)
-          auth-attempt-id (uuid state)]
-      (when (and state code)
-        (om/transact! this `[(app/finalise-auth-attempt {:id ~auth-attempt-id :code ~code})
-                             (untangled/load {:query [:current-user (:auth-attempt {:id ~auth-attempt-id})]})])
-        (n/navigate this {:handler :home}))))
+    (let [{:keys [current-user auth-attempt navigation]} (om/props this)
+          {:keys [error state code]} (:query-params navigation)
+          can-finalise-auth-attempt? (and state code (nil? error) (nil? auth-attempt))
+          can-redirect-to-home? (and (:user-id current-user) (:success-at auth-attempt))]
+      (cond
+        can-finalise-auth-attempt? (let [auth-attempt-id (uuid state)]
+                                     (om/transact! this `[(app/finalise-auth-attempt {:id ~auth-attempt-id :code ~code})
+                                                          (untangled/load {:query [:current-user (:auth-attempt {:id ~auth-attempt-id})]})]))
+        can-redirect-to-home? (n/navigate this {:handler :home :replace? true}))))
 
   (render [this]
-    (let [{:keys [navigation]} (om/props this)
-          {:keys [error]} (:query-params navigation)]
+    (let [{:keys [auth-attempt navigation]} (om/props this)
+          {:keys [query-params]} navigation
+          error? (or (empty? query-params)
+                     ;; error during facebook redirect
+                     (:error query-params)
+                     ;; no auth-attempt could be matched from backend
+                     (and (initialised? auth-attempt) (empty? auth-attempt))
+                     ;; auth-attempt finalisation failed on backend
+                     (and (initialised? auth-attempt) (:failure-at auth-attempt)))]
       (dom/div
-       (if error
-         "mmmm something didn't quite work"
+       (if error?
+         "something isn't right"
          (ui-loading))))))
 
 (def ui-auth-page (om/factory AuthPage))
@@ -64,25 +76,22 @@
 
   (render [this]
     (let [{:keys [current-user auth-attempt]} (om/props this)
-          {:keys [first-name]} current-user
-          {:keys [initialised-at failure-at success-at]} auth-attempt]
+          {:keys [first-name]} current-user]
       (dom/div
-       (if (empty? current-user)
+       (if (:user-id current-user)
+         (dom/div
+          "Hi " first-name)
+
          (dom/div
           ;; TODO - this should be a separate component that queries for what it needs
           (dom/button
-           {:disabled (or initialised-at failure-at success-at)
+           {:disabled (:ui/fetch-state auth-attempt)
             :on-click #(let [tempid (om/tempid)]
                          (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
                                               (untangled/load {:query [(:auth-attempt {:id ~tempid})]})]))}
            (cond
-             failure-at "sign in failed!"
-             success-at "signed in succeeded!"
-             initialised-at "signing in"
-             :else "sign in")))
-
-         (dom/div
-          "Hi " first-name))))))
+             auth-attempt "signing in"
+             :else "sign in"))))))))
 
 (def ui-home-page (om/factory HomePage))
 
@@ -148,12 +157,10 @@
 
   Object
   (render [this]
-    (let [{:keys [ui/react-key navigation current-user page-router]} (om/props this)
-          initialising? (or (nil? navigation)
-                            (nil? current-user)
-                            (:ui/fetch-state current-user))]
+    (let [{:keys [ui/react-key navigation current-user page-router]} (om/props this)]
+      (js/console.warn "render app")
       (dom/div
        {:key react-key}
-       (if initialising?
-         (ui-loading)
-         (ui-page-router page-router))))))
+       (if (and (initialised? navigation) (initialised? current-user))
+         (ui-page-router page-router)
+         (ui-loading))))))

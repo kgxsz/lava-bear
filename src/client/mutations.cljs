@@ -6,10 +6,7 @@
             [untangled.client.mutations :as um]))
 
 (defmethod um/mutate 'app/initialise-auth-attempt [{:keys [state]} _ _]
-  {:remote true
-   :action (fn []
-             (swap! state assoc
-                    :auth-attempt {}))})
+  {:remote true})
 
 (defmethod um/mutate 'app/finalise-auth-attempt [{:keys [state]} _ _]
   {:remote true})
