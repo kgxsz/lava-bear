@@ -158,7 +158,6 @@
   Object
   (render [this]
     (let [{:keys [ui/react-key navigation current-user page-router]} (om/props this)]
-      (js/console.warn "render app")
       (dom/div
        {:key react-key}
        (if (and (initialised? navigation) (initialised? current-user))
