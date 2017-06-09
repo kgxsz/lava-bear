@@ -6,9 +6,6 @@
             [untangled.client.data-fetch :as ud]
             [untangled.client.mutations :as um]))
 
-(defn initialised? [x]
-  (and (map? x) (not (:ui/fetch-state x))))
-
 (defui ^:once Loading
   Object
   (render [this]
@@ -44,9 +41,9 @@
                      ;; error during facebook redirect
                      (:error query-params)
                      ;; no auth-attempt could be matched from backend
-                     (and (initialised? auth-attempt) (empty? auth-attempt))
+                     (and (nil? (:ui/fetch-state auth-attempt)) (map? auth-attempt) (empty? auth-attempt))
                      ;; auth-attempt finalisation failed on backend
-                     (and (initialised? auth-attempt) (:failure-at auth-attempt)))]
+                     (:failure-at auth-attempt))]
       (dom/div
        (if error?
          "something isn't right"
@@ -66,8 +63,9 @@
   Object
   (componentDidUpdate [this _ _]
     (let [{:keys [auth-attempt]} (om/props this)
-          {:keys [initialised-at failure-at success-at id client-id redirect-url scope]} auth-attempt]
-      (when (and initialised-at (nil? failure-at) (nil? success-at))
+          {:keys [initialised-at failure-at success-at id client-id redirect-url scope]} auth-attempt
+          can-redirect-to-facebook? (and initialised-at (nil? failure-at) (nil? success-at))]
+      (when can-redirect-to-facebook?
         (n/navigate this {:url "https://www.facebook.com/v2.9/dialog/oauth"
                           :query-params {:client_id client-id
                                          :state id
@@ -76,19 +74,20 @@
 
   (render [this]
     (let [{:keys [current-user auth-attempt]} (om/props this)
-          {:keys [first-name]} current-user]
+          {:keys [first-name]} current-user
+          can-initialise-auth-attempt? (nil? auth-attempt)]
       (dom/div
        (if (:user-id current-user)
          (dom/div
           "Hi " first-name)
 
          (dom/div
-          ;; TODO - this should be a separate component that queries for what it needs
           (dom/button
-           {:disabled (:ui/fetch-state auth-attempt)
+           {:disabled (not can-initialise-auth-attempt?)
             :on-click #(let [tempid (om/tempid)]
-                         (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
-                                              (untangled/load {:query [(:auth-attempt {:id ~tempid})]})]))}
+                         (when can-initialise-auth-attempt?
+                           (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
+                                                (untangled/load {:query [(:auth-attempt {:id ~tempid})]})])))}
            (cond
              auth-attempt "signing in"
              :else "sign in"))))))))
@@ -160,6 +159,6 @@
     (let [{:keys [ui/react-key navigation current-user page-router]} (om/props this)]
       (dom/div
        {:key react-key}
-       (if (and (initialised? navigation) (initialised? current-user))
+       (if (and (seq navigation) (map? current-user) (nil? (:ui/fetch-state current-user)))
          (ui-page-router page-router)
          (ui-loading))))))
