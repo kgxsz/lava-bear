@@ -84,8 +84,8 @@
           "Hi " first-name)
 
          (dom/div
-
-          (html (util/embed-svg "dummy.svg"))
+          {:style {:width 200}}
+          (html (util/embed-svg "mascot-initial.svg"))
 
           (dom/button
            {:disabled (not can-initialise-auth-attempt?)

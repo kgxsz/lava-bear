@@ -95,8 +95,8 @@
                                          "loading"]
                                         [:div
                                          ;; TODO - clean this up to a top level style with garden
-                                         {:style "width: 400px;"}
-                                         (util/embed-svg "dummy.svg")]
+                                         {:style "width: 200px;"}
+                                         (util/embed-svg "mascot-initial.svg")]
                                         (page/include-js "/js/compiled/app.js")])]
                         (-> root-page ur/response (ur/content-type "text/html"))))
           handler (-> (ring/make-handler server-routes {:root-page root-page})
