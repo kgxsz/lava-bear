@@ -1,6 +1,7 @@
 (ns server.system
   (:gen-class)
   (:require [server.api :as api]
+            [shared.util :as util]
             [bidi.ring :as ring]
             [clojure.edn :as edn]
             [com.stuartsierra.component :as c]
@@ -92,6 +93,10 @@
                                        [:body
                                         [:div#app
                                          "loading"]
+                                        [:div
+                                         ;; TODO - clean this up to a top level style with garden
+                                         {:style "width: 400px;"}
+                                         (util/embed-svg "dummy.svg")]
                                         (page/include-js "/js/compiled/app.js")])]
                         (-> root-page ur/response (ur/content-type "text/html"))))
           handler (-> (ring/make-handler server-routes {:root-page root-page})

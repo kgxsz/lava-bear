@@ -1,7 +1,9 @@
 (ns client.ui
   (:require [client.navigation :as n]
+            [shared.util :as util]
             [om.next :as om :refer-macros [defui]]
             [om-tools.dom :as dom :include-macros true]
+            [sablono.core :as html :refer-macros [html]]
             [untangled.client.core :as uc]
             [untangled.client.data-fetch :as ud]
             [untangled.client.mutations :as um]))
@@ -82,6 +84,9 @@
           "Hi " first-name)
 
          (dom/div
+
+          (html (util/embed-svg "dummy.svg"))
+
           (dom/button
            {:disabled (not can-initialise-auth-attempt?)
             :on-click #(let [tempid (om/tempid)]
@@ -131,6 +136,7 @@
 
   Object
   (render [this]
+
     (let [{:keys [page] :as props} (om/props this)]
       (case page
         :home-page (ui-home-page props)

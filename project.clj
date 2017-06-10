@@ -13,6 +13,8 @@
                  [medley "0.7.1"]
                  [http-kit "2.1.18"]
                  [hiccup "1.0.5"]
+                 [hickory "0.7.1"]
+                 [sablono "0.8.0"]
                  [garden "1.3.2"]
                  [com.cemerick/url "0.1.1"]
                  [ring/ring-defaults "0.1.5"]
