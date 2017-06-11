@@ -93,7 +93,9 @@
                                        [:body
                                         [:div#js-app
                                          [:div.c-mascot
-                                          (util/embed-svg "mascot-initial.svg")]]
+                                          (util/embed-svg "mascot-initial.svg")]
+                                         [:div.c-loader
+                                          "loading"]]
                                         (page/include-js "/js/compiled/app.js")])]
                         (-> root-page ur/response (ur/content-type "text/html"))))
           handler (-> (ring/make-handler server-routes {:root-page root-page})

@@ -37,4 +37,11 @@
   [:.c-mascot {:width (px 300)
                :margin-top (vh 15)
                :margin-left :auto
-               :margin-right :auto}])
+               :margin-right :auto}]
+
+  [:.c-loader {:margin-top (px 30)
+               :font-family "arial"
+               :text-align :center
+               }]
+
+  )

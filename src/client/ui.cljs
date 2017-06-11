@@ -12,8 +12,12 @@
   Object
   (render [this]
     (dom/div
-     {:class "c-mascot"}
-     (html (util/embed-svg "mascot-initial.svg")))))
+     (dom/div
+      {:class "c-mascot"}
+      (html (util/embed-svg "mascot-initial.svg")))
+     (dom/div
+      {:class "c-loader"}
+      "loading"))))
 
 (def ui-loading (om/factory Loading))
 
