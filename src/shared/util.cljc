@@ -2,6 +2,12 @@
   (:require [hickory.core :as h]
             [om-tools.dom :as dom :include-macros true]))
 
+#?(:clj (defn remove-svg-dimensions [v]
+          ;; Remove the width and height attributes of the outer svg so
+          ;; that the containing element can determine the dimensions
+          (let [[_ attributes & rest] v]
+            (vec (concat [:svg (dissoc attributes :width :height)] rest)))))
+
 #?(:clj (defn conserve-svg-attributes [v]
           ;; When Hickory converts html to hiccup, it lower-cases the attributes. This is fine for html, but it's
           ;; problematic for svg which relies on camel cased attributes. This function walks a hiccup structure and
@@ -10,7 +16,9 @@
             (let [[tag attributes & rest] v
                   replacements {:viewbox :viewBox}
                   updated-attributes (clojure.set/rename-keys attributes replacements)]
-              (concat [tag updated-attributes] (mapv conserve-svg-attributes rest)))
+              (->> (map conserve-svg-attributes rest)
+                   (concat [tag updated-attributes])
+                   (vec)))
             v)))
 
 #?(:clj (defmacro embed-svg [file-name]
@@ -19,5 +27,6 @@
                            (h/parse-fragment)
                            (first)
                            (h/as-hiccup)
-                           (conserve-svg-attributes))]
+                           (conserve-svg-attributes)
+                           (remove-svg-dimensions))]
             `~hiccup)))
