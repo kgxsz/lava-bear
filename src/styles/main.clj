@@ -1,5 +1,5 @@
 (ns styles.main
-  (:require [shared.util :refer [translate steps]]
+  (:require [shared.util :refer [translate]]
             [garden.def :refer [defstyles]]
             [garden.stylesheet :refer [at-font-face at-keyframes]]
             [garden.units :refer [px percent ms vh vw]]))
