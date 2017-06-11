@@ -2,6 +2,9 @@
   (:require [hickory.core :as h]
             [om-tools.dom :as dom :include-macros true]))
 
+#?(:clj (defn translate [x y]
+          (str "translate(" x "px," y "px)")))
+
 #?(:clj (defn remove-svg-dimensions [v]
           ;; Remove the width and height attributes of the outer svg so
           ;; that the containing element can determine the dimensions
