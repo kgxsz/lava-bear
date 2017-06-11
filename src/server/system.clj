@@ -92,7 +92,7 @@
                                         (page/include-css "/css/compiled/app.css")]
                                        [:body
                                         [:div#js-app
-                                         [:div.c-mascot
+                                         [:div.c-mascot-container
                                           (util/embed-svg "mascot-initial.svg")]
                                          [:div.c-loader
                                           "loading"]]

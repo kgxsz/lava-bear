@@ -13,7 +13,7 @@
   (render [this]
     (dom/div
      (dom/div
-      {:class "c-mascot"}
+      {:class "c-mascot-container"}
       (html (util/embed-svg "mascot-initial.svg")))
      (dom/div
       {:class "c-loader"}
@@ -87,8 +87,10 @@
       (dom/div
 
        (dom/div
-        {:class "c-mascot"}
-        (html (util/embed-svg "mascot-initial.svg")))
+        {:class "c-mascot-container"}
+        (dom/div
+         {:class "c-mascot-container__sprites c-mascot-container__sprites--blink"}
+         (html (util/embed-svg "mascot-sprites.svg"))))
 
        ;; TODO - bring this back in when ready
        #_(if (:user-id current-user)
