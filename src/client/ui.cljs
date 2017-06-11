@@ -134,10 +134,8 @@
   (ident [this {:keys [page id]}]
     [page id])
 
-
   Object
   (render [this]
-
     (let [{:keys [page] :as props} (om/props this)]
       (case page
         :home-page (ui-home-page props)
