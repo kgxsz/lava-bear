@@ -31,9 +31,10 @@
 
   [:body {:height (percent 100)}]
 
-  [:#js-app {:height (percent 100)}]
+  [:#js-app {:height (percent 100)
+             :overflow :auto}]
 
   [:.c-mascot {:width (px 300)
-               :margin-top (px 100)
+               :margin-top (vh 15)
                :margin-left :auto
                :margin-right :auto}])
