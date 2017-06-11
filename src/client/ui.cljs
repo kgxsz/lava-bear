@@ -14,7 +14,9 @@
     (dom/div
      (dom/div
       {:class "c-mascot-container"}
-      (html (util/embed-svg "mascot-initial.svg")))
+      (dom/div
+       {:class "c-mascot-container__mascot"}
+       (html (util/embed-svg "mascot-initial.svg"))))
      (dom/div
       {:class "c-loader"}
       "loading"))))
@@ -89,7 +91,7 @@
        (dom/div
         {:class "c-mascot-container"}
         (dom/div
-         {:class "c-mascot-container__sprites c-mascot-container__sprites--blink"}
+         {:class "c-mascot-container__mascot c-mascot-container__mascot--sprites"}
          (html (util/embed-svg "mascot-sprites.svg"))))
 
        ;; TODO - bring this back in when ready

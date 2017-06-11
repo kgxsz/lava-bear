@@ -93,7 +93,8 @@
                                        [:body
                                         [:div#js-app
                                          [:div.c-mascot-container
-                                          (util/embed-svg "mascot-initial.svg")]
+                                          [:div.c-mascot-container__mascot
+                                           (util/embed-svg "mascot-initial.svg")]]
                                          [:div.c-loader
                                           "loading"]]
                                         (page/include-js "/js/compiled/app.js")])]

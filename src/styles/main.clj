@@ -46,12 +46,13 @@
                          :margin-left :auto
                          :margin-right :auto
                          :overflow :hidden}
-   [:&__sprites {:width (px 600)}
-    [:&--blink {:animation-name :mascot-blink
-                :animation-duration (ms 400)
-                :animation-timing-function "steps(5)"
-                :animation-direction :alternate
-                :animation-iteration-count :infinite}]]]
+   [:&__mascot
+    [:&--sprites {:width (px 600)
+                  :animation-name :mascot-blink
+                  :animation-duration (ms 400)
+                  :animation-timing-function "steps(5)"
+                  :animation-direction :alternate
+                  :animation-iteration-count :infinite}]]]
 
   [:.c-loader {:margin-top (px 30)
                :font-family "arial"
