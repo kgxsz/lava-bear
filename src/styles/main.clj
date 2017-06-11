@@ -23,13 +23,13 @@
                    [:7% {:transform (translate 0 y)}]
                    [:8% {:transform (translate 0 y)}]
                    [:40% {:transform (translate x y)}]
-                   [:42% {:transform (translate x (* y 2))}]
-                   [:44% {:transform (translate x (* y 3))}]
-                   [:46% {:transform (translate x (* y 4))}]
-                   [:48% {:transform (translate x (* y 3))}]
-                   [:50% {:transform (translate x (* y 2))}]
-                   [:52% {:transform (translate x y)}]
-                   [:54% {:transform (translate 0 0)}]
+                   [:41% {:transform (translate x (* y 2))}]
+                   [:42% {:transform (translate x (* y 3))}]
+                   [:43% {:transform (translate x (* y 4))}]
+                   [:60% {:transform (translate x (* y 3))}]
+                   [:61% {:transform (translate x (* y 2))}]
+                   [:62% {:transform (translate x y)}]
+                   [:63% {:transform (translate 0 0)}]
                    [:100% {:transform (translate 0 0)}]))])
 
 (def meyer-reset
