@@ -40,7 +40,7 @@
                                                        (ud/load reconciler :current-user nil))
                                    :shared shared))]
       (log/info "starting renderer")
-      (swap! untangled-client uc/mount ui/App "app")
+      (swap! untangled-client uc/mount ui/App "js-app")
       (assoc this :untangled-client untangled-client)))
 
   (stop [this]

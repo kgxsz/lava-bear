@@ -91,12 +91,9 @@
                                                 :content "width = device-width, initial-scale = 1.0, user-scalable = no"}]
                                         (page/include-css "/css/compiled/app.css")]
                                        [:body
-                                        [:div#app
-                                         "loading"]
-                                        [:div
-                                         ;; TODO - clean this up to a top level style with garden
-                                         {:style "width: 200px;"}
-                                         (util/embed-svg "mascot-initial.svg")]
+                                        [:div#js-app
+                                         [:div.c-mascot
+                                          (util/embed-svg "mascot-initial.svg")]]
                                         (page/include-js "/js/compiled/app.js")])]
                         (-> root-page ur/response (ur/content-type "text/html"))))
           handler (-> (ring/make-handler server-routes {:root-page root-page})

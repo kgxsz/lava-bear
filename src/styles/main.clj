@@ -1,12 +1,39 @@
 (ns styles.main
   (:require [garden.def :refer [defstyles]]
-            [garden.units :refer [px]]))
+            [garden.units :refer [px percent ms vh vw]]))
 
 (defstyles main
-  [:body {:background-color "#EEE"}]
-  [:.heading {:margin-top (px 250)
-              :font-family "sans-serif"
-              :color "#555"
-              :text-align :center
-              :font-size (px 45)
-              :line-height 1.5}])
+  [:html :body :div :span :applet :object :iframe :h1 :h2 :h3 :h4 :h5 :h6 :p
+   :blockquote :pre :a :abbr :acronym :address :big :cite :code :del :dfn :em
+   :img :ins :kbd :q :s :samp :small :strike :strong :sub :sup :tt :var :b :u
+   :i :center :dl :dt :dd :ol :ul :li :fieldset :form :label :legend :table
+   :caption :tbody :tfoot :thead :tr :th :td :article :aside :canvas :details
+   :embed :figure :figcaption :footer :header :hgroup :menu :nav :output :ruby
+   :section :summary :time :mark :audio :video
+   {:margin 0 :padding 0 :border 0 :font-size (percent 100) :font :inherit :vertical-align :baseline}]
+
+  [:* {:box-sizing :border-box}]
+
+  [:article :aside :details :figcaption :figure :footer :header :hgroup :menu :nav :section
+   {:display :block}]
+
+  [:body {:line-height 1}]
+
+  [:ol :ul {:list-style :none}]
+
+  [:blockquote :q {:quotes :none}
+   [:&:before :&:after {:content :none}]]
+
+  [:table {:border-collapse :collapse :border-spacing 0}]
+
+  [:html {:height (percent 100)
+          :overflow-y :scroll}]
+
+  [:body {:height (percent 100)}]
+
+  [:#js-app {:height (percent 100)}]
+
+  [:.c-mascot {:width (px 300)
+               :margin-top (px 100)
+               :margin-left :auto
+               :margin-right :auto}])

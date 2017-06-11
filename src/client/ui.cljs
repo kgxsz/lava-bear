@@ -11,7 +11,9 @@
 (defui ^:once Loading
   Object
   (render [this]
-   (dom/div "loading")))
+    (dom/div
+     {:class "c-mascot"}
+     (html (util/embed-svg "mascot-initial.svg")))))
 
 (def ui-loading (om/factory Loading))
 
@@ -79,23 +81,25 @@
           {:keys [first-name]} current-user
           can-initialise-auth-attempt? (nil? auth-attempt)]
       (dom/div
-       (if (:user-id current-user)
+
+       (dom/div
+        {:class "c-mascot"}
+        (html (util/embed-svg "mascot-initial.svg")))
+
+       ;; TODO - bring this back in when ready
+       #_(if (:user-id current-user)
          (dom/div
           "Hi " first-name)
 
-         (dom/div
-          {:style {:width 200}}
-          (html (util/embed-svg "mascot-initial.svg"))
-
-          (dom/button
-           {:disabled (not can-initialise-auth-attempt?)
-            :on-click #(let [tempid (om/tempid)]
-                         (when can-initialise-auth-attempt?
-                           (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
-                                                (untangled/load {:query [(:auth-attempt {:id ~tempid})]})])))}
-           (cond
-             auth-attempt "signing in"
-             :else "sign in"))))))))
+         (dom/button
+          {:disabled (not can-initialise-auth-attempt?)
+           :on-click #(let [tempid (om/tempid)]
+                        (when can-initialise-auth-attempt?
+                          (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
+                                               (untangled/load {:query [(:auth-attempt {:id ~tempid})]})])))}
+          (cond
+            auth-attempt "signing in"
+            :else "sign in")))))))
 
 (def ui-home-page (om/factory HomePage))
 
