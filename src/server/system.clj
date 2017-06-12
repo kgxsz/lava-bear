@@ -92,10 +92,11 @@
                                         (page/include-css "/css/compiled/app.css")]
                                        [:body
                                         [:div#js-app
-                                         [:div.c-mascot-container
-                                          [:div.c-mascot-container__mascot
-                                           (util/embed-svg "mascot-initial.svg")]]
-                                         [:div.c-loader
+                                         [:div.l-cell.l-cell--justify-center
+                                          [:div.c-mascot-container
+                                           [:div.c-mascot-container__mascot
+                                            (util/embed-svg "mascot-initial.svg")]]]
+                                         [:div.l-cell.l-cell--justify-center.l-cell--margin-top-medium
                                           "loading"]]
                                         (page/include-js "/js/compiled/app.js")])]
                         (-> root-page ur/response (ur/content-type "text/html"))))

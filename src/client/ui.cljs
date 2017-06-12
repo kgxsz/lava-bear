@@ -13,12 +13,14 @@
   (render [this]
     (dom/div
      (dom/div
-      {:class "c-mascot-container"}
+      {:class "l-cell l-cell--justify-center"}
       (dom/div
-       {:class "c-mascot-container__mascot"}
-       (html (util/embed-svg "mascot-initial.svg"))))
+       {:class "c-mascot-container"}
+       (dom/div
+        {:class "c-mascot-container__mascot"}
+        (html (util/embed-svg "mascot-initial.svg")))))
      (dom/div
-      {:class "c-loader"}
+      {:class "l-cell l-cell--justify-center l-cell--margin-top-medium"}
       "loading"))))
 
 (def ui-loading (om/factory Loading))
@@ -87,12 +89,17 @@
           {:keys [first-name]} current-user
           can-initialise-auth-attempt? (nil? auth-attempt)]
       (dom/div
+       (dom/div
+        {:class "l-cell l-cell--justify-center"}
+        (dom/div
+         {:class "c-mascot-container"}
+         (dom/div
+          {:class "c-mascot-container__mascot c-mascot-container__mascot--sprites"}
+          (html (util/embed-svg "mascot-sprites.svg")))))
 
        (dom/div
-        {:class "c-mascot-container"}
-        (dom/div
-         {:class "c-mascot-container__mascot c-mascot-container__mascot--sprites"}
-         (html (util/embed-svg "mascot-sprites.svg"))))
+        {:class "l-cell l-cell--justify-center l-cell--margin-top-medium"}
+        "under construction")
 
        ;; TODO - bring this back in when ready
        #_(if (:user-id current-user)
