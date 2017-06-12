@@ -33,7 +33,6 @@
   animations/mascot
 
   ;; layouts
-  layouts/cell
   layouts/flex
 
   ;; components

@@ -13,14 +13,14 @@
   (render [this]
     (dom/div
      (dom/div
-      {:class "l-flex l-flex--justify-center"}
+      {:class (util/bem [:l-flex #{:justify-center}])}
       (dom/div
-       {:class "c-mascot-container"}
+       {:class (util/bem :c-mascot-container)}
        (dom/div
-        {:class "c-mascot-container__mascot"}
+        {:class (util/bem :c-mascot-container__mascot)}
         (html (util/embed-svg "mascot-initial.svg")))))
      (dom/div
-      {:class "l-flex l-flex--justify-center l-flex--margin-top-medium"}
+      {:class (util/bem [:l-flex #{:justify-center :margin-top-medium}])}
       "loading"))))
 
 (def ui-loading (om/factory Loading))
@@ -90,15 +90,15 @@
           can-initialise-auth-attempt? (nil? auth-attempt)]
       (dom/div
        (dom/div
-        {:class "l-flex l-flex--justify-center"}
+        {:class (util/bem [:l-flex #{:justify-center}])}
         (dom/div
-         {:class "c-mascot-container"}
+         {:class (util/bem :c-mascot-container)}
          (dom/div
-          {:class "c-mascot-container__mascot c-mascot-container__mascot--sprites"}
+          {:class (util/bem [:c-mascot-container__mascot #{:sprites}])}
           (html (util/embed-svg "mascot-sprites.svg")))))
 
        (dom/div
-        {:class "l-flex l-flex--justify-center l-flex--margin-top-medium"}
+        {:class (util/bem [:l-flex #{:justify-center :margin-top-medium}])}
         "under construction")
 
        ;; TODO - bring this back in when ready
@@ -107,6 +107,7 @@
           "Hi " first-name)
 
          (dom/button
+          ;; TODO - going to have to deal with local ui state here for button states
           {:disabled (not can-initialise-auth-attempt?)
            :on-click #(let [tempid (om/tempid)]
                         (when can-initialise-auth-attempt?

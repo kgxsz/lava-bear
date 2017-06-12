@@ -30,3 +30,36 @@
                            (conserve-svg-attributes)
                            (remove-svg-dimensions))]
             `~hiccup)))
+
+(defn bem
+ "Creates a class string from bem structured arguments.
+  (bem :block
+       :block__element
+       :block__element--modifier
+       [:block true]
+       [:block__element true]
+       [:block__element--modifier true]
+       [:block__element #{:modifier-a :modifier-c}]
+       [:block__element true #{:modifier-a :modifier-c}]
+       [:block__element true #{:modifier-a [:modifier-c true]}]) "
+
+  [& xs]
+
+  (let [block-elements (filter keyword? xs)]
+    (->> (for [vector (filter vector? xs)]
+           (let [block-element (first (filter keyword? vector))
+                 predicate (first (filter boolean? vector))
+                 modifiers (first (filter set? vector))]
+             (when-not (false? predicate)
+               (cons
+                (name block-element)
+                (for [modifier modifiers]
+                  (if (vector? modifier)
+                    (when (second modifier)
+                      (str (name block-element) "--" (name (first modifier))))
+                    (str (name block-element) "--" (name modifier))))))))
+         (concat (map name block-elements))
+         (flatten)
+         (remove nil?)
+         (interpose " ")
+         (apply str))))
