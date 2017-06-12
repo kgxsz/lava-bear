@@ -34,6 +34,7 @@
 
   ;; layouts
   layouts/cell
+  layouts/flex
 
   ;; components
   components/mascot-container
