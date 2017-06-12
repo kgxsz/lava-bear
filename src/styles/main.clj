@@ -5,8 +5,8 @@
             [garden.units :refer [px percent ms vh vw]]))
 
 (def constants
-  {:mascot-width 250
-   :mascot-height 250
+  {:mascot-width 220
+   :mascot-height 220
    :mascot-animation-count 2})
 
 (def animation-keyframes
@@ -64,7 +64,7 @@
 
   [:.c-mascot-container {:width (-> constants :mascot-width px)
                          :height (-> constants :mascot-height px)
-                         :margin-top (vh 15)
+                         :margin-top (vh 10)
                          :margin-left :auto
                          :margin-right :auto
                          :overflow :hidden}
