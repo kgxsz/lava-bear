@@ -27,7 +27,7 @@
    :xx-large 384
    :xxx-large 512})
 
-(def proportions
+(def proportion
   {:0 0
    :5 5
    :10 10
