@@ -21,9 +21,9 @@
         {:class (util/bem :c-mascot-container__mascot)}
         (html (util/embed-svg "mascot-initial.svg")))))
      (dom/div
-      {:class (util/bem [:l-flex #{:justify-center :margin-top-large}])}
+      {:class (util/bem [:l-flex #{:justify-center :margin-top-x-large}])}
       (dom/span
-       {:class (util/bem [:c-text #{:paragraph-x-large}])}
+       {:class (util/bem [:c-text #{:paragraph-large :color-grey}])}
        "loading")))))
 
 (def ui-loading (om/factory Loading))
@@ -102,12 +102,22 @@
           (html (util/embed-svg "mascot-sprites.svg")))))
 
        (dom/div
-        {:class (util/bem [:l-flex #{:justify-center :margin-top-large}])}
-        (dom/span
-         {:class (util/bem [:c-icon #{:warning :paragraph-x-large :padding-right-small}])})
-        (dom/span
-         {:class (util/bem [:c-text #{:paragraph-x-large}])}
-         "under construction"))
+        {:class (util/bem [:l-flex #{:col :align-center}])}
+        (dom/div
+         {:class (util/bem [:l-flex #{:margin-top-large}])}
+         (dom/span
+          {:class (util/bem [:c-text #{:heading-small :color-grey}])}
+          "Hello!"))
+        (dom/div
+         {:class (util/bem [:l-flex #{:margin-top-medium}])}
+         (dom/span
+          {:class (util/bem [:c-text #{:paragraph-medium :color-grey}])}
+          "You must be new here."))
+        (dom/div
+         {:class (util/bem [:l-flex #{:margin-top-small}])}
+         (dom/span
+          {:class (util/bem [:c-text #{:paragraph-medium :color-grey}])}
+          "Please be my friend!")))
 
        ;; TODO - bring this back in when ready
        #_(if (:user-id current-user)
@@ -139,11 +149,35 @@
   Object
   (render [this]
     (dom/div
-      (dom/p
-        "You're lost")
-      (dom/button
-        {:on-click #(n/navigate this {:handler :home})}
-        "go home"))))
+       {:class (util/bem :c-page)}
+       (dom/div
+        {:class (util/bem [:l-flex #{:justify-center}])}
+        (dom/div
+         {:class (util/bem :c-mascot-container)}
+         (dom/div
+          {:class (util/bem [:c-mascot-container__mascot #{:sprites}])}
+          (html (util/embed-svg "mascot-sprites.svg")))))
+
+       (dom/div
+        {:class (util/bem [:l-flex #{:col :align-center}])}
+        (dom/div
+         {:class (util/bem [:l-flex #{:margin-top-large}])}
+         (dom/span
+          {:class (util/bem [:c-text #{:heading-small :color-grey}])}
+          "Idiot!"))
+        (dom/div
+         {:class (util/bem [:l-flex #{:margin-top-medium}])}
+         (dom/span
+          {:class (util/bem [:c-text #{:paragraph-medium :color-grey}])}
+          "This page doesn't even exist."))
+        (dom/div
+         {:class (util/bem [:l-flex #{:margin-top-small}])}
+         (dom/a
+          {:class (util/bem [:c-text #{:link :paragraph-medium :color-grey}])
+           :on-click #(n/navigate this {:handler :home})
+           ;; TODO - this should probably be bidi
+           :href "/"}
+          "go home"))))))
 
 (def ui-unknown-page (om/factory UnknownPage))
 

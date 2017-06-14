@@ -6,7 +6,7 @@
 (def flex
   [:.l-flex {:display :flex}
    [:&--row {:flex-direction :row}]
-   [:&--col {:flex-direction :col}]
+   [:&--col {:flex-direction :column}]
 
    [:&--justify
     [:&-center {:justify-content :center}]

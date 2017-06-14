@@ -31,8 +31,11 @@
    (width-md {:width (px 750)})])
 
 (def text
+  ;; TODO - could use some default font sizes to medium I think, and also color
   [:.c-text {:font-family "'Raleway', Arial"
              :text-decoration :none}
+
+   [:&--link {:text-decoration :underline}]
 
    [:&--ellipsis {:white-space :nowrap
                   :overflow :hidden

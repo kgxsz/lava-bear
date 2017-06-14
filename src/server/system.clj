@@ -97,8 +97,8 @@
                                            [:div {:class (util/bem :c-mascot-container)}
                                             [:div {:class (util/bem :c-mascot-container__mascot)}
                                              (util/embed-svg "mascot-initial.svg")]]]
-                                          [:div {:class (util/bem [:l-flex #{:justify-center :margin-top-large}])}
-                                           [:span {:class (util/bem [:c-text #{:paragraph-x-large}])}
+                                          [:div {:class (util/bem [:l-flex #{:justify-center :margin-top-x-large}])}
+                                           [:span {:class (util/bem [:c-text #{:paragraph-large :color-grey}])}
                                             "loading"]]]]
                                         (page/include-js "/js/compiled/app.js")])]
                         (-> root-page ur/response (ur/content-type "text/html"))))

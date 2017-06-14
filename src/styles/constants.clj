@@ -6,22 +6,26 @@
    :animation-count 2})
 
 (def paragraph
-  {:xx-small 8
+  {:xxx-small 6
+   :xx-small 8
    :x-small 10
    :small 12
    :medium 14
    :large 16
    :x-large 18
-   :xx-large 20})
+   :xx-large 20
+   :xxx-large 25})
 
 (def heading
-  {:xx-small 25
+  {:xxx-small 20
+   :xx-small 25
    :x-small 30
    :small 35
    :medium 40
    :large 60
    :x-large 80
-   :xx-large 100})
+   :xx-large 100
+   :xxx-large 120})
 
 (def spacing
   {:xxx-small 1
@@ -69,4 +73,5 @@
    :100 100})
 
 (def color
-  {:grapefruit "#FD5F73"})
+  {:grapefruit "#FD5F73"
+   :grey "#555555"})
