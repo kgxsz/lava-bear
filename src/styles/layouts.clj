@@ -29,22 +29,18 @@
     [:&--grow-3 {:flex-grow 3}]
     [:&--basis-0 {:flex-basis 0}]]
 
+   (make-modifiers [:&--background-color {:background-color {:values constants/color}}])
+   (make-modifiers [:&--width {:width {:values constants/filling :units px}}])
+   (make-modifiers [:&--width {:width {:values constants/proportion :units percent}}])
+   (make-modifiers [:&--height {:height {:values constants/filling :units px}}])
+   (make-modifiers [:&--height {:height {:values constants/proportion :units percent}}])
    (make-modifiers [:&--margin {:margin {:values constants/spacing :units px}}])
    (make-modifiers [:&--margin-top {:margin-top {:values constants/spacing :units px}}])
    (make-modifiers [:&--margin-bottom {:margin-bottom {:values constants/spacing :units px}}])
    (make-modifiers [:&--margin-left {:margin-left {:values constants/spacing :units px}}])
    (make-modifiers [:&--margin-right {:margin-right {:values constants/spacing :units px}}])
-
    (make-modifiers [:&--padding {:padding {:values constants/spacing :units px}}])
    (make-modifiers [:&--padding-top {:padding-top {:values constants/spacing :units px}}])
    (make-modifiers [:&--padding-bottom {:padding-bottom {:values constants/spacing :units px}}])
    (make-modifiers [:&--padding-left {:padding-left {:values constants/spacing :units px}}])
-   (make-modifiers [:&--padding-right {:padding-right {:values constants/spacing :units px}}])
-
-   (make-modifiers [:&--width {:width {:values constants/filling :units px}}])
-   (make-modifiers [:&--width {:width {:values constants/proportion :units percent}}])
-
-   (make-modifiers [:&--height {:height {:values constants/filling :units px}}])
-   (make-modifiers [:&--height {:height {:values constants/proportion :units percent}}])
-
-   (make-modifiers [:&--background-color {:background-color {:values constants/color}}])])
+   (make-modifiers [:&--padding-right {:padding-right {:values constants/spacing :units px}}])])

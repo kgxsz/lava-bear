@@ -12,6 +12,7 @@
   Object
   (render [this]
     (dom/div
+     {:class (util/bem :c-page)}
      (dom/div
       {:class (util/bem [:l-flex #{:justify-center}])}
       (dom/div
@@ -20,8 +21,10 @@
         {:class (util/bem :c-mascot-container__mascot)}
         (html (util/embed-svg "mascot-initial.svg")))))
      (dom/div
-      {:class (util/bem [:l-flex #{:justify-center :margin-top-medium}])}
-      "loading"))))
+      {:class (util/bem [:l-flex #{:justify-center :margin-top-large}])}
+      (dom/span
+       {:class (util/bem [:c-text #{:paragraph-x-large}])}
+       "loading")))))
 
 (def ui-loading (om/factory Loading))
 
@@ -89,6 +92,7 @@
           {:keys [first-name]} current-user
           can-initialise-auth-attempt? (nil? auth-attempt)]
       (dom/div
+       {:class (util/bem :c-page)}
        (dom/div
         {:class (util/bem [:l-flex #{:justify-center}])}
         (dom/div
@@ -98,8 +102,12 @@
           (html (util/embed-svg "mascot-sprites.svg")))))
 
        (dom/div
-        {:class (util/bem [:l-flex #{:justify-center :margin-top-medium}])}
-        "under construction")
+        {:class (util/bem [:l-flex #{:justify-center :margin-top-large}])}
+        (dom/span
+         {:class (util/bem [:c-icon #{:warning :paragraph-x-large :padding-right-small}])})
+        (dom/span
+         {:class (util/bem [:c-text #{:paragraph-x-large}])}
+         "under construction"))
 
        ;; TODO - bring this back in when ready
        #_(if (:user-id current-user)

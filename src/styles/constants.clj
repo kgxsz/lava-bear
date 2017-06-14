@@ -5,6 +5,24 @@
    :height 220
    :animation-count 2})
 
+(def paragraph
+  {:xx-small 8
+   :x-small 10
+   :small 12
+   :medium 14
+   :large 16
+   :x-large 18
+   :xx-large 20})
+
+(def heading
+  {:xx-small 25
+   :x-small 30
+   :small 35
+   :medium 40
+   :large 60
+   :x-large 80
+   :xx-large 100})
+
 (def spacing
   {:xxx-small 1
    :xx-small 2

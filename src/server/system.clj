@@ -87,17 +87,19 @@
                       (let [root-page (page/html5
                                        [:head
                                         [:title "keigo.io"]
-                                        [:meta {:name "viewport"
-                                                :content "width = device-width, initial-scale = 1.0, user-scalable = no"}]
+                                        [:meta {:name "viewport" :content "width = device-width, initial-scale = 1.0, user-scalable = no"}]
+                                        [:link {:type "text/css" :href "https://fonts.googleapis.com/css?family=Fira+Mono|Raleway:300" :rel "stylesheet"}]
                                         (page/include-css "/css/compiled/app.css")]
                                        [:body
                                         [:div#js-app
-                                         [:div {:class (util/bem [:l-flex #{:justify-center}])}
-                                          [:div {:class (util/bem :c-mascot-container)}
-                                           [:div {:class (util/bem :c-mascot-container__mascot)}
-                                            (util/embed-svg "mascot-initial.svg")]]]
-                                         [:div {:class (util/bem [:l-flex #{:justify-center :margin-top-medium}])}
-                                          "loading"]]
+                                         [:div.c-page
+                                          [:div {:class (util/bem [:l-flex #{:justify-center}])}
+                                           [:div {:class (util/bem :c-mascot-container)}
+                                            [:div {:class (util/bem :c-mascot-container__mascot)}
+                                             (util/embed-svg "mascot-initial.svg")]]]
+                                          [:div {:class (util/bem [:l-flex #{:justify-center :margin-top-large}])}
+                                           [:span {:class (util/bem [:c-text #{:paragraph-x-large}])}
+                                            "loading"]]]]
                                         (page/include-js "/js/compiled/app.js")])]
                         (-> root-page ur/response (ur/content-type "text/html"))))
           handler (-> (ring/make-handler server-routes {:root-page root-page})

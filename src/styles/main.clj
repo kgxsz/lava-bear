@@ -1,9 +1,11 @@
 (ns styles.main
   (:require [styles.animations :as animations]
-            [styles.layouts :as layouts]
             [styles.components :as components]
+            [styles.layouts :as layouts]
             [garden.def :refer [defstyles]]
-            [garden.units :refer [px percent ms vh vw]]))
+            [garden.stylesheet :refer [at-font-face]]
+            [garden.units :refer [px percent ms vh vw]]
+            [com.stuartsierra.component :as component]))
 
 (defstyles main
    ;; Meyer reset
@@ -24,10 +26,17 @@
    [:&:before :&:after {:content :none}]]
   [:table {:border-collapse :collapse :border-spacing 0}]
 
-  ;; general setup
-  [:html {:height (percent 100)
-          :overflow-y :scroll}]
-  [:body {:height (percent 100)}]
+  ;; TODO - extract into own file
+  ;; TODO - can I bring the google font in like this? https://fonts.googleapis.com/css?family=Fira+Mono
+  ;; fonts
+  (at-font-face {:font-family "'icomoon'"
+                 :font-weight :normal
+                 :font-style :normal
+                 :src "url('/fonts/icomoon.eot?r0cvwu#iefix') format('embedded-opentype'),
+                        url('/fonts/icomoon.woff2?r0cvwu') format('woff2'),
+                        url('/fonts/icomoon.ttf?r0cvwu') format('truetype'),
+                        url('/fonts/icomoon.woff?r0cvwu') format('woff'),
+                        url('/fonts/icomoon.svg?r0cvwu#icomoon') format('svg')"})
 
   ;; animations
   animations/mascot
@@ -36,6 +45,9 @@
   layouts/flex
 
   ;; components
+  components/text
+  components/icon
+  components/page
   components/mascot-container
   components/loader
 
