@@ -20,9 +20,15 @@
                :text-align :center}])
 
 (def page
-  [:.c-page {:margin-top (-> constants/spacing :xx-large px)}
-   (width-xs {:margin-top (-> constants/spacing :large px)})
-   (width-sm {:margin-top (-> constants/spacing :x-large px)})])
+  [:.c-page {:margin-top (-> constants/spacing :xx-large px)
+             :margin-left :auto
+             :margin-right :auto
+             :width (px 1000)}
+   (width-xs {:margin-top (-> constants/spacing :large px)
+              :width (percent 100)})
+   (width-sm {:margin-top (-> constants/spacing :x-large px)
+              :width (px 480)})
+   (width-md {:width (px 750)})])
 
 (def text
   [:.c-text {:font-family "'Raleway', Arial"
