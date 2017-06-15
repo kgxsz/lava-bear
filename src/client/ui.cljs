@@ -137,15 +137,15 @@
            {:class (util/bem [:l-box #{:margin-top-large}])}
            (dom/span
             {:class (util/bem [:c-text #{:heading-medium}])}
-            "You idiot!"))
+            "Fucking idiot!"))
           (dom/div
            {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
            (dom/span
             {:class (util/bem [:c-text])}
-            first-name ", never trust anyone")
+            first-name ", don't just give anyone")
            (dom/span
             {:class (util/bem [:c-text])}
-            "on the internet, ever!"))
+            "your details on the internet!"))
           (dom/div
            {:class (util/bem [:l-box #{:margin-top-medium}])}
            (dom/span
