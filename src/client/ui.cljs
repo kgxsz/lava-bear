@@ -127,39 +127,48 @@
           {:class (util/bem [:c-mascot__sprites])}
           (html (util/embed-svg "mascot-sprites.svg")))))
 
-       (dom/div
-        {:class (util/bem [:l-box #{:col :align-center}])}
-        (dom/div
-         {:class (util/bem [:l-box #{:margin-top-large}])}
-         (dom/span
-          {:class (util/bem [:c-text #{:heading-medium}])}
-          "Hello!"))
-        (dom/div
-         {:class (util/bem [:l-box #{:margin-top-medium}])}
-         (dom/span
-          {:class (util/bem [:c-text])}
-          "Are you new here?"))
-        (dom/div
-         {:class (util/bem [:l-box #{:margin-top-small}])}
-         (dom/span
-          {:class (util/bem [:c-text])}
-          "Please be my friend.")))
-
-       ;; TODO - bring this back in when ready
-       #_(if (:user-id current-user)
+       (if (:user-id current-user)
          (dom/div
-          "Hi " first-name)
+          {:class (util/bem [:l-box #{:col :align-center}])}
+          (dom/div
+           {:class (util/bem [:l-box #{:margin-top-large}])}
+           (dom/span
+            {:class (util/bem [:c-text #{:heading-medium}])}
+            "Hi " first-name))
+          (dom/div
+           {:class (util/bem [:l-box #{:margin-top-medium}])}
+           (dom/span
+            {:class (util/bem [:c-text])}
+            "Now we'll be friends forever.")))
 
-         (dom/button
-          ;; TODO - going to have to deal with local ui state here for button states
-          {:disabled (not can-initialise-auth-attempt?)
-           :on-click #(let [tempid (om/tempid)]
-                        (when can-initialise-auth-attempt?
-                          (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
-                                               (untangled/load {:query [(:auth-attempt {:id ~tempid})]})])))}
-          (cond
-            auth-attempt "signing in"
-            :else "sign in")))))))
+         (dom/div
+          {:class (util/bem [:l-box #{:col :align-center}])}
+          (dom/div
+           {:class (util/bem [:l-box #{:margin-top-large}])}
+           (dom/span
+            {:class (util/bem [:c-text #{:heading-medium}])}
+            "Hello!"))
+          (dom/div
+           {:class (util/bem [:l-box #{:margin-top-medium}])}
+           (dom/span
+            {:class (util/bem [:c-text])}
+            "Are you new here?"))
+          (dom/div
+           {:class (util/bem [:l-box #{:margin-top-small}])}
+           (dom/span
+            {:class (util/bem [:c-text])}
+            "Please be my friend."))
+          (dom/div
+           {:class (util/bem [:l-box #{:margin-top-small}])}
+           (dom/span
+            {:class (util/bem [:c-text #{:link :color-grapefruit}])
+             :on-click #(let [tempid (om/tempid)]
+                          (when can-initialise-auth-attempt?
+                            (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
+                                                 (untangled/load {:query [(:auth-attempt {:id ~tempid})]})])))}
+            (cond
+              auth-attempt "befriending"
+              :else "befriend")))))))))
 
 (def ui-home-page (om/factory HomePage))
 

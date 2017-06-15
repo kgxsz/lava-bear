@@ -21,7 +21,7 @@
   [:.c-text {:font-family "'Raleway', Arial"
              :color (:dark-grey constants/color)
              :font-size (-> constants/paragraph :medium px)
-             :line-height 1.3
+             :line-height 1.2
              :text-decoration :none}
 
    [:&--link {
