@@ -1,6 +1,7 @@
 (ns styles.main
   (:require [styles.animations :as animations]
             [styles.components :as components]
+            [styles.fonts :as fonts]
             [styles.layouts :as layouts]
             [garden.def :refer [defstyles]]
             [garden.stylesheet :refer [at-font-face]]
@@ -26,17 +27,10 @@
    [:&:before :&:after {:content :none}]]
   [:table {:border-collapse :collapse :border-spacing 0}]
 
-  ;; TODO - extract into own file
-  ;; TODO - can I bring the google font in like this? https://fonts.googleapis.com/css?family=Fira+Mono
   ;; fonts
-  (at-font-face {:font-family "'icomoon'"
-                 :font-weight :normal
-                 :font-style :normal
-                 :src "url('/fonts/icomoon.eot?r0cvwu#iefix') format('embedded-opentype'),
-                        url('/fonts/icomoon.woff2?r0cvwu') format('woff2'),
-                        url('/fonts/icomoon.ttf?r0cvwu') format('truetype'),
-                        url('/fonts/icomoon.woff?r0cvwu') format('woff'),
-                        url('/fonts/icomoon.svg?r0cvwu#icomoon') format('svg')"})
+  fonts/icomoon
+  fonts/fira-mono
+  fonts/raleway
 
   ;; animations
   animations/mascot
@@ -50,5 +44,4 @@
   components/text
   components/icon
   components/mascot
-
   )

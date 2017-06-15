@@ -16,6 +16,7 @@
                  [hickory "0.7.1"]
                  [sablono "0.8.0"]
                  [garden "1.3.2"]
+                 [rm-hull/ring-gzip-middleware "0.1.7"]
                  [com.cemerick/url "0.1.1"]
                  [ring/ring-defaults "0.1.5"]
                  [com.taoensso/timbre "4.1.4"]]

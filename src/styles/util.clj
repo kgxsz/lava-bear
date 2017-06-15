@@ -28,8 +28,7 @@
  "Creates a vector of modifiers, the modifier names will consist of the modifier
   and the constant keys. The unit function is used on each var of values if required."
   [[modifier properties]]
-  ;; TODO - can this be done in a vector rather than a map?
-  (let [[property {:keys [values units]}] (first properties)]
+  (let [[property [values units]] (first properties)]
     (for [[k v] values]
       [(keyword (str (name modifier) "-" (name k)))
        {property (if units (units v) v)}])))

@@ -75,18 +75,21 @@
             {:class (util/bem [:l-box #{:margin-top-large}])}
             (dom/span
              {:class (util/bem [:c-text #{:heading-small}])}
-             "No dice!"))
+             "The heck?"))
+           (dom/div
+            {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
+            (dom/span
+             {:class (util/bem [:c-text])}
+             "Something is broken!")
+            (dom/span
+             {:class (util/bem [:c-text])}
+             "I bet you're really angry."))
            (dom/div
             {:class (util/bem [:l-box #{:margin-top-medium}])}
             (dom/span
-             {:class (util/bem [:c-text])}
-             "Can't sign you in right now. Bummer."))
-           (dom/div
-            {:class (util/bem [:l-box #{:margin-top-small}])}
-            (dom/span
              {:class (util/bem [:c-text #{:link :color-grapefruit}])
               :on-click #(n/navigate this {:handler :home})}
-             "go home"))))
+             "speak to a manager"))))
 
          (ui-loading))))))
 
@@ -134,12 +137,21 @@
            {:class (util/bem [:l-box #{:margin-top-large}])}
            (dom/span
             {:class (util/bem [:c-text #{:heading-medium}])}
-            "Hi " first-name))
+            "You idiot!"))
+          (dom/div
+           {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
+           (dom/span
+            {:class (util/bem [:c-text])}
+            first-name ", never trust anyone")
+           (dom/span
+            {:class (util/bem [:c-text])}
+            "on the internet, ever!"))
           (dom/div
            {:class (util/bem [:l-box #{:margin-top-medium}])}
            (dom/span
-            {:class (util/bem [:c-text])}
-            "Now we'll be friends forever.")))
+            {:class (util/bem [:c-text #{:link :color-grapefruit}])
+             :on-click #(n/navigate this {:url "https://omfgdogs.com"})}
+            "never forget this life lesson")))
 
          (dom/div
           {:class (util/bem [:l-box #{:col :align-center}])}
@@ -147,19 +159,18 @@
            {:class (util/bem [:l-box #{:margin-top-large}])}
            (dom/span
             {:class (util/bem [:c-text #{:heading-medium}])}
-            "Hello!"))
+            "Hi there!"))
+          (dom/div
+           {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
+           (dom/span
+            {:class (util/bem [:c-text])}
+            "Boy am I glad to see you!")
+           (dom/span
+            {:class (util/bem [:c-text])}
+            "Would you like to be friends?"))
+
           (dom/div
            {:class (util/bem [:l-box #{:margin-top-medium}])}
-           (dom/span
-            {:class (util/bem [:c-text])}
-            "Are you new here?"))
-          (dom/div
-           {:class (util/bem [:l-box #{:margin-top-small}])}
-           (dom/span
-            {:class (util/bem [:c-text])}
-            "Please be my friend."))
-          (dom/div
-           {:class (util/bem [:l-box #{:margin-top-small}])}
            (dom/span
             {:class (util/bem [:c-text #{:link :color-grapefruit}])
              :on-click #(let [tempid (om/tempid)]
@@ -199,18 +210,21 @@
        {:class (util/bem [:l-box #{:margin-top-large}])}
        (dom/span
         {:class (util/bem [:c-text #{:heading-small}])}
-        "Idiot!"))
+        "You're lost!"))
+      (dom/div
+       {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
+       (dom/span
+        {:class (util/bem [:c-text])}
+        "This page doesn't even exist.")
+       (dom/span
+        {:class (util/bem [:c-text])}
+        "It's okay to feel scared."))
       (dom/div
        {:class (util/bem [:l-box #{:margin-top-medium}])}
        (dom/span
-        {:class (util/bem [:c-text])}
-        "This page doesn't even exist."))
-      (dom/div
-       {:class (util/bem [:l-box #{:margin-top-small}])}
-       (dom/span
         {:class (util/bem [:c-text #{:link :color-grapefruit}])
          :on-click #(n/navigate this {:handler :home})}
-        "go home"))))))
+        "go someplace safe"))))))
 
 (def ui-unknown-page (om/factory UnknownPage))
 

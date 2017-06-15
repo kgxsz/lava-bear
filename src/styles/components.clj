@@ -21,12 +21,10 @@
   [:.c-text {:font-family "'Raleway', Arial"
              :color (:dark-grey constants/color)
              :font-size (-> constants/paragraph :medium px)
-             :line-height 1.2
+             :line-height 1.8
              :text-decoration :none}
 
-   [:&--link {
-
-              :text-decoration :underline}
+   [:&--link {:text-decoration :underline}
     [:&:hover {:cursor :pointer}]]
 
    [:&--ellipsis {:white-space :nowrap
@@ -35,14 +33,14 @@
 
    [:&--align-center {:text-align :center}]
 
-   (make-modifiers [:&--color {:color {:values constants/color}}])
-   (make-modifiers [:&--heading {:font-size {:values constants/heading :units px}}])
-   (make-modifiers [:&--paragraph {:font-size {:values constants/paragraph :units px}}])
-   (make-modifiers [:&--padding {:padding {:values constants/spacing :units px}}])
-   (make-modifiers [:&--padding-top {:padding-top {:values constants/spacing :units px}}])
-   (make-modifiers [:&--padding-bottom {:padding-bottom {:values constants/spacing :units px}}])
-   (make-modifiers [:&--padding-left {:padding-left {:values constants/spacing :units px}}])
-   (make-modifiers [:&--padding-right {:padding-right {:values constants/spacing :units px}}])])
+   (make-modifiers [:&--color {:color [constants/color]}])
+   (make-modifiers [:&--heading {:font-size [constants/heading px]}])
+   (make-modifiers [:&--paragraph {:font-size [constants/paragraph px]}])
+   (make-modifiers [:&--padding {:padding [constants/spacing px]}])
+   (make-modifiers [:&--padding-top {:padding-top [constants/spacing px]}])
+   (make-modifiers [:&--padding-bottom {:padding-bottom [constants/spacing px]}])
+   (make-modifiers [:&--padding-left {:padding-left [constants/spacing px]}])
+   (make-modifiers [:&--padding-right {:padding-right [constants/spacing px]}])])
 
 (def icon
   [:.c-icon {:font-family "'icomoon'"
@@ -54,14 +52,14 @@
              :-moz-osx-font-smoothing :grayscale
              :text-decoration :none}
 
-   (make-modifiers [:&--color {:color {:values constants/color}}])
-   (make-modifiers [:&--heading {:font-size {:values constants/heading :units px}}])
-   (make-modifiers [:&--paragraph {:font-size {:values constants/paragraph :units px}}])
-   (make-modifiers [:&--padding {:padding {:values constants/spacing :units px}}])
-   (make-modifiers [:&--padding-top {:padding-top {:values constants/spacing :units px}}])
-   (make-modifiers [:&--padding-bottom {:padding-bottom {:values constants/spacing :units px}}])
-   (make-modifiers [:&--padding-left {:padding-left {:values constants/spacing :units px}}])
-   (make-modifiers [:&--padding-right {:padding-right {:values constants/spacing :units px}}])
+   (make-modifiers [:&--color {:color [constants/color]}])
+   (make-modifiers [:&--heading {:font-size [constants/heading px]}])
+   (make-modifiers [:&--paragraph {:font-size [constants/paragraph px]}])
+   (make-modifiers [:&--padding {:padding [constants/spacing px]}])
+   (make-modifiers [:&--padding-top {:padding-top [constants/spacing px]}])
+   (make-modifiers [:&--padding-bottom {:padding-bottom [constants/spacing px]}])
+   (make-modifiers [:&--padding-left {:padding-left [constants/spacing px]}])
+   (make-modifiers [:&--padding-right {:padding-right [constants/spacing px]}]) 
 
    [:&--question-circle:before {:content "'\\e87d'"}]
    [:&--arrow-left:before {:content "'\\e879'"}]

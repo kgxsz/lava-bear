@@ -8,6 +8,7 @@
             [hiccup.page :as page]
             [org.httpkit.server :as http]
             [ring.middleware.defaults :as md]
+            [ring.middleware.gzip :as gzip]
             [ring.util.response :as ur]
             [taoensso.timbre :as log]
             [untangled.server.core :as uc]
@@ -88,7 +89,6 @@
                                        [:head
                                         [:title "keigo.io"]
                                         [:meta {:name "viewport" :content "width = device-width, initial-scale = 1.0, user-scalable = no"}]
-                                        [:link {:type "text/css" :href "https://fonts.googleapis.com/css?family=Fira+Mono|Raleway:300" :rel "stylesheet"}]
                                         (page/include-css "/css/compiled/app.css")]
                                        [:body
                                         [:div#js-root
@@ -108,7 +108,8 @@
                       (wrap-session this)
                       (md/wrap-defaults middleware-opts)
                       (usm/wrap-transit-params)
-                      (usm/wrap-transit-response))
+                      (usm/wrap-transit-response)
+                      (gzip/wrap-gzip))
           stop-server (http/run-server handler http-kit-opts)]
 
       (log/info "starting server on port" (:port http-kit-opts))
