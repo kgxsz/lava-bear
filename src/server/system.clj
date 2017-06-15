@@ -94,11 +94,11 @@
                                         [:div#js-root
                                          [:div.c-app
                                           [:div.c-page
-                                           [:div {:class (util/bem [:l-flex #{:justify-center}])}
+                                           [:div {:class (util/bem [:l-box #{:justify-center}])}
                                             [:div {:class (util/bem :c-mascot)}
                                              [:div {:class (util/bem :c-mascot__mascot)}
                                               (util/embed-svg "mascot-initial.svg")]]]
-                                           [:div {:class (util/bem [:l-flex #{:justify-center :margin-top-x-large}])}
+                                           [:div {:class (util/bem [:l-box #{:justify-center :margin-top-x-large}])}
                                             [:span {:class (util/bem [:c-text #{:paragraph-large}])}
                                              "loading"]]]]]
                                         (page/include-js "/js/compiled/app.js")])]

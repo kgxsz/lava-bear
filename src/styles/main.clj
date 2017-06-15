@@ -42,7 +42,7 @@
   animations/mascot
 
   ;; layouts
-  layouts/flex
+  layouts/box
 
   ;; components
   components/app

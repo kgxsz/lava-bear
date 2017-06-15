@@ -3,8 +3,8 @@
             [styles.util :refer [make-modifiers]]
             [garden.units :refer [px percent ms vh vw]]))
 
-(def flex
-  [:.l-flex {:display :flex}
+(def box
+  [:.l-box {:display :flex}
    [:&--row {:flex-direction :row}]
    [:&--col {:flex-direction :column}]
 

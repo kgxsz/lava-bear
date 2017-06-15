@@ -14,12 +14,12 @@
     (dom/div
      {:class (util/bem :c-page)}
      (dom/div
-      {:class (util/bem [:l-flex #{:justify-center}])}
+      {:class (util/bem [:l-box #{:justify-center}])}
       (dom/div
        {:class (util/bem :c-mascot)}
        (html (util/embed-svg "mascot-initial.svg"))))
      (dom/div
-      {:class (util/bem [:l-flex #{:justify-center :margin-top-x-large}])}
+      {:class (util/bem [:l-box #{:justify-center :margin-top-x-large}])}
       (dom/span
        {:class (util/bem [:c-text #{:paragraph-large}])}
        "loading")))))
@@ -62,7 +62,7 @@
          (dom/div
           {:class (util/bem :c-page)}
           (dom/div
-           {:class (util/bem [:l-flex #{:justify-center}])}
+           {:class (util/bem [:l-box #{:justify-center}])}
            (dom/div
             {:class (util/bem [:c-mascot])}
             (dom/div
@@ -70,19 +70,19 @@
              (html (util/embed-svg "mascot-sprites.svg")))))
 
           (dom/div
-           {:class (util/bem [:l-flex #{:col :align-center}])}
+           {:class (util/bem [:l-box #{:col :align-center}])}
            (dom/div
-            {:class (util/bem [:l-flex #{:margin-top-large}])}
+            {:class (util/bem [:l-box #{:margin-top-large}])}
             (dom/span
              {:class (util/bem [:c-text #{:heading-small}])}
              "No dice!"))
            (dom/div
-            {:class (util/bem [:l-flex #{:margin-top-medium}])}
+            {:class (util/bem [:l-box #{:margin-top-medium}])}
             (dom/span
              {:class (util/bem [:c-text])}
              "Can't sign you in right now. Bummer."))
            (dom/div
-            {:class (util/bem [:l-flex #{:margin-top-small}])}
+            {:class (util/bem [:l-box #{:margin-top-small}])}
             (dom/span
              {:class (util/bem [:c-text #{:link :color-grapefruit}])
               :on-click #(n/navigate this {:handler :home})}
@@ -120,7 +120,7 @@
       (dom/div
        {:class (util/bem :c-page)}
        (dom/div
-        {:class (util/bem [:l-flex #{:justify-center}])}
+        {:class (util/bem [:l-box #{:justify-center}])}
         (dom/div
          {:class (util/bem :c-mascot)}
          (dom/div
@@ -128,19 +128,19 @@
           (html (util/embed-svg "mascot-sprites.svg")))))
 
        (dom/div
-        {:class (util/bem [:l-flex #{:col :align-center}])}
+        {:class (util/bem [:l-box #{:col :align-center}])}
         (dom/div
-         {:class (util/bem [:l-flex #{:margin-top-large}])}
+         {:class (util/bem [:l-box #{:margin-top-large}])}
          (dom/span
           {:class (util/bem [:c-text #{:heading-medium}])}
           "Hello!"))
         (dom/div
-         {:class (util/bem [:l-flex #{:margin-top-medium}])}
+         {:class (util/bem [:l-box #{:margin-top-medium}])}
          (dom/span
           {:class (util/bem [:c-text])}
           "Are you new here?"))
         (dom/div
-         {:class (util/bem [:l-flex #{:margin-top-small}])}
+         {:class (util/bem [:l-box #{:margin-top-small}])}
          (dom/span
           {:class (util/bem [:c-text])}
           "Please be my friend.")))
@@ -177,7 +177,7 @@
     (dom/div
      {:class (util/bem :c-page)}
      (dom/div
-      {:class (util/bem [:l-flex #{:justify-center}])}
+      {:class (util/bem [:l-box #{:justify-center}])}
       (dom/div
        {:class (util/bem :c-mascot)}
        (dom/div
@@ -185,19 +185,19 @@
         (html (util/embed-svg "mascot-sprites.svg")))))
 
      (dom/div
-      {:class (util/bem [:l-flex #{:col :align-center}])}
+      {:class (util/bem [:l-box #{:col :align-center}])}
       (dom/div
-       {:class (util/bem [:l-flex #{:margin-top-large}])}
+       {:class (util/bem [:l-box #{:margin-top-large}])}
        (dom/span
         {:class (util/bem [:c-text #{:heading-small}])}
         "Idiot!"))
       (dom/div
-       {:class (util/bem [:l-flex #{:margin-top-medium}])}
+       {:class (util/bem [:l-box #{:margin-top-medium}])}
        (dom/span
         {:class (util/bem [:c-text])}
         "This page doesn't even exist."))
       (dom/div
-       {:class (util/bem [:l-flex #{:margin-top-small}])}
+       {:class (util/bem [:l-box #{:margin-top-small}])}
        (dom/span
         {:class (util/bem [:c-text #{:link :color-grapefruit}])
          :on-click #(n/navigate this {:handler :home})}
