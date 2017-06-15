@@ -225,7 +225,8 @@
   (render [this]
     (let [{:keys [ui/react-key navigation current-user page-router]} (om/props this)]
       (dom/div
-       {:key react-key}
+       {:key react-key
+        :class (util/bem [:c-app])}
        (if (and (seq navigation) (map? current-user) (nil? (:ui/fetch-state current-user)))
          (ui-page-router page-router)
          (ui-loading))))))

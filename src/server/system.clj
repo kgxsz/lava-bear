@@ -91,15 +91,16 @@
                                         [:link {:type "text/css" :href "https://fonts.googleapis.com/css?family=Fira+Mono|Raleway:300" :rel "stylesheet"}]
                                         (page/include-css "/css/compiled/app.css")]
                                        [:body
-                                        [:div#js-app
-                                         [:div.c-page
-                                          [:div {:class (util/bem [:l-flex #{:justify-center}])}
-                                           [:div {:class (util/bem :c-mascot-container)}
-                                            [:div {:class (util/bem :c-mascot-container__mascot)}
-                                             (util/embed-svg "mascot-initial.svg")]]]
-                                          [:div {:class (util/bem [:l-flex #{:justify-center :margin-top-x-large}])}
-                                           [:span {:class (util/bem [:c-text #{:paragraph-large :color-grey}])}
-                                            "loading"]]]]
+                                        [:div#js-root
+                                         [:div.c-app
+                                          [:div.c-page
+                                           [:div {:class (util/bem [:l-flex #{:justify-center}])}
+                                            [:div {:class (util/bem :c-mascot-container)}
+                                             [:div {:class (util/bem :c-mascot-container__mascot)}
+                                              (util/embed-svg "mascot-initial.svg")]]]
+                                           [:div {:class (util/bem [:l-flex #{:justify-center :margin-top-x-large}])}
+                                            [:span {:class (util/bem [:c-text #{:paragraph-large :color-grey}])}
+                                             "loading"]]]]]
                                         (page/include-js "/js/compiled/app.js")])]
                         (-> root-page ur/response (ur/content-type "text/html"))))
           handler (-> (ring/make-handler server-routes {:root-page root-page})

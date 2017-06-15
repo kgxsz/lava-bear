@@ -45,9 +45,10 @@
   layouts/flex
 
   ;; components
+  components/app
+  components/page
   components/text
   components/icon
-  components/page
   components/mascot-container
   components/loader
 

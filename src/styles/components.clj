@@ -19,6 +19,9 @@
                :font-family "arial"
                :text-align :center}])
 
+(def app
+  [:.c-app {:overflow :auto}])
+
 (def page
   [:.c-page {:margin-top (-> constants/spacing :xx-large px)
              :margin-left :auto
