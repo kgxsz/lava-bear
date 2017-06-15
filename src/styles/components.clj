@@ -3,22 +3,6 @@
             [styles.util :refer [steps make-modifiers width-xs width-sm width-md width-lg]]
             [garden.units :refer [px percent ms vh vw]]))
 
-(def mascot-container
-  [:.c-mascot-container {:width (-> constants/mascot :width px)
-                         :height (-> constants/mascot :height px)
-                         :overflow :hidden}
-   [:&__mascot
-    [:&--sprites {:width (-> (* (:animation-count constants/mascot) (:width constants/mascot)) px)
-                  :animation-name :mascot
-                  :animation-duration (ms 5000)
-                  :animation-timing-function (steps 1)
-                  :animation-iteration-count :infinite}]]])
-
-(def loader
-  [:.c-loader {:margin-top (px 30)
-               :font-family "arial"
-               :text-align :center}])
-
 (def app
   [:.c-app {:overflow :auto}])
 
@@ -260,3 +244,13 @@
    [:&--select:before {:content "'\\e852'"}]
    [:&--users:before {:content "'\\e82b'"}]
    [:&--sort-amount-asc:before {:content "'\\e8a4'"}]])
+
+(def mascot
+  [:.c-mascot {:width (-> constants/mascot :width px)
+               :height (-> constants/mascot :height px)
+               :overflow :hidden}
+   [:&__sprites {:width (-> (* (:animation-count constants/mascot) (:width constants/mascot)) px)
+                 :animation-name :mascot
+                 :animation-duration (ms 5000)
+                 :animation-timing-function (steps 1)
+                 :animation-iteration-count :infinite}]])

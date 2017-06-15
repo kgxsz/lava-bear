@@ -49,7 +49,6 @@
   components/page
   components/text
   components/icon
-  components/mascot-container
-  components/loader
+  components/mascot
 
   )

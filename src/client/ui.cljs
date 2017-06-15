@@ -16,10 +16,8 @@
      (dom/div
       {:class (util/bem [:l-flex #{:justify-center}])}
       (dom/div
-       {:class (util/bem :c-mascot-container)}
-       (dom/div
-        {:class (util/bem :c-mascot-container__mascot)}
-        (html (util/embed-svg "mascot-initial.svg")))))
+       {:class (util/bem :c-mascot)}
+       (html (util/embed-svg "mascot-initial.svg"))))
      (dom/div
       {:class (util/bem [:l-flex #{:justify-center :margin-top-x-large}])}
       (dom/span
@@ -66,9 +64,9 @@
           (dom/div
            {:class (util/bem [:l-flex #{:justify-center}])}
            (dom/div
-            {:class (util/bem [:c-mascot-container])}
+            {:class (util/bem [:c-mascot])}
             (dom/div
-             {:class (util/bem [:c-mascot-container__mascot #{:sprites}])}
+             {:class (util/bem [:c-mascot__sprites])}
              (html (util/embed-svg "mascot-sprites.svg")))))
 
           (dom/div
@@ -124,9 +122,9 @@
        (dom/div
         {:class (util/bem [:l-flex #{:justify-center}])}
         (dom/div
-         {:class (util/bem :c-mascot-container)}
+         {:class (util/bem :c-mascot)}
          (dom/div
-          {:class (util/bem [:c-mascot-container__mascot #{:sprites}])}
+          {:class (util/bem [:c-mascot__sprites])}
           (html (util/embed-svg "mascot-sprites.svg")))))
 
        (dom/div
@@ -181,9 +179,9 @@
      (dom/div
       {:class (util/bem [:l-flex #{:justify-center}])}
       (dom/div
-       {:class (util/bem :c-mascot-container)}
+       {:class (util/bem :c-mascot)}
        (dom/div
-        {:class (util/bem [:c-mascot-container__mascot #{:sprites}])}
+        {:class (util/bem [:c-mascot__sprites])}
         (html (util/embed-svg "mascot-sprites.svg")))))
 
      (dom/div

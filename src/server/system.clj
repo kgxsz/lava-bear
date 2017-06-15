@@ -95,8 +95,8 @@
                                          [:div.c-app
                                           [:div.c-page
                                            [:div {:class (util/bem [:l-flex #{:justify-center}])}
-                                            [:div {:class (util/bem :c-mascot-container)}
-                                             [:div {:class (util/bem :c-mascot-container__mascot)}
+                                            [:div {:class (util/bem :c-mascot)}
+                                             [:div {:class (util/bem :c-mascot__mascot)}
                                               (util/embed-svg "mascot-initial.svg")]]]
                                            [:div {:class (util/bem [:l-flex #{:justify-center :margin-top-x-large}])}
                                             [:span {:class (util/bem [:c-text #{:paragraph-large}])}
