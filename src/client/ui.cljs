@@ -137,21 +137,21 @@
            {:class (util/bem [:l-box #{:margin-top-large}])}
            (dom/span
             {:class (util/bem [:c-text #{:heading-medium}])}
-            "Fucking idiot!"))
+            "Whoops!"))
           (dom/div
            {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
            (dom/span
             {:class (util/bem [:c-text])}
-            first-name ", don't just give anyone")
+            first-name ", it looks like you're not on")
            (dom/span
             {:class (util/bem [:c-text])}
-            "your details on the internet!"))
+            "our guest list. What a shame. Bye."))
           (dom/div
            {:class (util/bem [:l-box #{:margin-top-medium}])}
            (dom/span
-            {:class (util/bem [:c-text #{:link :color-grapefruit}])
+            {:class (util/bem [:c-text #{:link}])
              :on-click #(n/navigate this {:url "https://omfgdogs.com"})}
-            "never forget this life lesson")))
+            "look at dogs instead")))
 
          (dom/div
           {:class (util/bem [:l-box #{:col :align-center}])}
@@ -159,27 +159,27 @@
            {:class (util/bem [:l-box #{:margin-top-large}])}
            (dom/span
             {:class (util/bem [:c-text #{:heading-medium}])}
-            "Hi there!"))
+            "Hello!"))
           (dom/div
            {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
            (dom/span
             {:class (util/bem [:c-text])}
-            "Boy am I glad to see you!")
+            "My name is Keigo.")
            (dom/span
             {:class (util/bem [:c-text])}
-            "Would you like to be friends?"))
+            "I build things."))
 
-          #_(dom/div
+          (dom/div
            {:class (util/bem [:l-box #{:margin-top-medium}])}
            (dom/span
-            {:class (util/bem [:c-text #{:link :color-grapefruit}])
+            {:class (util/bem [:c-text #{:link}])
              :on-click #(let [tempid (om/tempid)]
                           (when can-initialise-auth-attempt?
                             (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
                                                  (untangled/load {:query [(:auth-attempt {:id ~tempid})]})])))}
             (cond
-              auth-attempt "befriending"
-              :else "befriend")))))))))
+              auth-attempt "signing in"
+              :else "sign in")))))))))
 
 (def ui-home-page (om/factory HomePage))
 
@@ -222,7 +222,7 @@
       (dom/div
        {:class (util/bem [:l-box #{:margin-top-medium}])}
        (dom/span
-        {:class (util/bem [:c-text #{:link :color-grapefruit}])
+        {:class (util/bem [:c-text #{:link}])
          :on-click #(n/navigate this {:handler :home})}
         "go someplace safe"))))))
 
