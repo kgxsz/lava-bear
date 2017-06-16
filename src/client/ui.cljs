@@ -74,7 +74,7 @@
            (dom/div
             {:class (util/bem [:l-box #{:margin-top-large}])}
             (dom/span
-             {:class (util/bem [:c-text #{:heading-small}])}
+             {:class (util/bem [:c-text #{:heading-medium}])}
              "The heck?"))
            (dom/div
             {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
@@ -169,7 +169,7 @@
             {:class (util/bem [:c-text])}
             "Would you like to be friends?"))
 
-          (dom/div
+          #_(dom/div
            {:class (util/bem [:l-box #{:margin-top-medium}])}
            (dom/span
             {:class (util/bem [:c-text #{:link :color-grapefruit}])
@@ -209,7 +209,7 @@
       (dom/div
        {:class (util/bem [:l-box #{:margin-top-large}])}
        (dom/span
-        {:class (util/bem [:c-text #{:heading-small}])}
+        {:class (util/bem [:c-text #{:heading-medium}])}
         "You're lost!"))
       (dom/div
        {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
