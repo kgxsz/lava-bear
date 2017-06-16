@@ -18,6 +18,9 @@
   (at-media {:min-width (px 1025)}
             [:& styles]))
 
+(defn gradient [left right]
+  (str "linear-gradient("left", "right")"))
+
 (defn translate [x y]
   (str "translate(" x "px," y "px)"))
 

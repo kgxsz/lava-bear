@@ -1,7 +1,7 @@
 (ns styles.components
   (:require [styles.constants :as constants]
-            [styles.util :refer [steps make-modifiers width-xs width-sm width-md width-lg]]
-            [garden.units :refer [px percent ms vh vw]]))
+            [styles.util :refer [gradient steps make-modifiers width-xs width-sm width-md width-lg]]
+            [garden.units :refer [px em percent ms vh vw]]))
 
 (def app
   [:.c-app {:overflow :auto}])
@@ -24,7 +24,29 @@
              :line-height 1.8
              :text-decoration :none}
 
-   [:&--link {:text-decoration :underline}
+   [:&--link {:color (:grapefruit constants/color)
+              :text-shadow [[(em 0.03) 0 (:white constants/color)]
+                            [(em -0.03) 0 (:white constants/color)]
+                            [0 (em 0.03) (:white constants/color)]
+                            [0 (em -0.03) (:white constants/color)]
+                            [(em 0.06) 0 (:white constants/color)]
+                            [(em -0.06) 0 (:white constants/color)]
+                            [(em 0.09) 0 (:white constants/color)]
+                            [(em -0.09) 0 (:white constants/color)]
+                            [(em 0.12) 0 (:white constants/color)]
+                            [(em -0.12) 0 (:white constants/color)]
+                            [(em 0.15) 0 (:white constants/color)]
+                            [(em -0.15) 0 (:white constants/color)]]
+              :background-image [[(gradient (:white constants/color) (:white constants/color))]
+                                 [(gradient (:white constants/color) (:white constants/color))]
+                                 [(gradient (:grapefruit constants/color) (:grapefruit constants/color))]]
+              :background-size [[(em 0.05) (px 1)]
+                                [(em 0.05) (px 1)]
+                                [(px 1) (px 1)]]
+              :background-repeat [:no-repeat :no-repeat :repeat-x]
+              :background-position [[(percent 0) (percent 90)]
+                                    [(percent 100) (percent 90)]
+                                    [(percent 0) (percent 80)]]}
     [:&:hover {:cursor :pointer}]]
 
    [:&--ellipsis {:white-space :nowrap

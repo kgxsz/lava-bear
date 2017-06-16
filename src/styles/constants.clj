@@ -69,4 +69,6 @@
 (def color
   {:grapefruit "#FD5F73"
    :dark-grey "#454545"
-   :grey "#83909D"})
+   :grey "#83909D"
+   :light-grey "#CDD5DD"
+   :white "#FFFFFF"})
