@@ -11,10 +11,10 @@
 (defui ^:once StillMascot
   Object
   (render [this]
-          (let [{:keys []} (om/props this)]
-            (dom/div
-             {:class (util/bem [:c-still-mascot])}
-             (html (util/embed-svg "still-mascot.svg"))))))
+    (let [{:keys []} (om/props this)]
+      (dom/div
+       {:class (util/bem [:c-still-mascot])}
+       (html (util/embed-svg "still-mascot.svg"))))))
 
 (def ui-still-mascot (om/factory StillMascot))
 
