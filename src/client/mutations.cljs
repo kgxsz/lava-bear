@@ -11,7 +11,7 @@
 (defmethod um/mutate 'app/finalise-auth-attempt [{:keys [state]} _ _]
   {:remote true})
 
-(defmethod um/mutate 'app/navigate [{:keys [state]} _ {:keys [page handler route-params query-params]}]
+(defmethod um/mutate 'app/navigate-internally [{:keys [state]} _ {:keys [page handler route-params query-params]}]
   {:action (fn []
              (swap! state assoc
                     :navigation {:handler handler

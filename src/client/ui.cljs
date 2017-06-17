@@ -65,7 +65,7 @@
         can-finalise-auth-attempt? (let [auth-attempt-id (uuid state)]
                                      (om/transact! this `[(app/finalise-auth-attempt {:id ~auth-attempt-id :code ~code})
                                                           (untangled/load {:query [:current-user (:auth-attempt {:id ~auth-attempt-id})]})]))
-        can-redirect-to-home? (n/navigate-internal this {:handler :home :replace? true}))))
+        can-redirect-to-home? (n/navigate-internally this {:handler :home :replace? true}))))
 
   (render [this]
     (let [{:keys [auth-attempt navigation]} (om/props this)
@@ -104,7 +104,7 @@
             {:class (util/bem [:l-box #{:margin-top-medium}])}
             (dom/span
              {:class (util/bem [:c-text #{:link :color-grapefruit}])
-              :on-click #(n/navigate-internal this {:handler :home})}
+              :on-click #(n/navigate-internally this {:handler :home})}
              "speak to a manager"))))
 
          (ui-loading))))))
@@ -126,11 +126,11 @@
           {:keys [initialised-at failure-at success-at id client-id redirect-url scope]} auth-attempt
           can-redirect-to-facebook? (and initialised-at (nil? failure-at) (nil? success-at))]
       (when can-redirect-to-facebook?
-        (n/navigate-external this {:url "https://www.facebook.com/v2.9/dialog/oauth"
-                                   :query-params {:client_id client-id
-                                                  :state id
-                                                  :scope scope
-                                                  :redirect_uri redirect-url}}))))
+        (n/navigate-externally this {:url "https://www.facebook.com/v2.9/dialog/oauth"
+                                     :query-params {:client_id client-id
+                                                    :state id
+                                                    :scope scope
+                                                    :redirect_uri redirect-url}}))))
 
   (render [this]
     (let [{:keys [current-user auth-attempt]} (om/props this)
@@ -162,7 +162,7 @@
            {:class (util/bem [:l-box #{:margin-top-medium}])}
            (dom/span
             {:class (util/bem [:c-text #{:link}])
-             :on-click #(n/navigate-external this {:url "https://omfgdogs.com"})}
+             :on-click #(n/navigate-externally this {:url "https://omfgdogs.com"})}
             "look at dogs instead")))
 
          (dom/div
@@ -231,7 +231,7 @@
        {:class (util/bem [:l-box #{:margin-top-medium}])}
        (dom/span
         {:class (util/bem [:c-text #{:link}])
-         :on-click #(n/navigate-internal this {:handler :home})}
+         :on-click #(n/navigate-internally this {:handler :home})}
         "go someplace safe"))))))
 
 (def ui-unknown-page (om/factory UnknownPage))

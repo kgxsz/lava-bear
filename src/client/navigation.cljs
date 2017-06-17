@@ -7,11 +7,11 @@
             [pushy.core :as p]
             [taoensso.timbre :as log]))
 
-(defn navigate-external [_ {:keys [url query-params]}]
+(defn navigate-externally [_ {:keys [url query-params]}]
   (let [query-string (when-not (s/blank? (url/map->query query-params)) (str "?" (url/map->query query-params)))]
     (set! js/window.location (str url query-string))))
 
-(defn navigate-internal [component {:keys [handler query-params route-params replace?]}]
+(defn navigate-internally [component {:keys [handler query-params route-params replace?]}]
   (let [{{:keys [client-routes]} :config {:keys [navigation]} :browser} (om/shared component)
         query-string (when-not (s/blank? (url/map->query query-params)) (str "?" (url/map->query query-params)))
         route-params (-> route-params vec flatten)
@@ -30,10 +30,10 @@
                                                  (second)
                                                  (url/query->map)
                                                  (mc/map-keys keyword))]
-                           (om/transact! reconciler `[(app/navigate {:page ~page
-                                                                     :handler ~handler
-                                                                     :route-params ~route-params
-                                                                     :query-params ~query-params})
+                           (om/transact! reconciler `[(app/navigate-internally {:page ~page
+                                                                                :handler ~handler
+                                                                                :route-params ~route-params
+                                                                                :query-params ~query-params})
                                                       :page])))
                        (partial b/match-route client-routes)))
   (p/start! @navigation))
