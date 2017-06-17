@@ -10,6 +10,7 @@
   [:.c-page {:margin-top (-> constants/spacing :xx-large px)
              :margin-left :auto
              :margin-right :auto
+             :margin-bottom (-> constants/spacing :large px)
              :width (px 1000)}
    (width-xs {:margin-top (-> constants/spacing :large px)
               :width (percent 100)})
