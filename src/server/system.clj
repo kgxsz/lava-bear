@@ -95,9 +95,8 @@
                                          [:div.c-app
                                           [:div.c-page
                                            [:div {:class (util/bem [:l-box #{:justify-center}])}
-                                            [:div {:class (util/bem :c-mascot)}
-                                             [:div {:class (util/bem :c-mascot__mascot)}
-                                              (util/embed-svg "mascot-initial.svg")]]]
+                                            [:div {:class (util/bem [:c-still-mascot])}
+                                             (util/embed-svg "still-mascot.svg")]]
                                            [:div {:class (util/bem [:l-box #{:justify-center :margin-top-x-large}])}
                                             [:span {:class (util/bem [:c-text #{:paragraph-large}])}
                                              "loading"]]]]]

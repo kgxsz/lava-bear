@@ -8,6 +8,28 @@
             [untangled.client.data-fetch :as ud]
             [untangled.client.mutations :as um]))
 
+(defui ^:once StillMascot
+  Object
+  (render [this]
+          (let [{:keys []} (om/props this)]
+            (dom/div
+             {:class (util/bem [:c-still-mascot])}
+             (html (util/embed-svg "still-mascot.svg"))))))
+
+(def ui-still-mascot (om/factory StillMascot))
+
+(defui ^:once AnimatedMascot
+  Object
+  (render [this]
+    (let [{:keys []} (om/props this)]
+      (dom/div
+       {:class (util/bem [:c-animated-mascot])}
+       (dom/div
+        {:class (util/bem [:c-animated-mascot__animator])}
+        (html (util/embed-svg "animated-mascot.svg")))))))
+
+(def ui-animated-mascot (om/factory AnimatedMascot))
+
 (defui ^:once Loading
   Object
   (render [this]
@@ -15,9 +37,7 @@
      {:class (util/bem :c-page)}
      (dom/div
       {:class (util/bem [:l-box #{:justify-center}])}
-      (dom/div
-       {:class (util/bem :c-mascot)}
-       (html (util/embed-svg "mascot-initial.svg"))))
+      (ui-still-mascot))
      (dom/div
       {:class (util/bem [:l-box #{:justify-center :margin-top-x-large}])}
       (dom/span
@@ -63,11 +83,7 @@
           {:class (util/bem :c-page)}
           (dom/div
            {:class (util/bem [:l-box #{:justify-center}])}
-           (dom/div
-            {:class (util/bem [:c-mascot])}
-            (dom/div
-             {:class (util/bem [:c-mascot__sprites])}
-             (html (util/embed-svg "mascot-sprites.svg")))))
+           (ui-still-mascot))
 
           (dom/div
            {:class (util/bem [:l-box #{:col :align-center}])}
@@ -124,11 +140,7 @@
        {:class (util/bem :c-page)}
        (dom/div
         {:class (util/bem [:l-box #{:justify-center}])}
-        (dom/div
-         {:class (util/bem :c-mascot)}
-         (dom/div
-          {:class (util/bem [:c-mascot__sprites])}
-          (html (util/embed-svg "mascot-sprites.svg")))))
+        (ui-animated-mascot))
 
        (if (:user-id current-user)
          (dom/div
@@ -198,11 +210,7 @@
      {:class (util/bem :c-page)}
      (dom/div
       {:class (util/bem [:l-box #{:justify-center}])}
-      (dom/div
-       {:class (util/bem :c-mascot)}
-       (dom/div
-        {:class (util/bem [:c-mascot__sprites])}
-        (html (util/embed-svg "mascot-sprites.svg")))))
+      (ui-animated-mascot))
 
      (dom/div
       {:class (util/bem [:l-box #{:col :align-center}])}

@@ -43,5 +43,6 @@
   components/page
   components/text
   components/icon
-  components/mascot
+  components/still-mascot
+  components/animated-mascot
   )

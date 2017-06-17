@@ -265,12 +265,16 @@
    [:&--users:before {:content "'\\e82b'"}]
    [:&--sort-amount-asc:before {:content "'\\e8a4'"}]])
 
-(def mascot
-  [:.c-mascot {:width (-> constants/mascot :width px)
-               :height (-> constants/mascot :height px)
-               :overflow :hidden}
-   [:&__sprites {:width (-> (* (:animation-count constants/mascot) (:width constants/mascot)) px)
-                 :animation-name :mascot
-                 :animation-duration (ms 5000)
-                 :animation-timing-function (steps 1)
-                 :animation-iteration-count :infinite}]])
+(def still-mascot
+  [:.c-still-mascot {:width (-> constants/mascot :width px)
+                     :height (-> constants/mascot :height px)}])
+
+(def animated-mascot
+  [:.c-animated-mascot {:width (-> constants/mascot :width px)
+                        :height (-> constants/mascot :height px)
+                        :overflow :hidden}
+   [:&__animator {:width (-> (* (:animation-count constants/mascot) (:width constants/mascot)) px)
+                  :animation-name :mascot
+                  :animation-duration (ms 5000)
+                  :animation-timing-function (steps 1)
+                  :animation-iteration-count :infinite}]])
