@@ -32,34 +32,32 @@
             `~hiccup)))
 
 (defn bem
- "Creates a class string from bem structured arguments.
-  (bem :block
-       :block__element
-       :block__element--modifier
-       [:block true]
-       [:block__element true]
-       [:block__element--modifier true]
-       [:block__element #{:modifier-a :modifier-c}]
-       [:block__element true #{:modifier-a :modifier-c}]
-       [:block__element true #{:modifier-a [:modifier-c true]}]) "
+ "Creates a class string from bem structured arguments. Take multiple arguments in vectors.
+  Each vector is composed of the block-elements keyword, then the optional modifiers then the
+  optional set of breakpoints. The modifiers may be either a keyword, or a vector, which itself
+  contains the modifer keyword, and a set of breakpoints. The top level breakpoints define at
+  which screen widths the block-elements are active, the modifier level breakpoints do the same
+  but only for that particular modifier. An empty set means that the block-element, or modifier
+  will never be active. No set at all, however, is shorthand for #{:xs :sm :md :lg} for brevity.
+
+  (bem [:block__element__element :modifier :modifier]
+       [:block__element__element :modifier :modifier #{:xs :sm}]
+       [:block__element__element :modifier [:modifier #{:md :lg}] #{:sm :md :lg}])"
 
   [& xs]
 
-  (let [block-elements (filter keyword? xs)]
-    (->> (for [vector (filter vector? xs)]
-           (let [block-element (first (filter keyword? vector))
-                 predicate (first (filter boolean? vector))
-                 modifiers (first (filter set? vector))]
-             (when-not (false? predicate)
-               (cons
-                (name block-element)
-                (for [modifier modifiers]
-                  (if (vector? modifier)
-                    (when (second modifier)
-                      (str (name block-element) "--" (name (first modifier))))
-                    (str (name block-element) "--" (name modifier))))))))
-         (concat (map name block-elements))
-         (flatten)
-         (remove nil?)
-         (interpose " ")
-         (apply str))))
+  (->> (for [x xs]
+         (let [block-elements (first x)
+               modifiers (filter (complement set?) (rest x))
+               breakpoints (or (first (filter set? x)) #{:xs :sm :md :lg})]
+           (when (seq breakpoints)
+             (cons
+              (name block-elements)
+              (for [modifier modifiers]
+                (if (vector? modifier)
+                  (when (seq (second modifier))
+                    (str (name block-elements) "--" (name (first modifier))))
+                  (str (name block-elements) "--" (name modifier))))))))
+       (flatten)
+       (interpose " ")
+       (apply str)))

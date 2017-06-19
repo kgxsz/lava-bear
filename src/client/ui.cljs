@@ -34,14 +34,14 @@
   Object
   (render [this]
     (dom/div
-     {:class (util/bem :c-page)}
+     {:class (util/bem [:c-page])}
      (dom/div
-      {:class (util/bem [:l-box #{:justify-center}])}
+      {:class (util/bem [:l-box :justify-center])}
       (ui-still-mascot))
      (dom/div
-      {:class (util/bem [:l-box #{:justify-center :margin-top-x-large}])}
+      {:class (util/bem [:l-box :justify-center :margin-top-x-large])}
       (dom/span
-       {:class (util/bem [:c-text #{:paragraph-large}])}
+       {:class (util/bem [:c-text :paragraph-large])}
        "loading")))))
 
 (def ui-loading (om/factory Loading))
@@ -80,20 +80,20 @@
       (dom/div
        (if error?
          (dom/div
-          {:class (util/bem :c-page)}
+          {:class (util/bem [:c-page])}
           (dom/div
-           {:class (util/bem [:l-box #{:justify-center}])}
+           {:class (util/bem [:l-box :justify-center])}
            (ui-still-mascot))
 
           (dom/div
-           {:class (util/bem [:l-box #{:col :align-center}])}
+           {:class (util/bem [:l-box :col :align-center])}
            (dom/div
-            {:class (util/bem [:l-box #{:margin-top-large}])}
+            {:class (util/bem [:l-box :margin-top-large])}
             (dom/span
-             {:class (util/bem [:c-text #{:heading-medium}])}
+             {:class (util/bem [:c-text :heading-medium])}
              "The heck?"))
            (dom/div
-            {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
+            {:class (util/bem [:l-box :col :align-center :margin-top-medium])}
             (dom/span
              {:class (util/bem [:c-text])}
              "Something is broken!")
@@ -101,9 +101,9 @@
              {:class (util/bem [:c-text])}
              "I bet you're really angry."))
            (dom/div
-            {:class (util/bem [:l-box #{:margin-top-medium}])}
+            {:class (util/bem [:l-box :margin-top-medium])}
             (dom/span
-             {:class (util/bem [:c-text #{:link :color-grapefruit}])
+             {:class (util/bem [:c-text :link :color-grapefruit])
               :on-click #(n/navigate-internally this {:handler :home})}
              "speak to a manager"))))
 
@@ -137,21 +137,21 @@
           {:keys [first-name]} current-user
           can-initialise-auth-attempt? (nil? auth-attempt)]
       (dom/div
-       {:class (util/bem :c-page)}
+       {:class (util/bem [:c-page])}
        (dom/div
-        {:class (util/bem [:l-box #{:justify-center}])}
+        {:class (util/bem [:l-box :justify-center])}
         (ui-animated-mascot))
 
        (if (:user-id current-user)
          (dom/div
-          {:class (util/bem [:l-box #{:col :align-center}])}
+          {:class (util/bem [:l-box :col :align-center])}
           (dom/div
-           {:class (util/bem [:l-box #{:margin-top-large}])}
+           {:class (util/bem [:l-box :margin-top-large])}
            (dom/span
-            {:class (util/bem [:c-text #{:heading-medium}])}
+            {:class (util/bem [:c-text :heading-medium])}
             "Whoops!"))
           (dom/div
-           {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
+           {:class (util/bem [:l-box :col :align-center :margin-top-medium])}
            (dom/span
             {:class (util/bem [:c-text])}
             first-name ", it looks like you're not on")
@@ -159,21 +159,21 @@
             {:class (util/bem [:c-text])}
             "our guest list. What a shame. Bye."))
           (dom/div
-           {:class (util/bem [:l-box #{:margin-top-medium}])}
+           {:class (util/bem [:l-box :margin-top-medium])}
            (dom/span
-            {:class (util/bem [:c-text #{:link}])
+            {:class (util/bem [:c-text :link])
              :on-click #(n/navigate-externally this {:url "https://omfgdogs.com"})}
             "look at dogs instead")))
 
          (dom/div
-          {:class (util/bem [:l-box #{:col :align-center}])}
+          {:class (util/bem [:l-box :col :align-center])}
           (dom/div
-           {:class (util/bem [:l-box #{:margin-top-large}])}
+           {:class (util/bem [:l-box :margin-top-large])}
            (dom/span
-            {:class (util/bem [:c-text #{:heading-medium}])}
+            {:class (util/bem [:c-text :heading-medium])}
             "Hello!"))
           (dom/div
-           {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
+           {:class (util/bem [:l-box :col :align-center :margin-top-medium])}
            (dom/span
             {:class (util/bem [:c-text])}
             "My name is Keigo.")
@@ -182,9 +182,9 @@
             "I build things."))
 
           (dom/div
-           {:class (util/bem [:l-box #{:margin-top-medium}])}
+           {:class (util/bem [:l-box :margin-top-medium])}
            (dom/span
-            {:class (util/bem [:c-text #{:link}])
+            {:class (util/bem [:c-text :link])
              :on-click #(let [tempid (om/tempid)]
                           (when can-initialise-auth-attempt?
                             (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
@@ -207,20 +207,20 @@
   Object
   (render [this]
     (dom/div
-     {:class (util/bem :c-page)}
+     {:class (util/bem [:c-page])}
      (dom/div
-      {:class (util/bem [:l-box #{:justify-center}])}
+      {:class (util/bem [:l-box :justify-center])}
       (ui-animated-mascot))
 
      (dom/div
-      {:class (util/bem [:l-box #{:col :align-center}])}
+      {:class (util/bem [:l-box :col :align-center])}
       (dom/div
-       {:class (util/bem [:l-box #{:margin-top-large}])}
+       {:class (util/bem [:l-box :margin-top-large])}
        (dom/span
-        {:class (util/bem [:c-text #{:heading-medium}])}
+        {:class (util/bem [:c-text :heading-medium])}
         "You're lost!"))
       (dom/div
-       {:class (util/bem [:l-box #{:col :align-center :margin-top-medium}])}
+       {:class (util/bem [:l-box :col :align-center :margin-top-medium])}
        (dom/span
         {:class (util/bem [:c-text])}
         "This page doesn't even exist.")
@@ -228,9 +228,9 @@
         {:class (util/bem [:c-text])}
         "It's okay to feel scared."))
       (dom/div
-       {:class (util/bem [:l-box #{:margin-top-medium}])}
+       {:class (util/bem [:l-box :margin-top-medium])}
        (dom/span
-        {:class (util/bem [:c-text #{:link}])
+        {:class (util/bem [:c-text :link])
          :on-click #(n/navigate-internally this {:handler :home})}
         "go someplace safe"))))))
 
