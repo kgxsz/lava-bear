@@ -29,8 +29,8 @@
 
   ;; fonts
   fonts/icomoon
-  fonts/fira-mono
-  fonts/raleway
+  fonts/raleway-light
+  fonts/raleway-regular
 
   ;; animations
   animations/mascot
