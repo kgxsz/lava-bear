@@ -6,20 +6,18 @@
    :animation-count 2})
 
 (def paragraph
-  {:x-small 10
-   :small 12
-   :medium 14
-   :large 16
-   :x-large 18})
+  {:x-small 12
+   :small 14
+   :medium 16
+   :large 18
+   :x-large 20})
 
 (def heading
-  {:xx-small 20
-   :x-small 25
-   :small 30
-   :medium 35
-   :large 40
-   :x-large 45
-   :xx-large 50})
+  {:x-small 24
+   :small 32
+   :medium 40
+   :large 48
+   :x-large 56})
 
 (def spacing
   {:xxx-small 1

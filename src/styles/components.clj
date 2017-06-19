@@ -20,13 +20,15 @@
 
 (def text
   [:.c-text {:font-family "'Raleway', Arial"
-             :font-weight 300
+             :font-weight :normal
              :color (:dark-grey constants/color)
              :font-size (-> constants/paragraph :medium px)
              :line-height 1.8
              :text-decoration :none}
 
+
    [:&--link {:color (:grapefruit constants/color)
+              :font-weight :bold
               :text-shadow [[(em 0.03) 0 (:white constants/color)]
                             [(em -0.03) 0 (:white constants/color)]
                             [0 (em 0.03) (:white constants/color)]
@@ -56,6 +58,8 @@
                   :text-overflow :ellipsis}]
 
    [:&--align-center {:text-align :center}]
+
+   [:&--font-weight-bold {:font-weight :bold}]
 
    (make-modifiers [:&--color {:color [constants/color]}])
    (make-modifiers [:&--heading {:font-size [constants/heading px]}])
