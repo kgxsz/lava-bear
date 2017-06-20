@@ -17,6 +17,7 @@
 
    [:&--align
     [:&-center {:align-items :center}]
+    [:&-baseline {:align-items :baseline}]
     [:&-start {:align-items :flex-start}]
     [:&-end {:align-items :flex-end}]]
 

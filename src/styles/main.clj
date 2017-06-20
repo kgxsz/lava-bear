@@ -29,7 +29,8 @@
 
   ;; fonts
   fonts/icomoon
-  fonts/raleway
+  fonts/raleway-light
+  fonts/raleway-heavy
 
   ;; animations
   animations/mascot
