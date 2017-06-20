@@ -21,14 +21,34 @@
 (defui ^:once AnimatedMascot
   Object
   (render [this]
-    (let [{:keys []} (om/props this)]
-      (dom/div
-       {:class (util/bem [:c-animated-mascot])}
-       (dom/div
-        {:class (util/bem [:c-animated-mascot__animator])}
-        (html (util/embed-svg "animated-mascot.svg")))))))
+    (dom/div
+     {:class (util/bem [:c-animated-mascot])}
+     (dom/div
+      {:class (util/bem [:c-animated-mascot__animator])}
+      (html (util/embed-svg "animated-mascot.svg"))))))
 
 (def ui-animated-mascot (om/factory AnimatedMascot))
+
+(defui ^:once AnimatedRoles
+  Object
+  (render [this]
+    (dom/div
+     {:class (util/bem [:c-animated-roles])}
+     (dom/div
+      {:class (util/bem [:c-animated-roles__animator])}
+      (dom/div
+       {:class (util/bem [:l-box :col])}
+       (for [role ["frontendy." "backendy." "devopsy." "designy."]]
+         (dom/div
+          {:class (util/bem [:l-box :padding-left-small])}
+          (dom/span
+           {:class (util/bem [:c-text :padding-right-x-small])}
+           "I'm")
+          (dom/span
+           {:class (util/bem [:c-text :color-grapefruit :font-weight-bold])}
+           role))))))))
+
+(def ui-animated-roles (om/factory AnimatedRoles))
 
 (defui ^:once Loading
   Object
@@ -177,21 +197,7 @@
            (dom/span
             {:class (util/bem [:c-text])}
             "My name is Keigo.")
-           (dom/div
-            {:class (util/bem [:c-animated-roles])}
-            (dom/div
-             {:class (util/bem [:c-animated-roles__animator])}
-             (dom/div
-              {:class (util/bem [:l-box :col])}
-              (for [role ["frontendy." "backendy." "devopsy." "designy."]]
-                (dom/div
-                 {:class (util/bem [:l-box :padding-left-small])}
-                 (dom/span
-                  {:class (util/bem [:c-text :padding-right-x-small])}
-                  "I'm")
-                 (dom/span
-                  {:class (util/bem [:c-text :color-grapefruit :font-weight-bold])}
-                  role)))))))
+           (ui-animated-roles))
 
           #_(dom/div
            {:class (util/bem [:l-box :margin-top-medium])}
@@ -203,7 +209,9 @@
                                                  (untangled/load {:query [(:auth-attempt {:id ~tempid})]})])))}
             (cond
               auth-attempt "signing in"
-              :else "sign in")))))))))
+              :else "sign in")))
+
+           ))))))
 
 (def ui-home-page (om/factory HomePage))
 
