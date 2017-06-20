@@ -284,3 +284,11 @@
                   :animation-duration (ms 5000)
                   :animation-timing-function (steps 1)
                   :animation-iteration-count :infinite}]])
+
+(def animated-roles
+  [:.c-animated-roles {:height (-> constants/roles :height px)
+                       :overflow :hidden}
+   [:&__animator {:animation-name :roles
+                  :animation-duration (ms 4000)
+                  :animation-timing-function (steps (:animation-count constants/roles))
+                  :animation-iteration-count :infinite}]])

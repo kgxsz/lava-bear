@@ -5,6 +5,10 @@
    :height 220
    :animation-count 2})
 
+(def roles
+  {:height 28
+   :animation-count 4})
+
 (def paragraph
   {:x-small 12
    :small 14

@@ -177,11 +177,23 @@
            (dom/span
             {:class (util/bem [:c-text])}
             "My name is Keigo.")
-           (dom/span
-            {:class (util/bem [:c-text])}
-            "I build things."))
+           (dom/div
+            {:class (util/bem [:c-animated-roles])}
+            (dom/div
+             {:class (util/bem [:c-animated-roles__animator])}
+             (dom/div
+              {:class (util/bem [:l-box :col])}
+              (for [role ["frontendy." "backendy." "devopsy." "designy."]]
+                (dom/div
+                 {:class (util/bem [:l-box :padding-left-small])}
+                 (dom/span
+                  {:class (util/bem [:c-text :padding-right-x-small])}
+                  "I'm")
+                 (dom/span
+                  {:class (util/bem [:c-text :color-grapefruit :font-weight-bold])}
+                  role)))))))
 
-          (dom/div
+          #_(dom/div
            {:class (util/bem [:l-box :margin-top-medium])}
            (dom/span
             {:class (util/bem [:c-text :link])

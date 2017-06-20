@@ -25,3 +25,9 @@
                    [:62% {:transform (translate x y)}]
                    [:63% {:transform (translate 0 0)}]
                    [:100% {:transform (translate 0 0)}]])))
+
+(def roles
+  (at-keyframes :roles
+                [[:0% {:transform (translate 0 0)}]
+                 [:100% {:transform (translate 0 (* (- (:height constants/roles)) (:animation-count constants/roles)))}]]))
+
