@@ -29,5 +29,5 @@
 (def roles
   (at-keyframes :roles
                 [[:0% {:transform (translate 0 0)}]
-                 [:100% {:transform (translate 0 (* (- (:height constants/roles)) (:animation-count constants/roles)))}]]))
+                 [:100% {:transform (translate 0 (* (- (:height constants/roles)) (:frame-count constants/roles)))}]]))
 

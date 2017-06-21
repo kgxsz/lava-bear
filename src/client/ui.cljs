@@ -40,13 +40,15 @@
        {:class (util/bem [:l-box :col])}
        (for [role ["frontendy." "backendy." "devopsy." "designy."]]
          (dom/div
-          {:class (util/bem [:l-box :padding-left-small])}
-          (dom/span
-           {:class (util/bem [:c-text :padding-right-x-small])}
-           "I'm")
-          (dom/span
-           {:class (util/bem [:c-text :color-grapefruit :font-weight-bold])}
-           role))))))))
+          {:class (util/bem [:c-animated-roles__animator__frame])}
+          (dom/div
+           {:class (util/bem [:l-box :row :align-center :height-100 :padding-left-small])}
+           (dom/span
+            {:class (util/bem [:c-text :padding-right-x-small])}
+            "I'm")
+           (dom/span
+            {:class (util/bem [:c-text :color-grapefruit :font-weight-bold])}
+            role)))))))))
 
 (def ui-animated-roles (om/factory AnimatedRoles))
 

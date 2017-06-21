@@ -288,5 +288,6 @@
                        :overflow :hidden}
    [:&__animator {:animation-name :roles
                   :animation-duration (ms 4000)
-                  :animation-timing-function (steps (:animation-count constants/roles))
-                  :animation-iteration-count :infinite}]])
+                  :animation-timing-function (steps (:frame-count constants/roles))
+                  :animation-iteration-count :infinite}
+    [:&__frame {:height (-> constants/roles :height px)}]]])
