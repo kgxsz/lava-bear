@@ -277,9 +277,9 @@
   [:.c-animated-mascot {:width (-> constants/mascot :width px)
                         :height (-> constants/mascot :height px)
                         :overflow :hidden}
-   [:&__animator {:width (-> (* (:animation-count constants/mascot) (:width constants/mascot)) px)
+   [:&__animator {:width (-> (* (:animation-strip-count constants/mascot) (:width constants/mascot)) px)
                   :animation-name :mascot
-                  :animation-duration (ms 5000)
+                  :animation-duration (-> constants/mascot :animation-duration ms)
                   :animation-timing-function (steps 1)
                   :animation-iteration-count :infinite}]])
 
@@ -287,7 +287,7 @@
   [:.c-animated-roles {:height (-> constants/roles :height px)
                        :overflow :hidden}
    [:&__animator {:animation-name :roles
-                  :animation-duration (ms 4000)
-                  :animation-timing-function (steps (:frame-count constants/roles))
+                  :animation-duration (-> constants/roles :animation-duration ms)
+                  :animation-timing-function (steps (:animation-frame-count constants/roles))
                   :animation-iteration-count :infinite}
     [:&__frame {:height (-> constants/roles :height px)}]]])

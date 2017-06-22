@@ -3,11 +3,13 @@
 (def mascot
   {:width 220
    :height 220
-   :animation-count 2})
+   :animation-strip-count 2
+   :animation-duration 5000})
 
 (def roles
   {:height 28
-   :frame-count 4})
+   :animation-frame-count 4
+   :animation-duration 3000})
 
 (def paragraph
   {:x-small 12
