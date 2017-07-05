@@ -40,9 +40,6 @@
     [:&-right {:position :absolute
                :right 0}]]
 
-   [:&--clickable
-    [:&:hover {:cursor :pointer}]]
-
    (make-modifiers [:&--background-color {:background-color [constants/color]}])
    (make-modifiers [:&--width {:width [constants/filling px]}])
    (make-modifiers [:&--width {:width [constants/proportion percent]}])
