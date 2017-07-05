@@ -20,7 +20,7 @@
 
 (def text
   [:.c-text {:font-family "'Raleway', Arial"
-             :color (:dark-grey constants/color)
+             :color (:black constants/color)
              :font-size (-> constants/paragraph :medium px)
              :line-height 1.8
              :text-decoration :none}
