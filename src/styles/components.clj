@@ -48,7 +48,7 @@
               :background-repeat [:no-repeat :no-repeat :repeat-x]
               :background-position [[(percent 0) (percent 90)]
                                     [(percent 100) (percent 90)]
-                                    [(percent 0) (percent 80)]]}
+                                    [(percent 0) (percent 78)]]}
     [:&:hover {:cursor :pointer}]]
 
    [:&--ellipsis {:white-space :nowrap
