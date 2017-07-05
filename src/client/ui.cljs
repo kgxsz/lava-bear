@@ -194,6 +194,7 @@
            (dom/span
             {:class (util/bem [:c-text :heading-medium])}
             "Hello!"))
+
           (dom/div
            {:class (util/bem [:l-box :col :align-center :margin-top-medium])}
            (dom/span
@@ -201,8 +202,8 @@
             "My name is Keigo.")
            (ui-animated-roles))
 
-          #_(dom/div
-           {:class (util/bem [:l-box :margin-top-medium])}
+          (dom/div
+           {:class (util/bem [:l-box :margin-medium :position-top :position-right])}
            (dom/span
             {:class (util/bem [:c-text :link])
              :on-click #(let [tempid (om/tempid)]
@@ -211,9 +212,7 @@
                                                  (untangled/load {:query [(:auth-attempt {:id ~tempid})]})])))}
             (cond
               auth-attempt "signing in"
-              :else "sign in")))
-
-           ))))))
+              :else "sign in")))))))))
 
 (def ui-home-page (om/factory HomePage))
 
