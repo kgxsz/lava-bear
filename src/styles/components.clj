@@ -48,7 +48,7 @@
               :background-repeat [:no-repeat :no-repeat :repeat-x]
               :background-position [[(percent 0) (percent 90)]
                                     [(percent 100) (percent 90)]
-                                    [(percent 0) (percent 78)]]}
+                                    [(percent 0) (percent 79)]]}
     [:&:hover {:cursor :pointer}]]
 
    [:&--ellipsis {:white-space :nowrap
@@ -85,11 +85,11 @@
    (make-modifiers [:&--padding-top {:padding-top [constants/spacing px]}])
    (make-modifiers [:&--padding-bottom {:padding-bottom [constants/spacing px]}])
    (make-modifiers [:&--padding-left {:padding-left [constants/spacing px]}])
-   (make-modifiers [:&--padding-right {:padding-right [constants/spacing px]}]) 
+   (make-modifiers [:&--padding-right {:padding-right [constants/spacing px]}])
 
    [:&--link {:color (:grapefruit constants/color)
               :border-bottom [[:solid (:grapefruit constants/color) (px 1)]]
-              :padding-bottom (px 0.75)}
+              :padding-bottom (px 1.25)}
     [:&:hover {:cursor :pointer}]]
 
    [:&--question-circle:before {:content "'\\e87d'"}]
