@@ -30,6 +30,16 @@
     [:&--grow-3 {:flex-grow 3}]
     [:&--basis-0 {:flex-basis 0}]]
 
+   [:&--position
+    [:&-top {:position :absolute
+             :top 0}]
+    [:&-bottom {:position :absolute
+                :bottom 0}]
+    [:&-left {:position :absolute
+              :left 0}]
+    [:&-right {:position :absolute
+               :right 0}]]
+
    (make-modifiers [:&--background-color {:background-color [constants/color]}])
    (make-modifiers [:&--width {:width [constants/filling px]}])
    (make-modifiers [:&--width {:width [constants/proportion percent]}])
