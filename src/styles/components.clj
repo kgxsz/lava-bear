@@ -12,7 +12,7 @@
              :margin-right :auto
              :margin-bottom (-> constants/spacing :large px)
              :width (px 1000)}
-   (width-xs {:margin-top (-> constants/spacing :large px)
+   (width-xs {:margin-top (-> constants/spacing :x-large px)
               :width (percent 100)})
    (width-sm {:margin-top (-> constants/spacing :x-large px)
               :width (px 480)})
