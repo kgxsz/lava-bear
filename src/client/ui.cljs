@@ -203,12 +203,13 @@
            (ui-animated-roles))
 
           (dom/div
-           {:class (util/bem [:l-box :align-baseline :margin-top-medium :clickable])
-            :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
+           {:class (util/bem [:l-box :row :align-baseline :margin-top-medium])}
            (dom/span
-            {:class (util/bem [:c-icon :github :paragraph-small])})
+            {:class (util/bem [:c-icon :github :link])
+             :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})})
            (dom/span
-            {:class (util/bem [:c-text])}
+            {:class (util/bem [:c-text :link])
+             :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
             "/kgxsz"))
 
           (dom/div

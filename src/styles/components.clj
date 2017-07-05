@@ -87,6 +87,11 @@
    (make-modifiers [:&--padding-left {:padding-left [constants/spacing px]}])
    (make-modifiers [:&--padding-right {:padding-right [constants/spacing px]}]) 
 
+   [:&--link {:color (:grapefruit constants/color)
+              :border-bottom [[:solid (:grapefruit constants/color) (px 1)]]
+              :padding-bottom (px 1)}
+    [:&:hover {:cursor :pointer}]]
+
    [:&--question-circle:before {:content "'\\e87d'"}]
    [:&--arrow-left:before {:content "'\\e879'"}]
    [:&--moon:before {:content "'\\e808'"}]
@@ -205,7 +210,7 @@
    [:&--cloud-upload:before {:content "'\\e80a'"}]
    [:&--volume-medium:before {:content "'\\e85b'"}]
    [:&--checkmark-circle:before {:content "'\\e87f'"}]
-   [:&--link:before {:content "'\\e86b'"}]
+   [:&--chainlink:before {:content "'\\e86b'"}]
    [:&--text-format-remove:before {:content "'\\e891'"}]
    [:&--strikethrough:before {:content "'\\e896'"}]
    [:&--picture:before {:content "'\\e827'"}]
