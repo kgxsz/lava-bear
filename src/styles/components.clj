@@ -89,7 +89,7 @@
 
    [:&--link {:color (:grapefruit constants/color)
               :border-bottom [[:solid (:grapefruit constants/color) (px 1)]]
-              :padding-bottom (px 1)}
+              :padding-bottom (px 0.75)}
     [:&:hover {:cursor :pointer}]]
 
    [:&--question-circle:before {:content "'\\e87d'"}]
