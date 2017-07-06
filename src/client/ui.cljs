@@ -187,7 +187,7 @@
             "our guest list. What a shame. Bye."))
 
           (dom/div
-           {:class (util/bem [:l-box :margin-top-medium])}
+           {:class (util/bem [:l-box :margin-top-large])}
            (dom/span
             {:class (util/bem [:c-text :link])
              :on-click #(n/navigate-externally this {:url "https://omfgdogs.com"})}
@@ -229,7 +229,7 @@
            (ui-animated-roles))
 
           (dom/div
-           {:class (util/bem [:l-box :row :align-baseline :margin-top-medium :underlay])}
+           {:class (util/bem [:l-box :row :align-baseline :margin-top-large :underlay])}
            (dom/div
             {:class (util/bem [:l-box :row :align-center :overlay :position-top :position-bottom :clickable])
              :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
@@ -275,7 +275,7 @@
         {:class (util/bem [:c-text])}
         "It's okay to feel scared."))
       (dom/div
-       {:class (util/bem [:l-box :margin-top-medium])}
+       {:class (util/bem [:l-box :margin-top-large])}
        (dom/span
         {:class (util/bem [:c-text :link])
          :on-click #(n/navigate-internally this {:handler :home})}
