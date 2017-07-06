@@ -30,15 +30,17 @@
     [:&--grow-3 {:flex-grow 3}]
     [:&--basis-0 {:flex-basis 0}]]
 
+   [:&--clickable
+    [:&:hover {:cursor :pointer}]]
+
+   [:&--underlay {:position :relative}]
+   [:&--overlay {:position :absolute}]
+
    [:&--position
-    [:&-top {:position :absolute
-             :top 0}]
-    [:&-bottom {:position :absolute
-                :bottom 0}]
-    [:&-left {:position :absolute
-              :left 0}]
-    [:&-right {:position :absolute
-               :right 0}]]
+    [:&-top {:top 0}]
+    [:&-bottom {:bottom 0}]
+    [:&-left {:left 0}]
+    [:&-right {:right 0}]]
 
    (make-modifiers [:&--background-color {:background-color [constants/color]}])
    (make-modifiers [:&--width {:width [constants/filling px]}])

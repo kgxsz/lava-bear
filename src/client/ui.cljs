@@ -158,13 +158,17 @@
     (let [{:keys [current-user auth-attempt]} (om/props this)
           {:keys [first-name]} current-user
           can-initialise-auth-attempt? (nil? auth-attempt)]
-      (dom/div
-       {:class (util/bem [:c-page])}
-       (dom/div
-        {:class (util/bem [:l-box :justify-center])}
-        (ui-animated-mascot))
 
-       (if (:user-id current-user)
+      (if (:user-id current-user)
+
+        ;; signed in
+        (dom/div
+         {:class (util/bem [:c-page])}
+
+         (dom/div
+          {:class (util/bem [:l-box :justify-center])}
+          (ui-animated-mascot))
+
          (dom/div
           {:class (util/bem [:l-box :col :align-center])}
           (dom/div
@@ -172,6 +176,7 @@
            (dom/span
             {:class (util/bem [:c-text :heading-medium])}
             "Whoops!"))
+
           (dom/div
            {:class (util/bem [:l-box :col :align-center :margin-top-medium])}
            (dom/span
@@ -180,12 +185,33 @@
            (dom/span
             {:class (util/bem [:c-text])}
             "our guest list. What a shame. Bye."))
+
           (dom/div
            {:class (util/bem [:l-box :margin-top-medium])}
            (dom/span
             {:class (util/bem [:c-text :link])
              :on-click #(n/navigate-externally this {:url "https://omfgdogs.com"})}
-            "look at dogs instead")))
+            "look at dogs instead"))))
+
+        ;; not signed in
+        (dom/div
+         {:class (util/bem [:c-page])}
+
+         (dom/div
+          {:class (util/bem [:l-box :margin-medium :overlay :position-top :position-right])}
+          (dom/span
+           {:class (util/bem [:c-text :link])
+            :on-click #(let [tempid (om/tempid)]
+                         (when can-initialise-auth-attempt?
+                           (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
+                                                (untangled/load {:query [(:auth-attempt {:id ~tempid})]})])))}
+           (cond
+             auth-attempt "signing in"
+             :else "sign in")))
+
+         (dom/div
+          {:class (util/bem [:l-box :justify-center])}
+          (ui-animated-mascot))
 
          (dom/div
           {:class (util/bem [:l-box :col :align-center])}
@@ -203,26 +229,16 @@
            (ui-animated-roles))
 
           (dom/div
-           {:class (util/bem [:l-box :row :align-baseline :margin-top-medium])}
-           (dom/span
-            {:class (util/bem [:c-icon :github])
-             :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})})
-           (dom/span
-            {:class (util/bem [:c-text :link])
+           {:class (util/bem [:l-box :row :align-baseline :margin-top-medium :underlay])}
+           (dom/div
+            {:class (util/bem [:l-box :row :align-center :overlay :position-top :position-bottom :clickable])
              :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
-            "/kgxsz"))
-
-          (dom/div
-           {:class (util/bem [:l-box :margin-medium :position-top :position-right])}
+            (dom/span
+             {:class (util/bem [:c-icon :github :padding-bottom-x-small :color-grapefruit])}))
            (dom/span
-            {:class (util/bem [:c-text :link])
-             :on-click #(let [tempid (om/tempid)]
-                          (when can-initialise-auth-attempt?
-                            (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
-                                                 (untangled/load {:query [(:auth-attempt {:id ~tempid})]})])))}
-            (cond
-              auth-attempt "signing in"
-              :else "sign in")))))))))
+            {:class (util/bem [:c-text :link :padding-left-medium])
+             :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
+            "/kgxsz"))))))))
 
 (def ui-home-page (om/factory HomePage))
 
