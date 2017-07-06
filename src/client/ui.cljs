@@ -205,7 +205,7 @@
           (dom/div
            {:class (util/bem [:l-box :row :align-baseline :margin-top-medium])}
            (dom/span
-            {:class (util/bem [:c-icon :github :link])
+            {:class (util/bem [:c-icon :github])
              :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})})
            (dom/span
             {:class (util/bem [:c-text :link])
