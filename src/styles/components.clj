@@ -27,10 +27,10 @@
 
 
    [:&--link {:color (:grapefruit constants/color)
-              :text-shadow [[(em 0.03) 0 (:white constants/color)]
-                            [(em -0.03) 0 (:white constants/color)]
-                            [0 (em 0.03) (:white constants/color)]
-                            [0 (em -0.03) (:white constants/color)]
+              :text-shadow [[(em 0.08) 0 (:white constants/color)]
+                            [(em -0.08) 0 (:white constants/color)]
+                            [0 (em 0.08) (:white constants/color)]
+                            [0 (em -0.08) (:white constants/color)]
                             [(em 0.06) 0 (:white constants/color)]
                             [(em -0.06) 0 (:white constants/color)]
                             [(em 0.09) 0 (:white constants/color)]
@@ -48,7 +48,7 @@
               :background-repeat [:no-repeat :no-repeat :repeat-x]
               :background-position [[(percent 0) (percent 90)]
                                     [(percent 100) (percent 90)]
-                                    [(percent 0) (percent 79)]]}
+                                    [(percent 0) (percent 81)]]}
     [:&:hover {:cursor :pointer}]]
 
    [:&--ellipsis {:white-space :nowrap
