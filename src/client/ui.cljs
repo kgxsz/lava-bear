@@ -42,9 +42,9 @@
          (dom/div
           {:class (util/bem [:c-animated-roles__animator__frame])}
           (dom/div
-           {:class (util/bem [:l-box :row :align-center :height-100 :padding-left-small])}
+           {:class (util/bem [:l-box :row :align-center :height-100 :padding-left-tiny])}
            (dom/span
-            {:class (util/bem [:c-text :padding-right-x-small])}
+            {:class (util/bem [:c-text :padding-right-xxx-small])}
             "I'm")
            (dom/span
             {:class (util/bem [:c-text :color-grapefruit :font-weight-bold])}
