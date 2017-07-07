@@ -231,14 +231,14 @@
           (dom/div
            {:class (util/bem [:l-box :row :align-baseline :margin-top-xxx-large :underlay])}
            (dom/span
-            {:class (util/bem [:c-text :link :padding-right-x-large])
+            {:class (util/bem [:c-text :link :padding-right-large])
              :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
             "visit my")
            (dom/div
             {:class (util/bem [:l-box :row :align-center :overlay :position-top :position-bottom :position-right :clickable])
              :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
             (dom/span
-             {:class (util/bem [:c-icon :github :paragraph-large :padding-bottom-xxx-small :padding-right-xx-tiny :color-grapefruit])})))))))))
+             {:class (util/bem [:c-icon :github :paragraph-medium :padding-bottom-tiny :padding-right-xxx-tiny :color-grapefruit])})))))))))
 
 (def ui-home-page (om/factory HomePage))
 
