@@ -12,29 +12,41 @@
    :animation-duration 3000})
 
 (def paragraph
-  {:x-small 12
+  {:xx-small 10
+   :x-small 12
    :small 14
    :medium 16
    :large 18
-   :x-large 20})
+   :x-large 20
+   :xx-large 22})
 
 (def heading
-  {:x-small 24
+  {:xx-small 24
+   :x-small 28
    :small 32
-   :medium 40
-   :large 48
-   :x-large 56})
+   :medium 36
+   :large 40
+   :x-large 48
+   :xx-large 52})
 
 (def spacing
-  {:xxx-small 1
-   :xx-small 2
-   :x-small 4
-   :small 8
+  {:xxx-tiny 1
+   :xx-tiny 2
+   :x-tiny 3
+   :tiny 4
+   :xxx-small 6
+   :xx-small 8
+   :x-small 10
+   :small 12
    :medium 16
-   :large 32
-   :x-large 64
-   :xx-large 128
-   :xxx-large 256})
+   :large 20
+   :x-large 24
+   :xx-large 28
+   :xxx-large 32
+   :huge 64
+   :x-huge 128
+   :xx-huge 256
+   :xxx-huge 512})
 
 (def filling
   {:xxx-small 16

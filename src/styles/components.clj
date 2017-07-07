@@ -7,14 +7,14 @@
   [:.c-app {:overflow :auto}])
 
 (def page
-  [:.c-page {:margin-top (-> constants/spacing :xx-large px)
+  [:.c-page {:margin-top (-> constants/spacing :x-huge px)
              :margin-left :auto
              :margin-right :auto
-             :margin-bottom (-> constants/spacing :large px)
+             :margin-bottom (-> constants/spacing :xxx-large px)
              :width (px 1000)}
-   (width-xs {:margin-top (-> constants/spacing :x-large px)
+   (width-xs {:margin-top (-> constants/spacing :huge px)
               :width (percent 100)})
-   (width-sm {:margin-top (-> constants/spacing :x-large px)
+   (width-sm {:margin-top (-> constants/spacing :huge px)
               :width (px 480)})
    (width-md {:width (px 750)})])
 

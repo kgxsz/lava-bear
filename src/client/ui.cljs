@@ -61,7 +61,7 @@
       {:class (util/bem [:l-box :justify-center])}
       (ui-still-mascot))
      (dom/div
-      {:class (util/bem [:l-box :justify-center :margin-top-x-large])}
+      {:class (util/bem [:l-box :justify-center :margin-top-huge])}
       (dom/span
        {:class (util/bem [:c-text :paragraph-large])}
        "loading")))))
@@ -110,12 +110,12 @@
           (dom/div
            {:class (util/bem [:l-box :col :align-center])}
            (dom/div
-            {:class (util/bem [:l-box :margin-top-large])}
+            {:class (util/bem [:l-box :margin-top-xx-large])}
             (dom/span
              {:class (util/bem [:c-text :heading-medium])}
              "The heck?"))
            (dom/div
-            {:class (util/bem [:l-box :col :align-center :margin-top-medium])}
+            {:class (util/bem [:l-box :col :align-center :margin-top-large])}
             (dom/span
              {:class (util/bem [:c-text])}
              "Something is broken!")
@@ -123,7 +123,7 @@
              {:class (util/bem [:c-text])}
              "I bet you're really angry."))
            (dom/div
-            {:class (util/bem [:l-box :margin-top-medium])}
+            {:class (util/bem [:l-box :margin-top-xxx-large])}
             (dom/span
              {:class (util/bem [:c-text :link :color-grapefruit])
               :on-click #(n/navigate-internally this {:handler :home})}
@@ -172,13 +172,13 @@
          (dom/div
           {:class (util/bem [:l-box :col :align-center])}
           (dom/div
-           {:class (util/bem [:l-box :margin-top-large])}
+           {:class (util/bem [:l-box :margin-top-xx-large])}
            (dom/span
             {:class (util/bem [:c-text :heading-medium])}
             "Whoops!"))
 
           (dom/div
-           {:class (util/bem [:l-box :col :align-center :margin-top-medium])}
+           {:class (util/bem [:l-box :col :align-center :margin-top-large])}
            (dom/span
             {:class (util/bem [:c-text])}
             first-name ", it looks like you're not on")
@@ -187,7 +187,7 @@
             "our guest list. What a shame. Bye."))
 
           (dom/div
-           {:class (util/bem [:l-box :margin-top-large])}
+           {:class (util/bem [:l-box :margin-top-xxx-large])}
            (dom/span
             {:class (util/bem [:c-text :link])
              :on-click #(n/navigate-externally this {:url "https://omfgdogs.com"})}
@@ -216,29 +216,29 @@
          (dom/div
           {:class (util/bem [:l-box :col :align-center])}
           (dom/div
-           {:class (util/bem [:l-box :margin-top-large])}
+           {:class (util/bem [:l-box :margin-top-xx-large])}
            (dom/span
             {:class (util/bem [:c-text :heading-medium])}
             "Hello!"))
 
           (dom/div
-           {:class (util/bem [:l-box :col :align-center :margin-top-medium])}
+           {:class (util/bem [:l-box :col :align-center :margin-top-large])}
            (dom/span
             {:class (util/bem [:c-text])}
             "My name is Keigo.")
            (ui-animated-roles))
 
           (dom/div
-           {:class (util/bem [:l-box :row :align-baseline :margin-top-large :underlay])}
+           {:class (util/bem [:l-box :row :align-baseline :margin-top-xxx-large :underlay])}
+           (dom/span
+            {:class (util/bem [:c-text :link :padding-right-x-large])
+             :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
+            "visit my")
            (dom/div
-            {:class (util/bem [:l-box :row :align-center :overlay :position-top :position-bottom :clickable])
+            {:class (util/bem [:l-box :row :align-center :overlay :position-top :position-bottom :position-right :clickable])
              :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
             (dom/span
-             {:class (util/bem [:c-icon :github :padding-bottom-x-small :color-grapefruit])}))
-           (dom/span
-            {:class (util/bem [:c-text :link :padding-left-medium])
-             :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
-            "/kgxsz"))))))))
+             {:class (util/bem [:c-icon :github :paragraph-large :padding-bottom-xxx-small :padding-right-xx-tiny :color-grapefruit])})))))))))
 
 (def ui-home-page (om/factory HomePage))
 
@@ -262,12 +262,12 @@
      (dom/div
       {:class (util/bem [:l-box :col :align-center])}
       (dom/div
-       {:class (util/bem [:l-box :margin-top-large])}
+       {:class (util/bem [:l-box :margin-top-xx-large])}
        (dom/span
         {:class (util/bem [:c-text :heading-medium])}
         "You're lost!"))
       (dom/div
-       {:class (util/bem [:l-box :col :align-center :margin-top-medium])}
+       {:class (util/bem [:l-box :col :align-center :margin-top-large])}
        (dom/span
         {:class (util/bem [:c-text])}
         "This page doesn't even exist.")
@@ -275,7 +275,7 @@
         {:class (util/bem [:c-text])}
         "It's okay to feel scared."))
       (dom/div
-       {:class (util/bem [:l-box :margin-top-large])}
+       {:class (util/bem [:l-box :margin-top-xxx-large])}
        (dom/span
         {:class (util/bem [:c-text :link])
          :on-click #(n/navigate-internally this {:handler :home})}

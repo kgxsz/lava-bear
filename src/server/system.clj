@@ -97,7 +97,7 @@
                                            [:div {:class (util/bem [:l-box :justify-center])}
                                             [:div {:class (util/bem [:c-still-mascot])}
                                              (util/embed-svg "still-mascot.svg")]]
-                                           [:div {:class (util/bem [:l-box :justify-center :margin-top-x-large])}
+                                           [:div {:class (util/bem [:l-box :justify-center :margin-top-huge])}
                                             [:span {:class (util/bem [:c-text :paragraph-large])}
                                              "loading"]]]]]
                                         (page/include-js "/js/compiled/app.js")])]
