@@ -56,9 +56,4 @@
    (make-modifiers [:&--padding-top {:padding-top [constants/spacing px]}])
    (make-modifiers [:&--padding-bottom {:padding-bottom [constants/spacing px]}])
    (make-modifiers [:&--padding-left {:padding-left [constants/spacing px]}])
-   (make-modifiers [:&--padding-right {:padding-right [constants/spacing px]}])
-
-   (make-modifiers [:&--nudge-top {:top [constants/spacing px]}])
-   (make-modifiers [:&--nudge-bottom {:bottom [constants/spacing px]}])
-   (make-modifiers [:&--nudge-left {:left [constants/spacing px]}])
-   (make-modifiers [:&--nudge-right {:right [constants/spacing px]}])])
+   (make-modifiers [:&--padding-right {:padding-right [constants/spacing px]}])])
