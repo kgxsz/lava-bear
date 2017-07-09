@@ -39,11 +39,7 @@
                                :responses {:not-modified-responses true
                                            :absolute-redirects true
                                            :content-types true
-                                           :default-charset "utf-8"}}
-             :auth {:client-id (or (System/getenv "AUTH_CLIENT_ID") "424679067898674")
-                    :client-secret (or (System/getenv "AUTH_CLIENT_SECRET") (:auth-client-secret private-config))
-                    :redirect-url (or (System/getenv "AUTH_REDIRECT_URL") "http://localhost:3000/auth")
-                    :scope "email"})))
+                                           :default-charset "utf-8"}})))
 
   (stop [this]
     this))
@@ -54,11 +50,7 @@
     (log/info "creating state")
     (assoc this
            :sessions (atom {})
-           :database (atom {:auth-attempts/by-id {}
-                            :users/by-id {}
-                            :last-id 2
-                            :items [{:id 1 :label "item from server"}
-                                    {:id 2 :label "another item"}]})))
+           :database (atom {})))
   (stop [this]
     this))
 

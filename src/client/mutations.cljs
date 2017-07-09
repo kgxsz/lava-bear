@@ -5,12 +5,6 @@
             [untangled.client.core :as uc]
             [untangled.client.mutations :as um]))
 
-(defmethod um/mutate 'app/initialise-auth-attempt [{:keys [state]} _ _]
-  {:remote true})
-
-(defmethod um/mutate 'app/finalise-auth-attempt [{:keys [state]} _ _]
-  {:remote true})
-
 (defmethod um/mutate 'app/navigate-internally [{:keys [state]} _ {:keys [page handler route-params query-params]}]
   {:action (fn []
              (swap! state assoc

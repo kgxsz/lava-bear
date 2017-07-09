@@ -34,6 +34,7 @@
                                                                                 :handler ~handler
                                                                                 :route-params ~route-params
                                                                                 :query-params ~query-params})
+                                                      :navigation
                                                       :page])))
                        (partial b/match-route client-routes)))
   (p/start! @navigation))

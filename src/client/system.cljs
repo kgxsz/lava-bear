@@ -14,7 +14,6 @@
     (log/info "starting config")
     (assoc this
            :client-routes ["/" [["" :home]
-                                ["auth" :auth]
                                 [true :unknown]]]))
 
   (stop [this]
@@ -36,8 +35,7 @@
     (let [shared {:browser browser :config config}
           untangled-client (atom (uc/new-untangled-client
                                    :started-callback (fn [{:keys [reconciler]}]
-                                                       (n/start-navigation reconciler (:navigation browser) (:client-routes config))
-                                                       (ud/load reconciler :current-user nil))
+                                                       (n/start-navigation reconciler (:navigation browser) (:client-routes config)))
                                    :shared shared))]
       (log/info "starting renderer")
       (swap! untangled-client uc/mount ui/App "js-root")

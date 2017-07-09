@@ -68,71 +68,6 @@
 
 (def ui-loading (om/factory Loading))
 
-(defui ^:once AuthPage
-  static uc/InitialAppState
-  (initial-state [this params]
-   {:id '_ :page :auth-page})
-
-  static om/IQuery
-  (query [this]
-    [:id :page [:current-user '_] [:auth-attempt '_] [:navigation '_]])
-
-  Object
-  (componentDidMount [this]
-    (let [{:keys [current-user auth-attempt navigation]} (om/props this)
-          {:keys [error state code]} (:query-params navigation)
-          can-finalise-auth-attempt? (and state code (nil? error) (nil? auth-attempt))
-          can-redirect-to-home? (and (:user-id current-user) (:success-at auth-attempt))]
-      (cond
-        can-finalise-auth-attempt? (let [auth-attempt-id (uuid state)]
-                                     (om/transact! this `[(app/finalise-auth-attempt {:id ~auth-attempt-id :code ~code})
-                                                          (untangled/load {:query [:current-user (:auth-attempt {:id ~auth-attempt-id})]})]))
-        can-redirect-to-home? (n/navigate-internally this {:handler :home :replace? true}))))
-
-  (render [this]
-    (let [{:keys [auth-attempt navigation]} (om/props this)
-          {:keys [query-params]} navigation
-          error? (or (empty? query-params)
-                     ;; error during facebook redirect
-                     (:error query-params)
-                     ;; no auth-attempt could be matched from backend
-                     (and (nil? (:ui/fetch-state auth-attempt)) (map? auth-attempt) (empty? auth-attempt))
-                     ;; auth-attempt finalisation failed on backend
-                     (:failure-at auth-attempt))]
-      (dom/div
-       (if error?
-         (dom/div
-          {:class (util/bem [:c-page])}
-          (dom/div
-           {:class (util/bem [:l-box :justify-center])}
-           (ui-still-mascot))
-
-          (dom/div
-           {:class (util/bem [:l-box :col :align-center])}
-           (dom/div
-            {:class (util/bem [:l-box :margin-top-xx-large])}
-            (dom/span
-             {:class (util/bem [:c-text :heading-medium])}
-             "The heck?"))
-           (dom/div
-            {:class (util/bem [:l-box :col :align-center :margin-top-large])}
-            (dom/span
-             {:class (util/bem [:c-text])}
-             "Something is broken!")
-            (dom/span
-             {:class (util/bem [:c-text])}
-             "I bet you're really angry."))
-           (dom/div
-            {:class (util/bem [:l-box :margin-top-xxx-large])}
-            (dom/span
-             {:class (util/bem [:c-text :link :color-grapefruit])
-              :on-click #(n/navigate-internally this {:handler :home})}
-             "speak to a manager"))))
-
-         (ui-loading))))))
-
-(def ui-auth-page (om/factory AuthPage))
-
 (defui ^:once HomePage
   static uc/InitialAppState
   (initial-state [this params]
@@ -140,105 +75,41 @@
 
   static om/IQuery
   (query [this]
-    [:id :page [:current-user '_] [:auth-attempt '_]])
+    [:id :page [:current-user '_]])
 
   Object
-  (componentDidUpdate [this _ _]
-    (let [{:keys [auth-attempt]} (om/props this)
-          {:keys [initialised-at failure-at success-at id client-id redirect-url scope]} auth-attempt
-          can-redirect-to-facebook? (and initialised-at (nil? failure-at) (nil? success-at))]
-      (when can-redirect-to-facebook?
-        (n/navigate-externally this {:url "https://www.facebook.com/v2.9/dialog/oauth"
-                                     :query-params {:client_id client-id
-                                                    :state id
-                                                    :scope scope
-                                                    :redirect_uri redirect-url}}))))
-
   (render [this]
-    (let [{:keys [current-user auth-attempt]} (om/props this)
-          {:keys [first-name]} current-user
-          can-initialise-auth-attempt? (nil? auth-attempt)]
+    (dom/div
+      {:class (util/bem [:c-page])}
+      (dom/div
+       {:class (util/bem [:l-box :justify-center])}
+       (ui-animated-mascot))
+      (dom/div
+       {:class (util/bem [:l-box :col :align-center])}
+       (dom/div
+        {:class (util/bem [:l-box :margin-top-xx-large])}
+        (dom/span
+         {:class (util/bem [:c-text :heading-medium])}
+         "Hello!"))
 
-      (if (:user-id current-user)
+       (dom/div
+        {:class (util/bem [:l-box :col :align-center :margin-top-large])}
+        (dom/span
+         {:class (util/bem [:c-text])}
+         "My name is Keigo.")
+        (ui-animated-roles))
 
-        ;; signed in
+       (dom/div
+        {:class (util/bem [:l-box :row :align-baseline :margin-top-xxx-large :underlay])}
+        (dom/span
+         {:class (util/bem [:c-text :link :padding-right-large])
+          :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
+         "visit my")
         (dom/div
-         {:class (util/bem [:c-page])}
-
-         (dom/div
-          {:class (util/bem [:l-box :justify-center])}
-          (ui-animated-mascot))
-
-         (dom/div
-          {:class (util/bem [:l-box :col :align-center])}
-          (dom/div
-           {:class (util/bem [:l-box :margin-top-xx-large])}
-           (dom/span
-            {:class (util/bem [:c-text :heading-medium])}
-            "Whoops!"))
-
-          (dom/div
-           {:class (util/bem [:l-box :col :align-center :margin-top-large])}
-           (dom/span
-            {:class (util/bem [:c-text])}
-            first-name ", it looks like you're not on")
-           (dom/span
-            {:class (util/bem [:c-text])}
-            "our guest list. What a shame. Bye."))
-
-          (dom/div
-           {:class (util/bem [:l-box :margin-top-xxx-large])}
-           (dom/span
-            {:class (util/bem [:c-text :link])
-             :on-click #(n/navigate-externally this {:url "https://omfgdogs.com"})}
-            "look at dogs instead"))))
-
-        ;; not signed in
-        (dom/div
-         {:class (util/bem [:c-page])}
-
-         (dom/div
-          {:class (util/bem [:l-box :margin-medium :overlay :position-top :position-right])}
-          (dom/span
-           {:class (util/bem [:c-text :link])
-            :on-click #(let [tempid (om/tempid)]
-                         (when can-initialise-auth-attempt?
-                           (om/transact! this `[(app/initialise-auth-attempt {:id ~tempid})
-                                                (untangled/load {:query [(:auth-attempt {:id ~tempid})]})])))}
-           (cond
-             auth-attempt "signing in"
-             :else "sign in")))
-
-         (dom/div
-          {:class (util/bem [:l-box :justify-center])}
-          (ui-animated-mascot))
-
-         (dom/div
-          {:class (util/bem [:l-box :col :align-center])}
-          (dom/div
-           {:class (util/bem [:l-box :margin-top-xx-large])}
-           (dom/span
-            {:class (util/bem [:c-text :heading-medium])}
-            "Hello!"))
-
-          (dom/div
-           {:class (util/bem [:l-box :col :align-center :margin-top-large])}
-           (dom/span
-            {:class (util/bem [:c-text])}
-            "My name is Keigo.")
-           (ui-animated-roles))
-
-          (dom/div
-           {:class (util/bem [:l-box :row :align-baseline :margin-top-xxx-large :underlay])}
-           (dom/span
-            {:class (util/bem [:c-text :link :padding-right-large])
-             :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
-            "visit my")
-           (dom/div
-            {:class (util/bem [:l-box :row :align-center :overlay :position-top :position-bottom :position-right :clickable])
-             :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
-            (dom/span
-             {:class (util/bem [:c-icon :github :paragraph-medium :padding-bottom-tiny :padding-right-xxx-tiny :color-grapefruit])})))))))))
+         {:class (util/bem [:l-box :row :align-center :overlay :position-top :position-bottom :position-right :clickable])
+          :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
+         (dom/span
+          {:class (util/bem [:c-icon :github :paragraph-medium :padding-bottom-tiny :padding-right-xxx-tiny :color-grapefruit])})))))))
 
 (def ui-home-page (om/factory HomePage))
 
@@ -291,7 +162,6 @@
   static om/IQuery
   (query [this]
     {:home-page (om/get-query HomePage)
-     :auth-page (om/get-query AuthPage)
      :unknown-page (om/get-query UnknownPage)})
 
   static om/Ident
@@ -303,7 +173,6 @@
     (let [{:keys [page] :as props} (om/props this)]
       (case page
         :home-page (ui-home-page props)
-        :auth-page (ui-auth-page props)
         (ui-unknown-page props)))))
 
 (def ui-page-router (om/factory PageRouter))
@@ -313,22 +182,20 @@
   (initial-state [this params]
     {:ui/react-key :app
      :navigation nil
-     :current-user nil
      :page-router (uc/initial-state PageRouter {})})
 
   static om/IQuery
   (query [this]
     [:ui/react-key
      :navigation
-     :current-user
      {:page-router (om/get-query PageRouter)}])
 
   Object
   (render [this]
-    (let [{:keys [ui/react-key navigation current-user page-router]} (om/props this)]
+    (let [{:keys [ui/react-key navigation page-router]} (om/props this)]
       (dom/div
        {:key react-key
         :class (util/bem [:c-app])}
-       (if (and (seq navigation) (map? current-user) (nil? (:ui/fetch-state current-user)))
+       (if (seq navigation)
          (ui-page-router page-router)
          (ui-loading))))))
