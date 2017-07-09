@@ -1,6 +1,6 @@
 # Lava Bear
 
-##### The repository backing (keigo.io)[https://keigo.io]
+##### The repository backing [keigo.io](https://www.keigo.io)
 [![Build Status](https://travis-ci.org/kgxsz/lava-bear.svg?branch=master)](https://travis-ci.org/kgxsz/lava-bear)
 
 ## Local development setup
