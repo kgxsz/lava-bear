@@ -1,6 +1,6 @@
 # Lava Bear
 
-##### A repository to mess around with Component, Untangled, Om/Next, and other goods.
+##### The repository backing (keigo.io)[https://keigo.io]
 [![Build Status](https://travis-ci.org/kgxsz/lava-bear.svg?branch=master)](https://travis-ci.org/kgxsz/lava-bear)
 
 ## Local development setup
