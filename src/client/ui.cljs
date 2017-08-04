@@ -47,7 +47,7 @@
             {:class (util/bem [:c-text :padding-right-xxx-small])}
             "I'm")
            (dom/span
-            {:class (util/bem [:c-text :color-grapefruit :font-weight-bold])}
+            {:class (util/bem [:c-text :color-grapefruit])}
             role)))))))))
 
 (def ui-animated-roles (om/factory AnimatedRoles))
@@ -89,7 +89,7 @@
        (dom/div
         {:class (util/bem [:l-box :margin-top-xx-large])}
         (dom/span
-         {:class (util/bem [:c-text :heading-medium])}
+         {:class (util/bem [:c-text :heading-medium :font-weight-bold])}
          "Hello!"))
 
        (dom/div
@@ -135,7 +135,7 @@
       (dom/div
        {:class (util/bem [:l-box :margin-top-xx-large])}
        (dom/span
-        {:class (util/bem [:c-text :heading-medium])}
+        {:class (util/bem [:c-text :heading-medium :font-weight-bold])}
         "You're lost!"))
       (dom/div
        {:class (util/bem [:l-box :col :align-center :margin-top-large])}
