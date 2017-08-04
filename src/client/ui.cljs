@@ -99,17 +99,18 @@
          "My name is Keigo.")
         (ui-animated-roles))
 
-       (dom/div
-        {:class (util/bem [:l-box :row :align-baseline :margin-top-xxx-large :underlay])}
-        (dom/span
-         {:class (util/bem [:c-text :link :padding-right-large])
-          :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
-         "visit my")
-        (dom/div
-         {:class (util/bem [:l-box :row :align-center :overlay :position-top :position-bottom :position-right :clickable])
-          :on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})}
-         (dom/span
-          {:class (util/bem [:c-icon :github :paragraph-medium :padding-bottom-tiny :padding-right-xxx-tiny :color-grapefruit])})))))))
+       (let [on-click #(n/navigate-externally this {:url "https://github.com/kgxsz"})]
+         (dom/div
+          {:class (util/bem [:l-box :row :align-baseline :margin-top-xxx-large :underlay])}
+          (dom/span
+           {:class (util/bem [:c-text :link :padding-right-large])
+            :on-click on-click}
+           "visit my")
+          (dom/div
+           {:class (util/bem [:l-box :row :align-center :overlay :position-top :position-bottom :position-right :clickable])
+            :on-click on-click}
+           (dom/span
+            {:class (util/bem [:c-icon :github :paragraph-medium :padding-bottom-tiny :color-grapefruit])}))))))))
 
 (def ui-home-page (om/factory HomePage))
 
