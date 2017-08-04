@@ -19,9 +19,10 @@
    (width-md {:width (px 750)})])
 
 (def text
-  [:.c-text {:font-family "'Raleway', Arial"
+  [:.c-text {:font-family "'Roboto', Arial"
              :color (:black constants/color)
              :font-size (-> constants/paragraph :medium px)
+             :font-weight 400
              :line-height 1.8
              :text-decoration :none}
 
@@ -69,7 +70,7 @@
 
    [:&--align-center {:text-align :center}]
 
-   [:&--font-weight-bold {:font-weight :bold}]
+   [:&--font-weight-bold {:font-weight 700}]
 
    (make-modifiers [:&--color {:color [constants/color]}])
    (make-modifiers [:&--heading {:font-size [constants/heading px]}])

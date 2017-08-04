@@ -11,11 +11,20 @@
                        url('/fonts/icomoon.woff?r0cvwu') format('woff'),
                        url('/fonts/icomoon.svg?r0cvwu#icomoon') format('svg')"}))
 
-(def raleway
-  (at-font-face {:font-family "'Raleway'"
-                 :font-weight :normal
+(def roboto-regular
+  (at-font-face {:font-family "'Roboto'"
                  :font-style :normal
-                 :src "local('Raleway'),
-                       local('Raleway-Regular'),
-                       url(https://fonts.gstatic.com/s/raleway/v11/QAUlVt1jXOgQavlW5wEfxQLUuEpTyoUstqEm5AMlJo4.woff2) format('woff2')"
+                 :font-weight 400
+                 :src "local('Roboto'),
+                       local('Roboto-regular'),
+                       url(https://fonts.gstatic.com/s/roboto/v16/oMMgfZMQthOryQo9n22dcuvvDin1pK8aKteLpeZ5c0A.woff2) format('woff2')"
+                 :unicode-range "U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215"}))
+
+(def roboto-bold
+  (at-font-face {:font-family "'Roboto'"
+                 :font-style :normal
+                 :font-weight 700
+                 :src "local('Roboto Bold'),
+                       local('Roboto-Bold'),
+                       url(https://fonts.gstatic.com/s/roboto/v16/d-6IYplOFocCacKzxwXSOJBw1xU1rKptJj_0jans920.woff2) format('woff2')"
                  :unicode-range "U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215"}))

@@ -29,7 +29,8 @@
 
   ;; fonts
   fonts/icomoon
-  fonts/raleway
+  fonts/roboto-regular
+  fonts/roboto-bold
 
   ;; animations
   animations/mascot
