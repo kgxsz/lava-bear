@@ -1,3 +1,3 @@
 # Lava Bear
 
-##### The repository backing [keigo.io](https://www.keigo.io).
+##### The repository backing [keigo.io](https://keigo.io).
