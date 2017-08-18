@@ -438,25 +438,21 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 60px auto 5px auto;
+  width: 280px;
+  margin: 50px auto 5px auto;
   position: relative;
 }
 
 @media all and (min-width: 768px) {
   .hero {
+    width: 600px;
     margin: 80px auto 10px auto;
   }
 }
 
 .container {
-  width: 280px;
+  width: 100%;
   position: absolute;
-}
-
-@media all and (min-width: 768px) {
-  .container {
-    width: 600px;
-  }
 }
 
 #grid .cls-1 {
