@@ -19,3 +19,87 @@ body {
   width: 100%;
   position: absolute;
 }
+
+#k-light {
+  opacity: 0;
+  animation: flicker-a 5000ms infinite ease-in-out;
+  animation-delay: 300ms;
+}
+
+#e-light {
+  opacity: 0;
+  animation: flicker-b 5000ms infinite ease-in-out;
+  animation-delay: 600ms;
+}
+
+#i-light {
+  opacity: 0;
+  animation: flicker-b 6000ms infinite ease-in-out;
+  animation-delay: 500ms;
+}
+
+#g-light {
+  opacity: 0;
+  animation: flicker-b 4000ms infinite ease-in-out;
+  animation-delay: 400ms;
+}
+
+#o-light {
+  opacity: 0;
+  animation: flicker-a 6000ms infinite ease-in-out;
+  animation-delay: 700ms;
+}
+
+@keyframes flicker-a {
+  0% {
+    opacity: 0;
+  }
+  2% {
+    opacity: 1;
+  }
+  4% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes flicker-b {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  18% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0;
+  }
+  22% {
+    opacity: 1;
+  }
+  98% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
