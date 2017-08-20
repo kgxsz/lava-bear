@@ -442,6 +442,13 @@ body {
   position: relative;
 }
 
+@media all and (min-width: 768px) {
+  .hero {
+    width: 600px;
+    margin: 80px auto 10px auto;
+  }
+}
+
 .links {
   display: flex;
   flex-direction: row;
@@ -451,13 +458,34 @@ body {
 .link {
   width: 60px;
   height: 60px;
+  padding: 0 10px;
 }
 
-@media all and (min-width: 768px) {
-  .hero {
-    width: 600px;
-    margin: 80px auto 10px auto;
-  }
+.roles {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.divider {
+  width: 53px;
+}
+
+.design {
+  width: 115.936px;
+}
+
+.frontend {
+  width: 138.304px;
+}
+
+.backend {
+  width: 134.608px;
+}
+
+.devops {
+  width: 121.552px;
 }
 
 .container {
