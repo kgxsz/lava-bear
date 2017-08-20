@@ -427,108 +427,57 @@ th {
    ========================================================================== */
 
 html {
-    background-color: #242424;
-}
-
-body {
+  background-color: #242424;
 }
 
 .hero {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 280px;
-  margin: 50px auto 5px auto;
-  position: relative;
-}
-
-@media all and (min-width: 768px) {
-  .hero {
-    width: 600px;
-    margin: 80px auto 10px auto;
-  }
-}
-
-.links {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.link {
-  width: 60px;
-  height: 60px;
-  padding: 0 10px;
-}
-
-.roles {
-  display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  margin: 60px 15px 30px 15px;
 }
 
-.divider {
-  width: 53px;
-}
-
-.design {
-  width: 115.936px;
-}
-
-.frontend {
-  width: 138.304px;
-}
-
-.backend {
-  width: 134.608px;
-}
-
-.devops {
-  width: 121.552px;
-}
-
-.container {
+.neon {
   width: 100%;
-  position: absolute;
+  max-width: 500px;
 }
 
-.k-light {
-  opacity: 1;
-  /*animation: flicker-a 5000ms infinite ease-in-out;*/
+#k-light {
+  opacity: 0;
+  animation: flicker-a 5000ms infinite ease-in-out;
   animation-delay: 300ms;
 }
 
-.e-light {
-  opacity: 1;
-  /*animation: flicker-b 5000ms infinite ease-in-out;*/
+#e-light {
+  opacity: 0;
+  animation: flicker-b 5000ms infinite ease-in-out;
   animation-delay: 600ms;
 }
 
-.i-light {
-  opacity: 1;
-  /*animation: flicker-b 6000ms infinite ease-in-out;*/
+#i-light {
+  opacity: 0;
+  animation: flicker-b 6000ms infinite ease-in-out;
   animation-delay: 500ms;
 }
 
-.g-light {
-  opacity: 1;
-  /*animation: flicker-b 4000ms infinite ease-in-out;*/
+#g-light {
+  opacity: 0;
+  animation: flicker-b 4000ms infinite ease-in-out;
   animation-delay: 400ms;
 }
 
-.o-light {
-  opacity: 1;
-  /*animation: flicker-a 6000ms infinite ease-in-out;*/
+#o-light {
+  opacity: 0;
+  animation: flicker-a 6000ms infinite ease-in-out;
   animation-delay: 700ms;
 }
 
-.katakana-light {
-  opacity: 1;
-  /*animation: flicker-a 5000ms infinite ease-in-out;*/
+#katakana-light {
+  opacity: 0;
+  animation: flicker-a 5000ms infinite ease-in-out;
   animation-delay: 200ms;
 }
-
 
 @keyframes flicker-a {
   0% {
@@ -582,4 +531,118 @@ body {
   100% {
     opacity: 0;
   }
+}
+
+.roles {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 15px;
+}
+
+.divider {
+  width: 26px;
+}
+
+.divider .glyph {
+  fill: #faf9d1;
+}
+
+.divider .backing {
+  filter: url(#divider);
+}
+
+.design {
+  width: 88px;
+}
+
+.design .glyph {
+  fill: #d1fad7;
+}
+
+.design .backing {
+  filter: url(#design);
+}
+
+.frontend {
+  width: 110px;
+}
+
+.frontend .glyph {
+  fill: #fad3d1;
+}
+
+.frontend .backing {
+  filter: url(#frontend);
+}
+
+.backend {
+  width: 107px;
+}
+
+.backend .glyph {
+  fill: #d1f3fa;
+}
+
+.backend .backing {
+  filter: url(#backend);
+}
+
+.devops {
+  width: 94px;
+}
+
+.devops .glpyh {
+  fill: #e5d1fa;
+}
+
+.devops .backing {
+  filter: url(#devops);
+}
+
+.links {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 40px;
+}
+
+.link {
+  width: 48px;
+  height: 48px;
+  margin: 0 10px;
+}
+
+.github-link .glyph {
+  fill: #faf9d1;
+}
+
+.github-link .backing {
+  filter: url(#github-link);
+}
+
+.codepen-link .glyph {
+  fill: #d1fad7;
+}
+
+.codepen-link .backing {
+  filter: url(#codepen-link);
+}
+
+.instagram-link .glyph {
+  fill: #e5d1fa;
+}
+
+.instagram-link .backing {
+  filter: url(#instagram-link);
+}
+
+.email-link .glyph {
+  fill: #d1f3fa;
+}
+
+.email-link .backing {
+  filter: url(#email-link);
 }
