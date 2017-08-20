@@ -431,7 +431,6 @@ html {
 }
 
 body {
-  overflow: auto;
 }
 
 .hero {
@@ -441,6 +440,17 @@ body {
   width: 280px;
   margin: 50px auto 5px auto;
   position: relative;
+}
+
+.links {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.link {
+  width: 60px;
+  height: 60px;
 }
 
 @media all and (min-width: 768px) {
@@ -456,38 +466,38 @@ body {
 }
 
 .k-light {
-  opacity: 0;
-  animation: flicker-a 5000ms infinite ease-in-out;
+  opacity: 1;
+  /*animation: flicker-a 5000ms infinite ease-in-out;*/
   animation-delay: 300ms;
 }
 
 .e-light {
-  opacity: 0;
-  animation: flicker-b 5000ms infinite ease-in-out;
+  opacity: 1;
+  /*animation: flicker-b 5000ms infinite ease-in-out;*/
   animation-delay: 600ms;
 }
 
 .i-light {
-  opacity: 0;
-  animation: flicker-b 6000ms infinite ease-in-out;
+  opacity: 1;
+  /*animation: flicker-b 6000ms infinite ease-in-out;*/
   animation-delay: 500ms;
 }
 
 .g-light {
-  opacity: 0;
-  animation: flicker-b 4000ms infinite ease-in-out;
+  opacity: 1;
+  /*animation: flicker-b 4000ms infinite ease-in-out;*/
   animation-delay: 400ms;
 }
 
 .o-light {
-  opacity: 0;
-  animation: flicker-a 6000ms infinite ease-in-out;
+  opacity: 1;
+  /*animation: flicker-a 6000ms infinite ease-in-out;*/
   animation-delay: 700ms;
 }
 
 .katakana-light {
-  opacity: 0;
-  animation: flicker-a 5000ms infinite ease-in-out;
+  opacity: 1;
+  /*animation: flicker-a 5000ms infinite ease-in-out;*/
   animation-delay: 200ms;
 }
 
