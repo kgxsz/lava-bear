@@ -455,59 +455,42 @@ body {
   position: absolute;
 }
 
-#grid .cls-1 {
-  fill: #666;
-}
-
-#guides .cls-2 {
-  fill: #333;
-}
-
-#type .cls-2 {
-  fill: #fad3d1;
-}
-#type .cls-3 {
-  fill: #e5d1fa;
-}
-#type .cls-4 {
-  fill: #fae6d1;
-}
-#type .cls-5 {
-  fill: #d1fad7;
-}
-#type .cls-6 {
-  fill: #d1f3fa;
-}
-
-#k-light {
+.k-light {
   opacity: 0;
   animation: flicker-a 5000ms infinite ease-in-out;
   animation-delay: 300ms;
 }
 
-#e-light {
+.e-light {
   opacity: 0;
   animation: flicker-b 5000ms infinite ease-in-out;
   animation-delay: 600ms;
 }
 
-#i-light {
+.i-light {
   opacity: 0;
   animation: flicker-b 6000ms infinite ease-in-out;
   animation-delay: 500ms;
 }
 
-#g-light {
+.g-light {
   opacity: 0;
   animation: flicker-b 4000ms infinite ease-in-out;
   animation-delay: 400ms;
 }
 
-#o-light {
+.o-light {
   opacity: 0;
   animation: flicker-a 6000ms infinite ease-in-out;
   animation-delay: 700ms;
 }
+
+.katakana-light {
+  opacity: 0;
+  animation: flicker-a 5000ms infinite ease-in-out;
+  animation-delay: 200ms;
+}
+
 
 @keyframes flicker-a {
   0% {
