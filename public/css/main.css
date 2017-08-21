@@ -666,12 +666,12 @@ html {
   filter: url(#github-link);
 }
 
-.codepen-link .glyph {
+.behance-link .glyph {
   fill: #d1fad7;
 }
 
-.codepen-link .backing {
-  filter: url(#codepen-link);
+.behance-link .backing {
+  filter: url(#behance-link);
 }
 
 .instagram-link .glyph {
