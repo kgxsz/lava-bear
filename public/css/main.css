@@ -288,8 +288,8 @@ select {
  */
 
 button,
-html input[type="button"], /* 1 */
-input[type="reset"],
+html input[type="button"],
+/* 1 */ input[type="reset"],
 input[type="submit"] {
   -webkit-appearance: button; /* 2 */
   cursor: pointer; /* 3 */
@@ -664,22 +664,6 @@ html {
 
 .github-link .backing {
   filter: url(#github-link);
-}
-
-.behance-link .glyph {
-  fill: #d1fad7;
-}
-
-.behance-link .backing {
-  filter: url(#behance-link);
-}
-
-.instagram-link .glyph {
-  fill: #e5d1fa;
-}
-
-.instagram-link .backing {
-  filter: url(#instagram-link);
 }
 
 .email-link .glyph {
